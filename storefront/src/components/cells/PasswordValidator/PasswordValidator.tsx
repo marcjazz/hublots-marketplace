@@ -3,7 +3,7 @@
 import { Card } from "@/components/atoms"
 import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
-import { CheckCircle } from "@medusajs/icons"
+import { Check, EyeMini, EyeSlashMini } from "@medusajs/icons"
 
 function validatePassword(password: string) {
   const errors = {
@@ -60,7 +60,7 @@ export const PasswordValidator = ({
           newPasswordError["8chars"] ? "text-red-700" : "text-green-700"
         )}
       >
-        <CheckCircle /> At least 8 characters
+        <Check /> At least 8 characters
       </p>
       <p
         className={cn(
@@ -68,7 +68,7 @@ export const PasswordValidator = ({
           newPasswordError["lower"] ? "text-red-700" : "text-green-700"
         )}
       >
-        <CheckCircle /> One lowercase letter
+        <Check /> One lowercase letter
       </p>
       <p
         className={cn(
@@ -76,7 +76,7 @@ export const PasswordValidator = ({
           newPasswordError["upper"] ? "text-red-700" : "text-green-700"
         )}
       >
-        <CheckCircle /> One uppercase letter
+        <Check /> One uppercase letter
       </p>
       <p
         className={cn(
@@ -84,7 +84,7 @@ export const PasswordValidator = ({
           newPasswordError["symbolOrDigit"] ? "text-red-700" : "text-green-700"
         )}
       >
-        <CheckCircle /> One number or symbol
+        <Check /> One number or symbol
       </p>
     </Card>
   )

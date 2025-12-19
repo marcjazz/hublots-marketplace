@@ -23,7 +23,9 @@ import { getRegion } from './regions';
  * @param cartId - optional - The ID of the cart to retrieve.
  * @returns The cart object if found, or null if not found.
  */
-export async function retrieveCart(cartId?: string) {
+import { Cart } from "@/types/cart";
+
+export async function retrieveCart(cartId?: string): Promise<Cart | null> {
   const id = cartId || (await getCartId());
 
   if (!id) {
@@ -208,7 +210,7 @@ export async function deleteLineItem(lineId: string) {
   };
 
   await sdk.store.cart
-    .deleteLineItem(cartId, lineId, headers)
+    .deleteLineItem(cartId, lineId)
     .then(async () => {
       const cartCacheTag = await getCacheTag('carts');
       await revalidateTag(cartCacheTag);
@@ -519,7 +521,7 @@ export async function updateRegionWithValidation(
           const item = cart?.items?.find(item => item.variant_id === variantId);
           if (item) {
             try {
-              await sdk.store.cart.deleteLineItem(cart.id, item.id, headers);
+              await sdk.store.cart.deleteLineItem(cart.id, item.id);
               removedItems.push(item.product_title || 'Unknown product');
             } catch (deleteError) {
               // Silent failure - item removal failed but continue

@@ -1,70 +1,67 @@
-"use client"
-import { HttpTypes } from "@medusajs/types"
-import { Button, Input } from "@/components/atoms"
-import { Heading, Label } from "@medusajs/ui"
-import { useState } from "react"
-import { applyPromotions } from "@/lib/data/cart"
-import { toast } from "@/lib/helpers/toast"
+'use client';
 
-export default function CartPromotionCode({
-  cart,
-}: {
-  cart:
-    | (HttpTypes.StoreCart & { promotions?: HttpTypes.StorePromotion[] })
-    | null
-}) {
-  const [promotionCode, setPromotionCode] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [hasError, setHasError] = useState(false)
+import { useState } from 'react';
+
+import { HttpTypes } from '@medusajs/types';
+import { Heading, Label } from '@medusajs/ui';
+
+import { Button, Input } from '@/components/atoms';
+import { applyPromotions } from '@/lib/data/cart';
+import { toast } from '@/lib/helpers/toast';
+
+export default function CartPromotionCode({ cart }: { cart: HttpTypes.StoreCart | null }) {
+  const [promotionCode, setPromotionCode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const handleApplyPromotionCode = async () => {
-    if (!promotionCode || isLoading) return
+    if (!promotionCode || isLoading) return;
 
-    setIsLoading(true)
-    setHasError(false)
+    setIsLoading(true);
+    setHasError(false);
     try {
-      const result = await applyPromotions([promotionCode])
+      const result = await applyPromotions([promotionCode]);
 
       if (!result.success) {
-        toast.info({ title: result.error })
-        setHasError(true)
-        return
+        toast.info({ title: result.error });
+        setHasError(true);
+        return;
       }
 
       if (!result.applied) {
-        toast.info({ title: "Promotion code not found" })
-        setHasError(true)
-        return
+        toast.info({ title: 'Promotion code not found' });
+        setHasError(true);
+        return;
       }
 
-      toast.success({ title: "Promotion code applied" })
-      setPromotionCode("")
-      setHasError(false)
+      toast.success({ title: 'Promotion code applied' });
+      setPromotionCode('');
+      setHasError(false);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault()
-      handleApplyPromotionCode()
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleApplyPromotionCode();
     }
-  }
+  };
 
   return (
     <div>
       <Heading
         level="h2"
-        className="flex flex-row text-3xl-regular gap-x-2 items-baseline items-center"
+        className="text-3xl-regular flex flex-row items-center items-baseline gap-x-2"
       >
         Promotion code
       </Heading>
       <div>
-        {cart?.promotions?.map((promo) => (
+        {cart?.promotions?.map(promo => (
           <div
             key={promo.id}
-            className="mb-4 flex flex-row gap-x-2 items-center"
+            className="mb-4 flex flex-row items-center gap-x-2"
           >
             <Label className="text-md">{promo.code}</Label>
           </div>
@@ -73,9 +70,9 @@ export default function CartPromotionCode({
       <Input
         placeholder="Enter your promotion code"
         value={promotionCode}
-        onChange={(e) => {
-          setPromotionCode(e.target.value)
-          setHasError(false)
+        onChange={e => {
+          setPromotionCode(e.target.value);
+          setHasError(false);
         }}
         onKeyDown={handleKeyDown}
         error={hasError}
@@ -92,5 +89,5 @@ export default function CartPromotionCode({
         </Button>
       </div>
     </div>
-  )
+  );
 }

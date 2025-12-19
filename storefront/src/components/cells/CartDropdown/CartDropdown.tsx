@@ -12,8 +12,8 @@ import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { useCartContext } from "@/components/providers"
 
-const getItemCount = (cart: HttpTypes.StoreCart | null) => {
-  return cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0
+const getItemCount = (cart: any | null) => {
+  return cart?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0
 }
 
 export const CartDropdown = () => {

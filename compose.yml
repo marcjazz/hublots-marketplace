@@ -11,5 +11,41 @@ services:
       - pgdata:/var/lib/postgresql/data
     restart: always
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    depends_on:
+      - postgres
+
+  storefront:
+    build:
+      context: ./storefront
+      dockerfile: Dockerfile
+    ports:
+      - "8000:3000"
+    depends_on:
+      - backend
+
+  admin-panel:
+    build:
+      context: ./admin-panel
+      dockerfile: Dockerfile
+    ports:
+      - "7000:3000"
+    depends_on:
+      - backend
+
+  vendor-panel:
+    build:
+      context: ./vendor-panel
+      dockerfile: Dockerfile
+    ports:
+      - "7001:3000"
+    depends_on:
+      - backend
+
 volumes:
   pgdata:

@@ -1,9 +1,12 @@
 "use client"
 
-import { Button, Card } from "@/components/atoms"
+import { Button } from "@/components/atoms"
 import { LabeledInput } from "@/components/cells"
+import { PasswordValidator } from "@/components/cells/PasswordValidator/PasswordValidator"
+import { updateCustomerPassword } from "@/lib/data/customer"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CheckCircle } from "@medusajs/icons"
+import { Heading, toast } from "@medusajs/ui"
+import { useState } from "react"
 import {
   FieldError,
   FieldValues,
@@ -12,12 +15,8 @@ import {
   useFormContext,
   UseFormReturn,
 } from "react-hook-form"
-import { ProfilePasswordFormData, profilePasswordSchema } from "./schema"
-import { useEffect, useState } from "react"
-import { updateCustomerPassword } from "@/lib/data/customer"
-import { Heading, toast } from "@medusajs/ui"
 import LocalizedClientLink from "../LocalizedLink/LocalizedLink"
-import { PasswordValidator } from "@/components/cells/PasswordValidator/PasswordValidator"
+import { ProfilePasswordFormData, profilePasswordSchema } from "./schema"
 
 export const ProfilePasswordForm = ({ token }: { token?: string }) => {
   const form = useForm<ProfilePasswordFormData>({

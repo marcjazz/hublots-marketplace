@@ -18,9 +18,9 @@ import { Label } from "@medusajs/ui"
 import { toast } from "@/lib/helpers/toast"
 
 type CountryOption = {
-  country: string
+  country: string | undefined
   region: string
-  label: string
+  label: string | undefined
 }
 
 type CountrySelectProps = {
@@ -58,8 +58,16 @@ const CountrySelect = ({ regions }: CountrySelectProps) => {
   }, [options, countryCode])
 
   const handleChange = async (option: CountryOption) => {
+    if (!option.country) {
+      toast.error({
+        title: "Error switching region",
+        description: "Selected country is undefined. Please try again.",
+      })
+      return
+    }
+
     try {
-      const result = await updateRegionWithValidation(option.country, currentPath)
+      const result = await updateRegionWithValidation(option.country!, currentPath)
       
       if (result.removedItems.length > 0) {
         const itemsList = result.removedItems.join(", ")

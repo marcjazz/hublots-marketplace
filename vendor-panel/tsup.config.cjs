@@ -10,6 +10,8 @@ export default defineConfig({
     "virtual:medusa/links",
     "virtual:medusa/menu-items",
     "virtual:medusa/widgets",
+    "@dnd-kit/utilities",
+    "copy-to-clipboard",
   ],
   tsconfig: "tsconfig.build.json",
   clean: true,

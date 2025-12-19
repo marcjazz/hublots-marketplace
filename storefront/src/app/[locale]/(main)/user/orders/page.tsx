@@ -34,7 +34,7 @@ export default async function UserPage({
   }, {} as Record<string, typeof orders>)
 
   const orderSets = Object.entries(orderSetsGrouped).map(
-    ([orderSetId, orders]) => {
+    ([orderSetId, orders]: [string, any]) => {
       const firstOrder = orders[0]
       const orderSet = (firstOrder as any).order_set
 
@@ -43,7 +43,7 @@ export default async function UserPage({
         orders: orders,
         created_at: orderSet.created_at,
         display_id: orderSet.display_id,
-        total: orders.reduce((sum, order) => sum + order.total, 0),
+        total: orders.reduce((sum: number, order: any) => sum + order.total, 0),
         currency_code: firstOrder.currency_code,
       }
     }

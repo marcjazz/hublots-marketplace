@@ -32,7 +32,7 @@ export async function generateMetadata({
     const locales = Array.from(
       new Set(
         (regions || [])
-          .map((r) => r.countries?.map((c) => c.iso_2) || [])
+          .map((r) => r.countries?.map((c: any) => c.iso_2) || [])
           .flat()
           .filter(Boolean)
       )

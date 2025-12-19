@@ -16,12 +16,12 @@ export const Cart = () => {
   return (
     <>
       <div className="col-span-12 lg:col-span-6">
-        <CartItems cart={cart} />
+        <CartItems cart={{ ...cart, promotions: cart.promotions ?? [] }} />
       </div>
       <div className="lg:col-span-2"></div>
       <div className="col-span-12 lg:col-span-4">
         <div className="w-full mb-6 border rounded-sm p-4">
-          <CartPromotionCode cart={cart} />
+          <CartPromotionCode cart={{ ...cart, promotions: cart.promotions ?? [] }} />
         </div>
         <div className="border rounded-sm p-4 h-fit">
           <CartSummary
