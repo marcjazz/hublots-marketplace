@@ -1,9 +1,0 @@
-steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'ghcr.io/${_GITHUB_OWNER}/${_GITHUB_REPO_NAME}/backend:${_TAG}', '.']
-    dir: 'backend'
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'ghcr.io/${_GITHUB_OWNER}/${_GITHUB_REPO_NAME}/backend:${_TAG}']
-    dir: 'backend'
-images:
-  - 'ghcr.io/${_GITHUB_OWNER}/${_GITHUB_REPO_NAME}/backend:${_TAG}'

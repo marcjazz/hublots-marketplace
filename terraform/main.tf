@@ -7,6 +7,7 @@ resource "google_project_service" "services" {
     "artifactregistry.googleapis.com",
     "secretmanager.googleapis.com",
     "compute.googleapis.com",
+    "cloudbuild.googleapis.com",
   ])
   project            = var.project_id
   service            = each.key
@@ -68,6 +69,14 @@ module "networking" {
   static_proxy_name = module.compute.static_proxy_name
   storefront_name   = module.compute.storefront_name
   depends_on        = [google_project_service.services, module.compute]
+}
+
+module "cloudbuild" {
+  source            = "./modules/cloudbuild"
+  project_id        = var.project_id
+  github_owner      = var.github_owner
+  github_repository = var.github_repository
+  depends_on        = [google_project_service.services]
 }
 
 resource "google_artifact_registry_repository" "ghcr_io_mirror" {
