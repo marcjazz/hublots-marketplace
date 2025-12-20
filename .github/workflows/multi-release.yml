@@ -3,7 +3,7 @@ name: Multi-Project Release
 on:
   push:
     tags:
-      - '*' # This will trigger for any tag, then filter in the job
+      - '*'
 
 env:
   REGISTRY: ghcr.io
@@ -33,7 +33,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ matrix.project }}
+          images: ${{ env.REGISTRY }}/${{ github.repository }}-${{ matrix.project }}
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}

@@ -11,7 +11,7 @@ resource "google_cloud_run_v2_service" "backend" {
 
     containers {
       name  = "backend"
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}/backend:${var.container_image_tag}"
+      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
       ports { container_port = 8080 }
       env {
         name  = "DATABASE_URL"
@@ -75,7 +75,7 @@ resource "google_cloud_run_v2_service" "storefront" {
   template {
     service_account = var.service_accounts["storefront"].email
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}/storefront:${var.container_image_tag}"
+      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-storefront:${var.container_image_tag}"
       ports { container_port = 3000 }
       env {
         name  = "NEXT_PUBLIC_MEDUSA_BACKEND_URL"

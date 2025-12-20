@@ -1,4 +1,4 @@
-name: Terraform
+name: Deploy to GCP with Terraform
 
 on:
   workflow_dispatch:
@@ -37,8 +37,8 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
         workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/providers/${{ secrets.WIP_PROVIDER }}'
-        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
