@@ -17,7 +17,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "9000:9000"
+      - '9000:9000'
     depends_on:
       - postgres
 
@@ -27,7 +27,7 @@ services:
       context: ./storefront
       dockerfile: Dockerfile
     ports:
-      - "8000:3000"
+      - '8000:3000'
     depends_on:
       - backend
 
@@ -37,7 +37,7 @@ services:
       context: ./admin-panel
       dockerfile: Dockerfile
     ports:
-      - "7000:3000"
+      - '7000:3000'
     depends_on:
       - backend
 
@@ -47,7 +47,7 @@ services:
       context: ./vendor-panel
       dockerfile: Dockerfile
     ports:
-      - "7001:3000"
+      - '7001:3000'
     depends_on:
       - backend
 
