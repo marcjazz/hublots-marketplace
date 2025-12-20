@@ -12,6 +12,7 @@ services:
     restart: always
 
   backend:
+    image: ghcr.io/marcjazz/hublots-marketplace/backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -21,6 +22,7 @@ services:
       - postgres
 
   storefront:
+    image: ghcr.io/marcjazz/hublots-marketplace/storefront:latest
     build:
       context: ./storefront
       dockerfile: Dockerfile
@@ -30,6 +32,7 @@ services:
       - backend
 
   admin-panel:
+    image: ghcr.io/marcjazz/hublots-marketplace/admin-panel:latest
     build:
       context: ./admin-panel
       dockerfile: Dockerfile
@@ -39,6 +42,7 @@ services:
       - backend
 
   vendor-panel:
+    image: ghcr.io/marcjazz/hublots-marketplace/vendor-panel:latest
     build:
       context: ./vendor-panel
       dockerfile: Dockerfile

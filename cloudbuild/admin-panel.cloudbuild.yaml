@@ -1,0 +1,9 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'ghcr.io/${_GITHUB_OWNER}/${_GITHUB_REPO_NAME}/admin-panel:${_TAG}', '.']
+    dir: 'admin-panel'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'ghcr.io/${_GITHUB_OWNER}/${_GITHUB_REPO_NAME}/admin-panel:${_TAG}']
+    dir: 'admin-panel'
+images:
+  - 'ghcr.io/${_GITHUB_OWNER}/${_GITHUB_REPO_NAME}/admin-panel:${_TAG}'
