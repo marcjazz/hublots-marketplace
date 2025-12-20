@@ -16,7 +16,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        project: [admin-panel, backend, storefront, vendor-panel]
+        project: [backend, storefront]
 
     steps:
       - name: Checkout repository
