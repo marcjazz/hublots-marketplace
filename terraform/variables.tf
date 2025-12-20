@@ -47,3 +47,49 @@ variable "ghcr_pat" {
   type        = string
   sensitive   = true
 }
+
+variable "jwt_secret" {
+  description = "JWT secret key for authentication"
+  type        = string
+  sensitive   = true
+}
+
+variable "cookie_secret" {
+  description = "Cookie secret key for session management"
+  type        = string
+  sensitive   = true
+}
+
+variable "algolia_api_key" {
+  description = "Algolia API Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "algolia_app_id" {
+  description = "Algolia Application ID"
+  type        = string
+}
+
+variable "stripe_secret_api_key" {
+  description = "Stripe Secret API Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "stripe_connected_accounts_webhook_secret" {
+  description = "Stripe Connected Accounts Webhook Secret"
+  type        = string
+  sensitive   = true
+}
+
+variable "resend_api_key" {
+  description = "Resend API Key for email services"
+  type        = string
+  sensitive   = true
+}
+
+variable "resend_from_email" {
+  description = "Resend 'from' email address"
+  type        = string
+}

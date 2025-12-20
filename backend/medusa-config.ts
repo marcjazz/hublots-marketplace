@@ -3,12 +3,10 @@ import { defineConfig, loadEnv } from '@medusajs/framework/utils'
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd());
 
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
-console.log("CORS_ORIGINS:", process.env.CORS_ORIGINS);
-
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
+    redisUrl: process.env.REDIS_URL,
     http: {
       storeCors: process.env.CORS_ORIGINS!,
       adminCors: process.env.CORS_ORIGINS!,
@@ -16,7 +14,8 @@ module.exports = defineConfig({
       vendorCors: process.env.CORS_ORIGINS!,
       authCors: process.env.CORS_ORIGINS!,
       jwtSecret: process.env.JWT_SECRET || 'supersecret',
-      cookieSecret: process.env.COOKIE_SECRET || 'supersecret'
+      cookieSecret: process.env.COOKIE_SECRET || 'supersecret',
+      host: '0.0.0.0'
     }
   },
   admin: {

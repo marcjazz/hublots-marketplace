@@ -61,7 +61,7 @@ resource "google_artifact_registry_repository" "ghcr_io_mirror" {
     }
     upstream_credentials {
       username_password_credentials {
-        username            = var.github_owner
+        username                = var.github_owner
         password_secret_version = google_secret_manager_secret_version.ghcr_pat_secret_version.name
       }
     }
@@ -80,12 +80,12 @@ resource "google_service_account" "cloudrun_service_accounts" {
 }
 
 resource "google_artifact_registry_repository_iam_member" "ghcr_io_mirror_reader" {
-  for_each     = google_service_account.cloudrun_service_accounts
-  repository   = google_artifact_registry_repository.ghcr_io_mirror.name
-  location     = var.region
-  project      = var.project_id
-  role         = "roles/artifactregistry.reader"
-  member       = "serviceAccount:${each.value.email}"
+  for_each   = google_service_account.cloudrun_service_accounts
+  repository = google_artifact_registry_repository.ghcr_io_mirror.name
+  location   = var.region
+  project    = var.project_id
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${each.value.email}"
 }
 
 # Backend Service (with Redis sidecar)
@@ -98,12 +98,12 @@ resource "google_cloud_run_v2_service" "backend" {
 
   template {
     service_account = google_service_account.cloudrun_service_accounts["backend"].email
-    
+
     containers {
       name  = "backend"
       image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}/backend:${var.container_image_tag}"
       ports {
-        container_port = 9000
+        container_port = 8080
       }
       resources {
         cpu_idle = true
@@ -122,24 +122,40 @@ resource "google_cloud_run_v2_service" "backend" {
       }
 
       env {
-        name  = "ADMIN_CORS"
-        value = "https://store-admin.${var.domain}"
-      }
-      env {
-        name  = "STORE_CORS"
-        value = "https://store.${var.domain}"
-      }
-      env {
-        name  = "AUTH_CORS"
+        name  = "CORS_ORIGINS"
         value = "https://store-admin.${var.domain},https://store.${var.domain},https://store-vendor.${var.domain}"
       }
       env {
         name  = "JWT_SECRET"
-        value = "super-secret-jwt-key" # Should be a secret in prod
+        value = var.jwt_secret
       }
       env {
         name  = "COOKIE_SECRET"
-        value = "super-secret-cookie-key" # Should be a secret in prod
+        value = var.cookie_secret
+      }
+      env {
+        name  = "ALGOLIA_API_KEY"
+        value = var.algolia_api_key
+      }
+      env {
+        name  = "ALGOLIA_APP_ID"
+        value = var.algolia_app_id
+      }
+      env {
+        name  = "STRIPE_SECRET_API_KEY"
+        value = var.stripe_secret_api_key
+      }
+      env {
+        name  = "STRIPE_CONNECTED_ACCOUNTS_WEBHOOK_SECRET"
+        value = var.stripe_connected_accounts_webhook_secret
+      }
+      env {
+        name  = "RESEND_API_KEY"
+        value = var.resend_api_key
+      }
+      env {
+        name  = "RESEND_FROM_EMAIL"
+        value = var.resend_from_email
       }
     }
 
@@ -163,7 +179,7 @@ resource "google_cloud_run_v2_service" "backend" {
       }
     }
   }
-  
+
   depends_on = [
     google_project_service.services,
     google_artifact_registry_repository.ghcr_io_mirror,
@@ -183,7 +199,7 @@ resource "google_cloud_run_v2_service" "admin_panel" {
     containers {
       image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}/admin-panel:${var.container_image_tag}"
       ports {
-        container_port = 80 # Nginx usually serves on 80
+        container_port = 3000
       }
       resources {
         cpu_idle = true
@@ -217,7 +233,7 @@ resource "google_cloud_run_v2_service" "storefront" {
     containers {
       image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}/storefront:${var.container_image_tag}"
       ports {
-        container_port = 8000
+        container_port = 3000
       }
       resources {
         cpu_idle = true
@@ -251,7 +267,7 @@ resource "google_cloud_run_v2_service" "vendor_panel" {
     containers {
       image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}/backend:${var.container_image_tag}"
       ports {
-        container_port = 80 # Nginx usually serves on 80
+        container_port = 3000
       }
       resources {
         cpu_idle = true
