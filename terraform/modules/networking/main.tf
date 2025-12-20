@@ -35,6 +35,7 @@ resource "google_compute_backend_service" "static_proxy" {
     max_ttl           = 86400
     negative_caching  = true
     serve_while_stale = 86400
+    signed_url_cache_max_age_sec = 3600
   }
 }
 

@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - '*'
+    paths:
+      - 'backend/**'
+      - 'storefront/**'
+      - '.github/workflows/multi-release.yml'
 
 env:
   REGISTRY: ghcr.io

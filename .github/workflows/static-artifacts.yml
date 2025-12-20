@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - '*'
+    paths:
+      - 'admin-panel/**'
+      - 'vendor-panel/**'
+      - '.github/workflows/static-artifacts.yml'
 
 permissions:
   contents: write
@@ -27,7 +31,7 @@ jobs:
         run: |
           cd admin-panel
           pnpm install
-          pnpm run build
+          pnpm run build:preview
         shell: bash
 
       - name: Tar Admin Panel
@@ -41,7 +45,7 @@ jobs:
         run: |
           cd vendor-panel
           pnpm install
-          pnpm run build
+          pnpm run build:preview
         shell: bash
 
       - name: Tar Vendor Panel

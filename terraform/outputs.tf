@@ -1,39 +1,34 @@
 output "backend_url" {
   description = "The URL of the backend Cloud Run service."
-  value       = google_cloud_run_v2_service.backend.uri
+  value       = module.compute.backend_uri
 }
 
 output "admin_panel_url" {
   description = "The URL of the admin panel Cloud Run service."
-  value       = google_cloud_run_v2_service.admin_panel.uri
+  value       = "https://admin.${var.domain}"
 }
 
 output "storefront_url" {
   description = "The URL of the storefront Cloud Run service."
-  value       = google_cloud_run_v2_service.storefront.uri
+  value       = "https://front.${var.domain}"
 }
 
 output "vendor_panel_url" {
   description = "The URL of the vendor panel Cloud Run service."
-  value       = google_cloud_run_v2_service.vendor_panel.uri
+  value       = "https://vendor.${var.domain}"
 }
 
 output "dns_nameservers" {
   description = "The nameservers for the Cloud DNS managed zone. These must be configured with your domain registrar."
-  value       = google_dns_managed_zone.default.name_servers
+  value       = module.networking.nameservers
 }
 
 output "domain_mapping_store_cname_target" {
-  description = "CNAME target for store.kdmarc.xyz. Configure this with your domain registrar if auto-provisioning fails."
-  value       = google_cloud_run_domain_mapping.store.status[0].resource_records[0].rrdata
+  description = "CNAME target for storefront domain mapping. Configure this with your domain registrar if auto-provisioning fails."
+  value       = module.networking.store_cname_target
 }
 
-output "domain_mapping_admin_cname_target" {
-  description = "CNAME target for store-admin.kdmarc.xyz. Configure this with your domain registrar if auto-provisioning fails."
-  value       = google_cloud_run_domain_mapping.store_admin.status[0].resource_records[0].rrdata
-}
-
-output "domain_mapping_vendor_cname_target" {
-  description = "CNAME target for store-vendor.kdmarc.xyz. Configure this with your domain registrar if auto-provisioning fails."
-  value       = google_cloud_run_domain_mapping.store_vendor.status[0].resource_records[0].rrdata
+output "load_balancer_ip" {
+  description = "The IP address of the Global Load Balancer."
+  value       = module.networking.lb_ip
 }

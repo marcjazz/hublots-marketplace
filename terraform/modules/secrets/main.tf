@@ -27,7 +27,7 @@ resource "google_secret_manager_secret" "nginx_conf" {
 
 resource "google_secret_manager_secret_version" "nginx_conf" {
   secret      = google_secret_manager_secret.nginx_conf.id
-  secret_data = templatefile("${path.module}/../../../static-proxy/nginx.conf.tftpl", { domain = var.domain })
+  secret_data = templatefile("${path.module}/../../templates/nginx.conf.tftpl", { domain = var.domain })
 }
 
 resource "google_secret_manager_secret_iam_member" "nginx_conf_access" {
