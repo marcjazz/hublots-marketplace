@@ -5,9 +5,9 @@ on:
     # tags:
     #   - '*'
     paths:
-      - 'admin-panel/**'
-      - 'vendor-panel/**'
-      - '.github/workflows/static-artifacts.yml'
+      - "admin-panel/**"
+      - "vendor-panel/**"
+      - ".github/workflows/static-artifacts.yml"
 
 jobs:
   build:
@@ -32,8 +32,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
           cache-dependency-path: ${{ matrix.panel }}/pnpm-lock.yaml
 
       - name: Build Panel
@@ -43,19 +43,39 @@ jobs:
           pnpm build:preview
         shell: bash
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v2"
         with:
-          token_format: 'access_token'
-          project_id: '${{ secrets.GCP_PROJECT_ID }}'
-          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/providers/${{ secrets.WIP_PROVIDER }}'
-          service_account: '${{ secrets.GHA_SERVICE_ACCOUNT }}'
+          token_format: "access_token"
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: "projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/providers/${{ secrets.WIP_PROVIDER }}"
+          service_account: ${{ secrets.GHA_SERVICE_ACCOUNT }}
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v2"
 
-      - name: 'Deploy to GCS'
+      - name: "Grant IAM Permissions"
+        run: |
+          gcloud iam service-accounts add-iam-policy-binding ${{ secrets.GHA_SERVICE_ACCOUNT }} \
+              --role="roles/iam.workloadIdentityUser" \
+              --member="principalSet://iam.googleapis.com/projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/attribute.repository/${{ github.repository }}" \
+              --project="${{ secrets.GCP_PROJECT_ID }}"
+          gcloud iam service-accounts add-iam-policy-binding ${{ secrets.GHA_SERVICE_ACCOUNT }} \
+              --role="roles/iam.serviceAccountTokenCreator" \
+              --member="principalSet://iam.googleapis.com/projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/attribute.repository/${{ github.repository }}" \
+              --project="${{ secrets.GCP_PROJECT_ID }}"
+          gcloud iam service-accounts add-iam-policy-binding ${{ secrets.GHA_SERVICE_ACCOUNT }} \
+              --role="roles/storage.objectAdmin" \
+              --member="principalSet://iam.googleapis.com/projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/attribute.repository/${{ github.repository }}" \
+              --project="${{ secrets.GCP_PROJECT_ID }}"
+          gcloud iam service-accounts add-iam-policy-binding ${{ secrets.GHA_SERVICE_ACCOUNT }} \
+              --role="roles/storage.admin" \
+              --member="principalSet://iam.googleapis.com/projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/attribute.repository/${{ github.repository }}" \
+              --project="${{ secrets.GCP_PROJECT_ID }}"
+        shell: bash
+
+      - name: "Deploy to GCS"
         run: |
           if [ "${{ matrix.panel }}" = "admin-panel" ]; then
             BUCKET_NAME="hublots-admin-static"
