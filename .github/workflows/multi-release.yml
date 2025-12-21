@@ -2,8 +2,8 @@ name: Multi-Project Release
 
 on:
   push:
-    tags:
-      - '*'
+    # tags:
+    #   - '*'
     paths:
       - 'backend/**'
       - 'storefront/**'
