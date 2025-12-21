@@ -78,8 +78,44 @@ resource "google_cloud_run_v2_service" "storefront" {
       image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-storefront:${var.container_image_tag}"
       ports { container_port = 3000 }
       env {
-        name  = "NEXT_PUBLIC_MEDUSA_BACKEND_URL"
+        name  = "MEDUSA_BACKEND_URL"
         value = google_cloud_run_v2_service.backend.uri
+      }
+      env {
+        name  = "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY"
+        value = var.medusa_publishable_key
+      }
+      env {
+        name  = "NEXT_PUBLIC_BASE_URL"
+        value = "https://front.${var.domain}"
+      }
+      env {
+        name  = "NEXT_PUBLIC_DEFAULT_REGION"
+        value = var.default_region
+      }
+      env {
+        name  = "NEXT_PUBLIC_STRIPE_KEY"
+        value = var.stripe_publishable_key
+      }
+      env {
+        name  = "REVALIDATE_SECRET"
+        value = var.revalidate_secret
+      }
+      env {
+        name  = "NEXT_PUBLIC_SITE_NAME"
+        value = var.site_name
+      }
+      env {
+        name  = "NEXT_PUBLIC_SITE_DESCRIPTION"
+        value = var.site_description
+      }
+      env {
+        name  = "NEXT_PUBLIC_ALGOLIA_ID"
+        value = var.algolia_id_storefront
+      }
+      env {
+        name  = "NEXT_PUBLIC_ALGOLIA_SEARCH_KEY"
+        value = var.algolia_search_key_storefront
       }
     }
   }

@@ -52,13 +52,21 @@ async function getRegionMap(cacheId: string) {
       },
       cache: 'force-cache'
     }).then(async response => {
-      const json = await response.json();
-
+      const contentType = response.headers.get('content-type');
       if (!response.ok) {
-        throw new Error(json.message);
+        if (contentType && contentType.includes('application/json')) {
+          const json = await response.json();
+          throw new Error(json.message);
+        } else {
+          const text = await response.text();
+          throw new Error(`Backend error: ${response.status} ${response.statusText} - ${text}`);
+        }
       }
-
-      return json;
+      if (contentType && contentType.includes('application/json')) {
+        return response.json();
+      } else {
+        throw new Error(`Unexpected response type: ${contentType}. Expected application/json.`);
+      }
     });
 
     if (!regions?.length) {

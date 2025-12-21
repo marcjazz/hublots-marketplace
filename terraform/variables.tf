@@ -93,3 +93,45 @@ variable "resend_from_email" {
   description = "Resend 'from' email address"
   type        = string
 }
+
+variable "medusa_publishable_key" {
+  description = "Medusa Publishable Key"
+  type        = string
+}
+
+variable "default_region" {
+  description = "Default region for the application"
+  type        = string
+}
+
+variable "stripe_publishable_key" {
+  description = "Stripe Publishable Key"
+  type        = string
+}
+
+variable "revalidate_secret" {
+  description = "Secret key for revalidation"
+  type        = string
+  sensitive   = true
+}
+
+variable "site_name" {
+  description = "Site name for SEO"
+  type        = string
+}
+
+variable "site_description" {
+  description = "Site description for SEO"
+  type        = string
+}
+
+variable "algolia_id_storefront" {
+  description = "Algolia ID for storefront"
+  type        = string
+}
+
+variable "algolia_search_key_storefront" {
+  description = "Algolia Search Key for storefront"
+  type        = string
+  sensitive   = true
+}

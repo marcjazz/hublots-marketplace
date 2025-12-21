@@ -17,3 +17,12 @@ variable "stripe_secret_api_key" { type = string }
 variable "stripe_connected_accounts_webhook_secret" { type = string }
 variable "resend_api_key" { type = string }
 variable "resend_from_email" { type = string }
+
+variable "medusa_publishable_key" { type = string }
+variable "default_region" { type = string }
+variable "stripe_publishable_key" { type = string }
+variable "revalidate_secret" { type = string }
+variable "site_name" { type = string }
+variable "site_description" { type = string }
+variable "algolia_id_storefront" { type = string }
+variable "algolia_search_key_storefront" { type = string }

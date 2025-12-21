@@ -29,12 +29,12 @@ resource "google_compute_backend_service" "static_proxy" {
   }
 
   cdn_policy {
-    cache_mode        = "CACHE_ALL_STATIC"
-    default_ttl       = 3600
-    client_ttl        = 3600
-    max_ttl           = 86400
-    negative_caching  = true
-    serve_while_stale = 86400
+    cache_mode                   = "CACHE_ALL_STATIC"
+    default_ttl                  = 3600
+    client_ttl                   = 3600
+    max_ttl                      = 86400
+    negative_caching             = true
+    serve_while_stale            = 86400
     signed_url_cache_max_age_sec = 3600
   }
 }

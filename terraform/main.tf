@@ -60,6 +60,14 @@ module "compute" {
   resend_api_key                           = var.resend_api_key
   resend_from_email                        = var.resend_from_email
   depends_on                               = [google_project_service.services, module.iam, module.storage, module.secrets]
+  medusa_publishable_key                   = var.medusa_publishable_key
+  default_region                           = var.default_region
+  stripe_publishable_key                   = var.stripe_publishable_key
+  revalidate_secret                        = var.revalidate_secret
+  site_name                                = var.site_name
+  site_description                         = var.site_description
+  algolia_id_storefront                    = var.algolia_id_storefront
+  algolia_search_key_storefront            = var.algolia_search_key_storefront
 }
 
 module "networking" {
