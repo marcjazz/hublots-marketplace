@@ -61,9 +61,11 @@ jobs:
           else
             BUCKET_NAME="hublots-vendor-static"
           fi
-          gsutil -m rsync -r -d ${{ matrix.panel }}/dist gs://$BUCKET_NAME
-          gsutil -m setmeta -h "Cache-Control:public, max-age=3600" gs://$BUCKET_NAME/**
+          gcloud storage rsync ${{ matrix.panel }}/dist gs://$BUCKET_NAME --recursive --delete-unmatched-destination-objects
+          gcloud storage objects update gs://$BUCKET_NAME --recursive --cache-control="public, max-age=3600"
         shell: bash
+        env:
+          CLOUDSDK_AUTH_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
 
       - name: Tar Panel
         run: |
