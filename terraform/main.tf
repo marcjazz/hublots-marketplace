@@ -7,7 +7,6 @@ resource "google_project_service" "services" {
     "artifactregistry.googleapis.com",
     "secretmanager.googleapis.com",
     "compute.googleapis.com",
-    "cloudbuild.googleapis.com",
   ])
   project            = var.project_id
   service            = each.key
@@ -23,7 +22,9 @@ module "iam" {
 
 module "storage" {
   source     = "./modules/storage"
+  project_id = var.project_id
   region     = var.region
+  domain     = var.domain
   depends_on = [google_project_service.services]
 }
 
@@ -47,7 +48,7 @@ module "compute" {
   service_accounts                         = module.iam.service_accounts
   admin_bucket_name                        = module.storage.admin_bucket_name
   vendor_bucket_name                       = module.storage.vendor_bucket_name
-  nginx_conf_secret_id                     = module.secrets.nginx_conf_secret_id
+  config_bucket_name                       = module.storage.config_bucket_name
   neon_db_url                              = var.neon_db_url
   domain                                   = var.domain
   jwt_secret                               = var.jwt_secret
@@ -69,14 +70,6 @@ module "networking" {
   static_proxy_name = module.compute.static_proxy_name
   storefront_name   = module.compute.storefront_name
   depends_on        = [google_project_service.services, module.compute]
-}
-
-module "cloudbuild" {
-  source            = "./modules/cloudbuild"
-  project_id        = var.project_id
-  github_owner      = var.github_owner
-  github_repository = var.github_repository
-  depends_on        = [google_project_service.services]
 }
 
 resource "google_artifact_registry_repository" "ghcr_io_mirror" {

@@ -109,7 +109,7 @@ resource "google_cloud_run_v2_service" "static_proxy" {
       }
       volume_mounts {
         name       = "nginx-conf"
-        mount_path = "/etc/nginx"
+        mount_path = "/etc/nginx/conf.d"
       }
     }
 
@@ -129,12 +129,9 @@ resource "google_cloud_run_v2_service" "static_proxy" {
     }
     volumes {
       name = "nginx-conf"
-      secret {
-        secret = var.nginx_conf_secret_id
-        items {
-          version = "latest"
-          path    = "nginx.conf"
-        }
+      gcs {
+        bucket    = var.config_bucket_name
+        read_only = true
       }
     }
   }

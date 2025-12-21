@@ -15,6 +15,10 @@ jobs:
     strategy:
       matrix:
         panel: [admin-panel, vendor-panel]
+    permissions:
+      contents: write
+      id-token: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,6 +40,27 @@ jobs:
           cd ${{ matrix.panel }}
           pnpm install
           pnpm build:preview
+        shell: bash
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/providers/${{ secrets.WIP_PROVIDER }}'
+          service_account: '${{ secrets.GHA_SERVICE_ACCOUNT }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Deploy to GCS'
+        run: |
+          if [ "${{ matrix.panel }}" = "admin-panel" ]; then
+            BUCKET_NAME="hublots-admin-static"
+          else
+            BUCKET_NAME="hublots-vendor-static"
+          fi
+          gsutil -m rsync -r -d ${{ matrix.panel }}/dist gs://$BUCKET_NAME
+          gsutil -m setmeta -h "Cache-Control:public, max-age=3600" gs://$BUCKET_NAME/**
         shell: bash
 
       - name: Tar Panel
