@@ -66,7 +66,6 @@ module "compute" {
   site_description       = var.site_description
 
   depends_on = [google_project_service.services, module.iam, module.storage, module.secrets]
-
 }
 
 module "networking" {
