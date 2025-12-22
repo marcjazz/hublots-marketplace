@@ -2,6 +2,22 @@ name: Deploy to GCP with Terraform
 
 on:
   workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: 'Deployment Environment'
+        required: true
+        default: 'production'
+        type: string
+      tag:
+        description: 'Container Image Tag'
+        required: true
+        default: 'latest'
+        type: string
+      domain:
+        description: 'Application Domain'
+        required: true
+        default: 'store.kdmarc.xyz'
+        type: string
 
 jobs:
   terraform:
@@ -11,25 +27,22 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
+      packages: 'read'
 
     env:
       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
       TF_VAR_region: ${{ secrets.GCP_REGION }}
-      TF_VAR_domain: ${{ secrets.APP_DOMAIN }}
-      TF_VAR_neon_db_url: ${{ secrets.NEON_DB_URL }}
-      TF_VAR_container_image_tag: ${{ secrets.CONTAINER_IMAGE_TAG }}
-      TF_VAR_github_repository: ${{ secrets.GITHUB_REPOSITORY }}
-      TF_VAR_github_owner: ${{ secrets.GITHUB_OWNER }}
-      TF_VAR_environment: ${{ secrets.ENVIRONMENT }}
-      TF_VAR_ghcr_pat: ${{ secrets.GHCR_PAT }}
+      TF_VAR_domain: ${{ github.event.inputs.domain }}
+      TF_VAR_neon_db_url: ${{ secrets.DATABASE_URL }}
+      TF_VAR_container_image_tag: ${{ github.event.inputs.tag }}
+      TF_VAR_github_repository: ${{ github.workspace }}
+      TF_VAR_github_owner: ${{ github.repository_owner }}
+      TF_VAR_environment: ${{ github.event.inputs.deploy_environment }}
+      TF_VAR_ghcr_pat: ${{ secrets.GITHUB_TOKEN}}
       TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
       TF_VAR_cookie_secret: ${{ secrets.COOKIE_SECRET }}
-      TF_VAR_algolia_api_key: ${{ secrets.ALGOLIA_API_KEY }}
-      TF_VAR_algolia_app_id: ${{ secrets.ALGOLIA_APP_ID }}
-      TF_VAR_stripe_secret_api_key: ${{ secrets.STRIPE_SECRET_API_KEY }}
-      TF_VAR_stripe_connected_accounts_webhook_secret: ${{ secrets.STRIPE_CONNECTED_ACCOUNTS_WEBHOOK_SECRET }}
       TF_VAR_resend_api_key: ${{ secrets.RESEND_API_KEY }}
-      TF_VAR_resend_from_email: ${{ secrets.RESEND_FROM_EMAIL }}
+      TF_VAR_resend_from_email: ${{ vars.RESEND_FROM_EMAIL }}
 
     steps:
     - name: Checkout

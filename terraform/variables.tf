@@ -29,6 +29,7 @@ variable "container_image_tag" {
 variable "github_repository" {
   description = "GitHub repository for GHCR images"
   type        = string
+  default     = "hublots-marketplace"
 }
 
 variable "github_owner" {
