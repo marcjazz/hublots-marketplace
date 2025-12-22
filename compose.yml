@@ -20,6 +20,8 @@ services:
       - '9000:9000'
     depends_on:
       - postgres
+    env_file:
+      - ./backend/.env
 
   storefront:
     image: ghcr.io/marcjazz/hublots-marketplace/storefront:latest
@@ -30,26 +32,10 @@ services:
       - '8000:3000'
     depends_on:
       - backend
+    env_file:
+      - ./storefront/.env.local
 
-  admin-panel:
-    image: ghcr.io/marcjazz/hublots-marketplace/admin-panel:latest
-    build:
-      context: ./admin-panel
-      dockerfile: Dockerfile
-    ports:
-      - '7000:3000'
-    depends_on:
-      - backend
 
-  vendor-panel:
-    image: ghcr.io/marcjazz/hublots-marketplace/vendor-panel:latest
-    build:
-      context: ./vendor-panel
-      dockerfile: Dockerfile
-    ports:
-      - '7001:3000'
-    depends_on:
-      - backend
 
 volumes:
   pgdata:

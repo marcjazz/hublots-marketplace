@@ -31,17 +31,6 @@ module.exports = defineConfig({
       options: {}
     },
     {
-      resolve: '@mercurjs/algolia',
-      options: {
-        apiKey: process.env.ALGOLIA_API_KEY,
-        appId: process.env.ALGOLIA_APP_ID
-      }
-    },
-    {
-      resolve: '@mercurjs/reviews',
-      options: {}
-    },
-    {
       resolve: '@mercurjs/requests',
       options: {}
     },
@@ -51,21 +40,6 @@ module.exports = defineConfig({
     }
   ],
   modules: [
-    {
-      resolve: '@medusajs/medusa/payment',
-      options: {
-        providers: [
-          {
-            resolve:
-              '@mercurjs/payment-stripe-connect/providers/stripe-connect',
-            id: 'stripe-connect',
-            options: {
-              apiKey: process.env.STRIPE_SECRET_API_KEY
-            }
-          }
-        ]
-      }
-    },
     {
       resolve: '@medusajs/medusa/notification',
       options: {

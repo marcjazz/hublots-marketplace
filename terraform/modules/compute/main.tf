@@ -34,22 +34,6 @@ resource "google_cloud_run_v2_service" "backend" {
         value = var.cookie_secret
       }
       env {
-        name  = "ALGOLIA_API_KEY"
-        value = var.algolia_api_key
-      }
-      env {
-        name  = "ALGOLIA_APP_ID"
-        value = var.algolia_app_id
-      }
-      env {
-        name  = "STRIPE_SECRET_API_KEY"
-        value = var.stripe_secret_api_key
-      }
-      env {
-        name  = "STRIPE_CONNECTED_ACCOUNTS_WEBHOOK_SECRET"
-        value = var.stripe_connected_accounts_webhook_secret
-      }
-      env {
         name  = "RESEND_API_KEY"
         value = var.resend_api_key
       }
@@ -94,10 +78,6 @@ resource "google_cloud_run_v2_service" "storefront" {
         value = var.default_region
       }
       env {
-        name  = "NEXT_PUBLIC_STRIPE_KEY"
-        value = var.stripe_publishable_key
-      }
-      env {
         name  = "REVALIDATE_SECRET"
         value = var.revalidate_secret
       }
@@ -108,14 +88,6 @@ resource "google_cloud_run_v2_service" "storefront" {
       env {
         name  = "NEXT_PUBLIC_SITE_DESCRIPTION"
         value = var.site_description
-      }
-      env {
-        name  = "NEXT_PUBLIC_ALGOLIA_ID"
-        value = var.algolia_id_storefront
-      }
-      env {
-        name  = "NEXT_PUBLIC_ALGOLIA_SEARCH_KEY"
-        value = var.algolia_search_key_storefront
       }
     }
   }

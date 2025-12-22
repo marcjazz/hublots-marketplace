@@ -71,18 +71,6 @@ variable "algolia_app_id" {
   type        = string
 }
 
-variable "stripe_secret_api_key" {
-  description = "Stripe Secret API Key"
-  type        = string
-  sensitive   = true
-}
-
-variable "stripe_connected_accounts_webhook_secret" {
-  description = "Stripe Connected Accounts Webhook Secret"
-  type        = string
-  sensitive   = true
-}
-
 variable "resend_api_key" {
   description = "Resend API Key for email services"
   type        = string
@@ -104,11 +92,6 @@ variable "default_region" {
   type        = string
 }
 
-variable "stripe_publishable_key" {
-  description = "Stripe Publishable Key"
-  type        = string
-}
-
 variable "revalidate_secret" {
   description = "Secret key for revalidation"
   type        = string
@@ -123,15 +106,4 @@ variable "site_name" {
 variable "site_description" {
   description = "Site description for SEO"
   type        = string
-}
-
-variable "algolia_id_storefront" {
-  description = "Algolia ID for storefront"
-  type        = string
-}
-
-variable "algolia_search_key_storefront" {
-  description = "Algolia Search Key for storefront"
-  type        = string
-  sensitive   = true
 }

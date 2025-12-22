@@ -53,21 +53,15 @@ module "compute" {
   domain                                   = var.domain
   jwt_secret                               = var.jwt_secret
   cookie_secret                            = var.cookie_secret
-  algolia_api_key                          = var.algolia_api_key
-  algolia_app_id                           = var.algolia_app_id
-  stripe_secret_api_key                    = var.stripe_secret_api_key
-  stripe_connected_accounts_webhook_secret = var.stripe_connected_accounts_webhook_secret
   resend_api_key                           = var.resend_api_key
   resend_from_email                        = var.resend_from_email
   depends_on                               = [google_project_service.services, module.iam, module.storage, module.secrets]
   medusa_publishable_key                   = var.medusa_publishable_key
   default_region                           = var.default_region
-  stripe_publishable_key                   = var.stripe_publishable_key
   revalidate_secret                        = var.revalidate_secret
   site_name                                = var.site_name
   site_description                         = var.site_description
-  algolia_id_storefront                    = var.algolia_id_storefront
-  algolia_search_key_storefront            = var.algolia_search_key_storefront
+
 }
 
 module "networking" {
