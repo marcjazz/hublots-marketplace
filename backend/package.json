@@ -26,14 +26,11 @@
     "@medusajs/cli": "2.11.3",
     "@medusajs/framework": "2.11.3",
     "@medusajs/medusa": "2.11.3",
-    "@mercurjs/algolia": "^1.4.5",
     "@mercurjs/b2c-core": "^1.4.5",
     "@mercurjs/commission": "^1.4.5",
     "@mercurjs/framework": "^1.4.5",
-    "@mercurjs/payment-stripe-connect": "^1.4.5",
     "@mercurjs/requests": "^1.4.5",
-    "@mercurjs/resend": "^1.4.5",
-    "@mercurjs/reviews": "^1.4.5"
+    "@mercurjs/resend": "^1.4.5"
   },
   "devDependencies": {
     "@medusajs/test-utils": "2.11.3",
