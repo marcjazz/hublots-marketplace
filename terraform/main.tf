@@ -75,7 +75,6 @@ module "networking" {
   domain           = var.domain
   nginx_proxy_name = module.compute.nginx_proxy_name
   storefront_name  = module.compute.storefront_name
-  vendor_name      = module.compute.vendor_name
 
   depends_on = [google_project_service.services, module.compute]
 }

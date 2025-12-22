@@ -27,8 +27,3 @@ output "domain_mapping_store_cname_target" {
   description = "CNAME target for storefront domain mapping. Configure this with your domain registrar if auto-provisioning fails."
   value       = module.networking.store_cname_target
 }
-
-output "load_balancer_ip" {
-  description = "The IP address of the Global Load Balancer."
-  value       = module.networking.lb_ip
-}
