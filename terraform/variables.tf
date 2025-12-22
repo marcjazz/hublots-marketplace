@@ -96,4 +96,3 @@ variable "site_description" {
   description = "Site description for SEO"
   type        = string
 }
-

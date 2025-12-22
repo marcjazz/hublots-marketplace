@@ -22,12 +22,13 @@ module "iam" {
 }
 
 module "storage" {
-  source     = "./modules/storage"
-  project_id = var.project_id
-  region     = var.region
-  domain     = var.domain
+  source                      = "./modules/storage"
+  project_id                  = var.project_id
+  region                      = var.region
+  domain                      = var.domain
+  cloudrun_service_accounts = module.iam.service_accounts
 
-  depends_on = [google_project_service.services]
+  depends_on = [google_project_service.services, module.iam]
 }
 
 module "secrets" {

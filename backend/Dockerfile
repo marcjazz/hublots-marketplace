@@ -24,4 +24,4 @@ COPY --from=builder /app/backend/node_modules ./node_modules
 COPY --from=builder /app/backend/.medusa/server ./
 EXPOSE 9000
 
-CMD ["/bin/sh", "-c", "yarn medusa db:migrate && yarn medusa exec ./src/scripts/seed.js && yarn start"]
+CMD ["/bin/sh", "-c", "yarn start"]

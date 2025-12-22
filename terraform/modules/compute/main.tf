@@ -12,7 +12,7 @@ resource "google_cloud_run_v2_service" "backend" {
     containers {
       name  = "backend"
       image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
-      ports { container_port = 8080 }
+      ports { container_port = 9000 }
       env {
         name  = "DATABASE_URL"
         value = var.neon_db_url
