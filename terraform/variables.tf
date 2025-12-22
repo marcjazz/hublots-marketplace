@@ -12,7 +12,6 @@ variable "region" {
 variable "domain" {
   description = "Root domain for the applications"
   type        = string
-  default     = "kdmarc.xyz"
 }
 
 variable "neon_db_url" {
@@ -59,17 +58,6 @@ variable "cookie_secret" {
   description = "Cookie secret key for session management"
   type        = string
   sensitive   = true
-}
-
-variable "algolia_api_key" {
-  description = "Algolia API Key"
-  type        = string
-  sensitive   = true
-}
-
-variable "algolia_app_id" {
-  description = "Algolia Application ID"
-  type        = string
 }
 
 variable "resend_api_key" {
