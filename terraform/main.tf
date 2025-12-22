@@ -52,7 +52,6 @@ module "compute" {
   source                 = "./modules/compute"
   project_id             = var.project_id
   region                 = var.region
-  github_owner           = var.github_owner
   github_repository      = var.github_repository
   container_image_tag    = var.container_image_tag
   service_accounts       = module.iam.service_accounts

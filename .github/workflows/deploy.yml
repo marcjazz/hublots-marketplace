@@ -30,7 +30,7 @@ jobs:
       TF_VAR_domain: ${{ vars.SITE_DOMAIN }}
       TF_VAR_neon_db_url: ${{ secrets.DATABASE_URL }}
       TF_VAR_container_image_tag: ${{ github.event.inputs.tag }}
-      TF_VAR_github_repository: ${{ github.workspace }}
+      TF_VAR_github_repository: ${{ github.repository }}
       TF_VAR_github_owner: ${{ github.repository_owner }}
       TF_VAR_environment: ${{ github.event.inputs.deploy_environment }}
       TF_VAR_ghcr_pat: ${{ secrets.GITHUB_TOKEN}}

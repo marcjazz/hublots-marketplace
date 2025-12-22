@@ -11,7 +11,7 @@ resource "google_cloud_run_v2_service" "backend" {
 
     containers {
       name  = "backend"
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
+      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-backend:${var.container_image_tag}"
       ports { container_port = 9000 }
       env {
         name = "DATABASE_URL"
@@ -88,7 +88,7 @@ resource "google_cloud_run_v2_service" "storefront" {
   template {
     service_account = var.service_accounts["storefront"].email
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-storefront:${var.container_image_tag}"
+      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-storefront:${var.container_image_tag}"
       ports { container_port = 3000 }
       env {
         name  = "MEDUSA_BACKEND_URL"
@@ -191,7 +191,7 @@ resource "google_cloud_run_v2_job" "medusa-migration" {
       timeout         = "1800s"
       service_account = var.service_accounts["backend"].email
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-backend:${var.container_image_tag}"
         command = ["/bin/sh", "-c"]
         args = [
           "yarn medusa db:migrate && exit 0"
@@ -222,7 +222,7 @@ resource "google_cloud_run_v2_job" "medusa-seeder" {
       timeout         = "1800s"
       service_account = var.service_accounts["backend"].email
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-backend:${var.container_image_tag}"
         command = ["/bin/sh", "-c"]
         args = [
           "yarn medusa exec ./src/scripts/seed.js  && exit 0"
