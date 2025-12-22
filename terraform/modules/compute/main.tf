@@ -67,7 +67,7 @@ resource "google_cloud_run_v2_service" "storefront" {
       ports { container_port = 3000 }
       env {
         name  = "MEDUSA_BACKEND_URL"
-        value = google_cloud_run_v2_service.backend.uri
+        value = "https://api.${var.domain}"
       }
       env {
         name  = "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY"

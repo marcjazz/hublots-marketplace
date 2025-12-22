@@ -38,9 +38,22 @@ resource "google_cloud_run_domain_mapping" "vendor" {
   }
 }
 
+resource "google_cloud_run_domain_mapping" "backend" {
+  location = var.region
+  name     = "api.${var.domain}"
+
+  metadata {
+    namespace = var.project_id
+  }
+
+  spec {
+    route_name = var.backend_name
+  }
+}
+
 # Service IAM for Public Access
 resource "google_cloud_run_service_iam_member" "public" {
-  for_each = toset([var.nginx_proxy_name, var.storefront_name])
+  for_each = toset([var.nginx_proxy_name, var.storefront_name, var.backend_name])
   location = var.region
   project  = var.project_id
   service  = each.key
