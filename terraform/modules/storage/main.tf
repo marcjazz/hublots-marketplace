@@ -35,7 +35,7 @@ resource "google_storage_bucket" "vendor_static" {
 resource "google_storage_bucket_iam_member" "config_proxy_access" {
   bucket = google_storage_bucket.config.name
   role   = "roles/storage.objectViewer"
-  member = "serviceAccount:cloudrun-static-proxy-sa@${var.project_id}.iam.gserviceaccount.com"
+  member = "serviceAccount:cloudrun-nginx-proxy-sa@${var.project_id}.iam.gserviceaccount.com"
 }
 
 resource "google_storage_bucket_iam_member" "admin_static_public" {
@@ -49,16 +49,16 @@ resource "google_storage_bucket_iam_member" "vendor_static_public" {
   role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
-resource "google_storage_bucket_iam_member" "admin_static_proxy_access" {
+resource "google_storage_bucket_iam_member" "admin_nginx_proxy_access" {
   bucket = google_storage_bucket.admin_static.name
   role   = "roles/storage.objectViewer"
-  member = "serviceAccount:cloudrun-static-proxy-sa@${var.project_id}.iam.gserviceaccount.com"
+  member = "serviceAccount:cloudrun-nginx-proxy-sa@${var.project_id}.iam.gserviceaccount.com"
 }
 
-resource "google_storage_bucket_iam_member" "vendor_static_proxy_access" {
+resource "google_storage_bucket_iam_member" "vendor_nginx_proxy_access" {
   bucket = google_storage_bucket.vendor_static.name
   role   = "roles/storage.objectViewer"
-  member = "serviceAccount:cloudrun-static-proxy-sa@${var.project_id}.iam.gserviceaccount.com"
+  member = "serviceAccount:cloudrun-nginx-proxy-sa@${var.project_id}.iam.gserviceaccount.com"
 }
 
 resource "google_storage_bucket_iam_member" "admin_static_gha" {

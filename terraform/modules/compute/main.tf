@@ -94,14 +94,14 @@ resource "google_cloud_run_v2_service" "storefront" {
 }
 
 # Nginx Static Proxy Service
-resource "google_cloud_run_v2_service" "static_proxy" {
+resource "google_cloud_run_v2_service" "nginx_proxy" {
   project  = var.project_id
   location = var.region
-  name     = "hublots-static-proxy"
+  name     = "hublots-nginx-proxy"
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
-    service_account       = var.service_accounts["static-proxy"].email
+    service_account       = var.service_accounts["nginx-proxy"].email
     execution_environment = "EXECUTION_ENVIRONMENT_GEN2"
 
     containers {
@@ -144,3 +144,4 @@ resource "google_cloud_run_v2_service" "static_proxy" {
     }
   }
 }
+
