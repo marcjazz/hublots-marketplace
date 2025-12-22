@@ -43,6 +43,8 @@ jobs:
       TF_VAR_revalidate_secret: ${{ secrets.REVALIDATE_SECRET }}
       TF_VAR_site_name: ${{ vars.SITE_NAME }}
       TF_VAR_site_description: ${{ vars.SITE_DESCRIPTION }}
+      TF_VAR_stripe_secret_api_key: ${{ secrets.STRIPE_SECRET_API_KEY }}
+      TF_IN_AUTOMATION: true
 
     steps:
     - name: Checkout
@@ -61,9 +63,9 @@ jobs:
       uses: hashicorp/setup-terraform@v2
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -input=false
       working-directory: ./terraform
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -input=false
       working-directory: ./terraform
