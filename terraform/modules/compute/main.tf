@@ -41,6 +41,10 @@ resource "google_cloud_run_v2_service" "backend" {
         name  = "RESEND_FROM_EMAIL"
         value = var.resend_from_email
       }
+      env {
+        name  = "STRIPE_SECRET_API_KEY"
+        value = var.stripe_secret_api_key
+      }
     }
     containers {
       name  = "redis"

@@ -22,10 +22,10 @@ module "iam" {
 }
 
 module "storage" {
-  source                      = "./modules/storage"
-  project_id                  = var.project_id
-  region                      = var.region
-  domain                      = var.domain
+  source                    = "./modules/storage"
+  project_id                = var.project_id
+  region                    = var.region
+  domain                    = var.domain
   cloudrun_service_accounts = module.iam.service_accounts
 
   depends_on = [google_project_service.services, module.iam]
@@ -64,6 +64,7 @@ module "compute" {
   revalidate_secret      = var.revalidate_secret
   site_name              = var.site_name
   site_description       = var.site_description
+  stripe_secret_api_key  = var.stripe_secret_api_key
 
   depends_on = [google_project_service.services, module.iam, module.storage, module.secrets]
 }

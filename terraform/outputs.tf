@@ -18,11 +18,6 @@ output "vendor_panel_url" {
   value       = "https://vendor.${var.domain}"
 }
 
-output "dns_nameservers" {
-  description = "The nameservers for the Cloud DNS managed zone. These must be configured with your domain registrar."
-  value       = module.networking.nameservers
-}
-
 output "domain_mapping_store_cname_target" {
   description = "CNAME target for storefront domain mapping. Configure this with your domain registrar if auto-provisioning fails."
   value       = module.networking.store_cname_target

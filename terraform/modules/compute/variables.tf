@@ -13,6 +13,7 @@ variable "jwt_secret" { type = string }
 variable "cookie_secret" { type = string }
 variable "resend_api_key" { type = string }
 variable "resend_from_email" { type = string }
+variable "stripe_secret_api_key" { type = string }
 
 variable "medusa_publishable_key" { type = string }
 variable "default_region" { type = string }

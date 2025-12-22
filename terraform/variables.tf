@@ -96,3 +96,9 @@ variable "site_description" {
   description = "Site description for SEO"
   type        = string
 }
+
+variable "stripe_secret_api_key" {
+  description = "Stripe Secret API Key"
+  type        = string
+  sensitive   = true
+}

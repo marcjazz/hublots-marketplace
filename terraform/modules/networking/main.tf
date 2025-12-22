@@ -1,19 +1,3 @@
-# Cloud DNS Zone
-resource "google_dns_managed_zone" "default" {
-  name        = "hublots-zone"
-  dns_name    = "${var.domain}."
-  description = "DNS zone for ${var.domain}"
-}
-
-# DNS Records
-resource "google_dns_record_set" "store" {
-  name         = "front.${var.domain}."
-  type         = "CNAME"
-  ttl          = 300
-  managed_zone = google_dns_managed_zone.default.name
-  rrdatas      = ["ghs.googlehosted.com."]
-}
-
 # Cloud Run Domain Mapping for Storefront
 resource "google_cloud_run_domain_mapping" "store" {
   location = var.region
