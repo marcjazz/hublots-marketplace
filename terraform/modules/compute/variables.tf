@@ -7,16 +7,15 @@ variable "service_accounts" { type = map(any) }
 variable "admin_bucket_name" { type = string }
 variable "vendor_bucket_name" { type = string }
 variable "config_bucket_name" { type = string }
-variable "neon_db_url" { type = string }
 variable "domain" { type = string }
-variable "jwt_secret" { type = string }
-variable "cookie_secret" { type = string }
-variable "resend_api_key" { type = string }
 variable "resend_from_email" { type = string }
-variable "stripe_secret_api_key" { type = string }
 
 variable "medusa_publishable_key" { type = string }
 variable "default_region" { type = string }
-variable "revalidate_secret" { type = string }
 variable "site_name" { type = string }
 variable "site_description" { type = string }
+
+variable "secret_ids" {
+  type = map(string)
+  description = "Map of secret names to their secret manager IDs"
+}

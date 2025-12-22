@@ -14,8 +14,13 @@ resource "google_cloud_run_v2_service" "backend" {
       image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
       ports { container_port = 9000 }
       env {
-        name  = "DATABASE_URL"
-        value = var.neon_db_url
+        name = "DATABASE_URL"
+        value_source {
+          secret_key_ref {
+            secret  = var.secret_ids["neon-db-url"]
+            version = "latest"
+          }
+        }
       }
       env {
         name  = "REDIS_URL"
@@ -26,24 +31,44 @@ resource "google_cloud_run_v2_service" "backend" {
         value = "https://admin.${var.domain},https://vendor.${var.domain},https://front.${var.domain}"
       }
       env {
-        name  = "JWT_SECRET"
-        value = var.jwt_secret
+        name = "JWT_SECRET"
+        value_source {
+          secret_key_ref {
+            secret  = var.secret_ids["jwt-secret"]
+            version = "latest"
+          }
+        }
       }
       env {
-        name  = "COOKIE_SECRET"
-        value = var.cookie_secret
+        name = "COOKIE_SECRET"
+        value_source {
+          secret_key_ref {
+            secret  = var.secret_ids["cookie-secret"]
+            version = "latest"
+          }
+        }
       }
       env {
-        name  = "RESEND_API_KEY"
-        value = var.resend_api_key
+        name = "RESEND_API_KEY"
+        value_source {
+          secret_key_ref {
+            secret  = var.secret_ids["resend-api-key"]
+            version = "latest"
+          }
+        }
       }
       env {
         name  = "RESEND_FROM_EMAIL"
         value = var.resend_from_email
       }
       env {
-        name  = "STRIPE_SECRET_API_KEY"
-        value = var.stripe_secret_api_key
+        name = "STRIPE_SECRET_API_KEY"
+        value_source {
+          secret_key_ref {
+            secret  = var.secret_ids["stripe-secret-api-key"]
+            version = "latest"
+          }
+        }
       }
     }
     containers {
@@ -82,8 +107,13 @@ resource "google_cloud_run_v2_service" "storefront" {
         value = var.default_region
       }
       env {
-        name  = "REVALIDATE_SECRET"
-        value = var.revalidate_secret
+        name = "REVALIDATE_SECRET"
+        value_source {
+          secret_key_ref {
+            secret  = var.secret_ids["revalidate-secret"]
+            version = "latest"
+          }
+        }
       }
       env {
         name  = "NEXT_PUBLIC_SITE_NAME"
@@ -167,8 +197,13 @@ resource "google_cloud_run_v2_job" "medusa-migration" {
           "yarn medusa db:migrate && exit 0"
         ]
         env {
-          name  = "DATABASE_URL"
-          value = var.neon_db_url
+          name = "DATABASE_URL"
+          value_source {
+            secret_key_ref {
+              secret  = var.secret_ids["neon-db-url"]
+              version = "latest"
+            }
+          }
         }
       }
     }
@@ -193,12 +228,22 @@ resource "google_cloud_run_v2_job" "medusa-seeder" {
           "yarn medusa exec ./src/scripts/seed.js  && exit 0"
         ]
         env {
-          name  = "DATABASE_URL"
-          value = var.neon_db_url
+          name = "DATABASE_URL"
+          value_source {
+            secret_key_ref {
+              secret  = var.secret_ids["neon-db-url"]
+              version = "latest"
+            }
+          }
         }
         env {
-          name  = "STRIPE_SECRET_API_KEY"
-          value = var.stripe_secret_api_key
+          name = "STRIPE_SECRET_API_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = var.secret_ids["stripe-secret-api-key"]
+              version = "latest"
+            }
+          }
         }
       }
     }

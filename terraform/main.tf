@@ -32,12 +32,18 @@ module "storage" {
 }
 
 module "secrets" {
-  source           = "./modules/secrets"
-  project_id       = var.project_id
-  ghcr_pat         = var.ghcr_pat
-  github_owner     = var.github_owner
-  domain           = var.domain
-  service_accounts = module.iam.service_accounts
+  source                = "./modules/secrets"
+  project_id            = var.project_id
+  ghcr_pat              = var.ghcr_pat
+  github_owner          = var.github_owner
+  domain                = var.domain
+  service_accounts      = module.iam.service_accounts
+  jwt_secret            = var.jwt_secret
+  cookie_secret         = var.cookie_secret
+  resend_api_key        = var.resend_api_key
+  revalidate_secret     = var.revalidate_secret
+  stripe_secret_api_key = var.stripe_secret_api_key
+  neon_db_url           = var.neon_db_url
 
   depends_on = [google_project_service.services, module.iam]
 }
@@ -53,18 +59,14 @@ module "compute" {
   admin_bucket_name      = module.storage.admin_bucket_name
   vendor_bucket_name     = module.storage.vendor_bucket_name
   config_bucket_name     = module.storage.config_bucket_name
-  neon_db_url            = var.neon_db_url
   domain                 = var.domain
-  jwt_secret             = var.jwt_secret
-  cookie_secret          = var.cookie_secret
-  resend_api_key         = var.resend_api_key
-  resend_from_email      = var.resend_from_email
   medusa_publishable_key = var.medusa_publishable_key
   default_region         = var.default_region
-  revalidate_secret      = var.revalidate_secret
   site_name              = var.site_name
   site_description       = var.site_description
-  stripe_secret_api_key  = var.stripe_secret_api_key
+  resend_from_email      = var.resend_from_email
+
+  secret_ids = module.secrets.secret_ids
 
   depends_on = [google_project_service.services, module.iam, module.storage, module.secrets]
 }
