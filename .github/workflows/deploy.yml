@@ -43,6 +43,11 @@ jobs:
       TF_VAR_cookie_secret: ${{ secrets.COOKIE_SECRET }}
       TF_VAR_resend_api_key: ${{ secrets.RESEND_API_KEY }}
       TF_VAR_resend_from_email: ${{ vars.RESEND_FROM_EMAIL }}
+      TF_VAR_medusa_publishable_key: ${{ secrets.MEDUSA_PUBLISHABLE_KEY }}
+      TF_VAR_default_region: ${{ vars.DEFAULT_REGION }}
+      TF_VAR_revalidate_secret: ${{ secrets.REVALIDATE_SECRET }}
+      TF_VAR_site_name: ${{ vars.SITE_NAME }}
+      TF_VAR_site_description: ${{ vars.SITE_DESCRIPTION }}
 
     steps:
     - name: Checkout
