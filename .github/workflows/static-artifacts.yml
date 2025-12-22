@@ -3,7 +3,7 @@ name: Static Artifacts Release
 on:
   push:
     tags:
-      - '*'
+      - "*"
     paths:
       - "admin-panel/**"
       - "vendor-panel/**"
@@ -42,6 +42,11 @@ jobs:
           pnpm install
           pnpm build:preview
         shell: bash
+        env:
+          VITE_MEDUSA_BASE: "/"
+          VITE_MEDUSA_STOREFRONT_URL: front.${{ vars.SITE_DOMAIN }}
+          VITE_MEDUSA_BACKEND_URL: api.${{ vars.SITE_DOMAIN }}
+          VITE_MEDUSA_B2B_PANEL: true
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
