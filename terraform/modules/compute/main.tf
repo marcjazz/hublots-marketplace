@@ -149,3 +149,59 @@ resource "google_cloud_run_v2_service" "nginx_proxy" {
   }
 }
 
+# Medusa Migration Job
+resource "google_cloud_run_v2_job" "medusa-migration" {
+  project  = var.project_id
+  location = var.region
+  name     = "medusa-migration"
+
+  template {
+    template {
+      max_retries     = 0
+      timeout         = "1800s"
+      service_account = var.service_accounts["backend"].email
+      containers {
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
+        command = ["/bin/sh", "-c"]
+        args = [
+          "yarn medusa db:migrate && exit 0"
+        ]
+        env {
+          name  = "DATABASE_URL"
+          value = var.neon_db_url
+        }
+      }
+    }
+  }
+}
+
+# Medusa Seeder Job
+resource "google_cloud_run_v2_job" "medusa-seeder" {
+  project  = var.project_id
+  location = var.region
+  name     = "medusa-seeder"
+
+  template {
+    template {
+      max_retries     = 0
+      timeout         = "1800s"
+      service_account = var.service_accounts["backend"].email
+      containers {
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_owner}/${var.github_repository}-backend:${var.container_image_tag}"
+        command = ["/bin/sh", "-c"]
+        args = [
+          "yarn medusa exec ./src/scripts/seed.js  && exit 0"
+        ]
+        env {
+          name  = "DATABASE_URL"
+          value = var.neon_db_url
+        }
+        env {
+          name  = "STRIPE_SECRET_API_KEY"
+          value = var.stripe_secret_api_key
+        }
+      }
+    }
+  }
+}
+
