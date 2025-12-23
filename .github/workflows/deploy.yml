@@ -25,8 +25,8 @@ jobs:
       packages: 'read'
 
     env:
-      TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-      TF_VAR_region: ${{ secrets.GCP_REGION }}
+      TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+      TF_VAR_region: ${{ vars.GCP_REGION }}
       TF_VAR_domain: ${{ vars.SITE_DOMAIN }}
       TF_VAR_neon_db_url: ${{ secrets.DATABASE_URL }}
       TF_VAR_container_image_tag: ${{ github.event.inputs.tag }}
@@ -55,7 +55,7 @@ jobs:
       uses: 'google-github-actions/auth@v2'
       with:
         token_format: 'access_token'
-        project_id: '${{ secrets.GCP_PROJECT_ID }}'
+        project_id: '${{ vars.GCP_PROJECT_ID }}'
         workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/providers/${{ secrets.WIP_PROVIDER }}'
         service_account: '${{ secrets.GHA_SERVICE_ACCOUNT }}'
 

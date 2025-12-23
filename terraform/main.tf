@@ -101,6 +101,14 @@ resource "google_artifact_registry_repository" "ghcr_io_mirror" {
       }
     }
   }
+  cleanup_policies {
+    id     = "cleanup-policy-1"
+    action = "DELETE"
+    condition {
+      older_than = "86400s" # 1 day
+      tag_state  = "UNTAGGED"
+    }
+  }
 
   depends_on = [google_project_service.services, module.secrets]
 }
