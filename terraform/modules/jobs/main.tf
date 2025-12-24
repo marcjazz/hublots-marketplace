@@ -25,6 +25,7 @@ resource "google_cloud_run_v2_job" "medusa_init" {
       service_account = var.service_accounts["backend"].email
 
       containers {
+        name  = "medusa-init"
         image = local.job_image
 
         command = ["/bin/sh", "-c"]

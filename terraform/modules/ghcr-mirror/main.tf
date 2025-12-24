@@ -36,7 +36,7 @@ resource "google_artifact_registry_repository_iam_member" "ghcr_io_mirror_reader
   repository = google_artifact_registry_repository.ghcr_io_mirror.name
   location   = var.region
   project    = var.project_id
-  role       = "roles/artifactregistry.reader"
+  role       = "roles/artifactregistry.writer"
   member     = "serviceAccount:${each.value.email}"
 }
 
