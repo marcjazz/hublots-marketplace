@@ -1,5 +1,5 @@
 locals {
-  job_image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.github_repository}-backend:${var.container_image_tag}"
+  job_image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-backend:${var.container_image_tag}"
 }
 
 resource "random_id" "run_id" {
