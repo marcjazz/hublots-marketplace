@@ -11,6 +11,8 @@ RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
 COPY . .
 
+ENV NODE_ENV=production
+
 RUN pnpm run build
 
 FROM node:22-alpine
@@ -24,6 +26,9 @@ ENV NEXT_SHARP_PATH=/usr/bin/node
 COPY --from=builder /app/storefront/public ./public
 COPY --from=builder /app/storefront/.next/standalone ./
 COPY --from=builder /app/storefront/.next/static ./.next/static
+
+ENV NODE_ENV=production
+
 EXPOSE 3000
 
 CMD ["node", "server.js"]

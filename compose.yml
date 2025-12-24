@@ -12,7 +12,7 @@ services:
     restart: always
 
   backend:
-    image: ghcr.io/marcjazz/hublots-marketplace/backend:latest
+    image: ghcr.io/marcjazz/hublots-marketplace-backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -24,7 +24,7 @@ services:
       - ./backend/.env
 
   storefront:
-    image: ghcr.io/marcjazz/hublots-marketplace/storefront:latest
+    image: ghcr.io/marcjazz/hublots-marketplace-storefront:latest
     build:
       context: ./storefront
       dockerfile: Dockerfile
