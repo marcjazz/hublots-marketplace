@@ -51,11 +51,7 @@ resource "google_secret_manager_secret_iam_member" "backend_secrets_access" {
 }
 
 resource "google_secret_manager_secret_iam_member" "storefront_secrets_access" {
-  for_each  = {
-    for k, v in google_secret_manager_secret.app_secrets : k => v
-    if k == "revalidate-secret"
-  }
-  secret_id = each.value.id
+  secret_id = google_secret_manager_secret.app_secrets["revalidate-secret"].id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${var.service_accounts["storefront"].email}"
 }
