@@ -15,6 +15,6 @@ variable "site_name" { type = string }
 variable "site_description" { type = string }
 
 variable "secret_ids" {
-  type = map(string)
+  type        = map(string)
   description = "Map of secret names to their secret manager IDs"
 }

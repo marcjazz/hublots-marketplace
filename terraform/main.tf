@@ -62,6 +62,18 @@ module "ghcr_mirror" {
   depends_on = [module.secrets]
 }
 
+module "jobs" {
+  source              = "./modules/jobs"
+  project_id          = var.project_id
+  region              = var.region
+  github_repository   = var.github_repository
+  container_image_tag = var.container_image_tag
+  service_accounts    = module.iam.service_accounts
+  secret_ids          = module.secrets.secret_ids
+
+  depends_on = [module.ghcr_mirror]
+}
+
 module "compute" {
   source                 = "./modules/compute"
   project_id             = var.project_id
@@ -78,10 +90,9 @@ module "compute" {
   site_name              = var.site_name
   site_description       = var.site_description
   resend_from_email      = var.resend_from_email
+  secret_ids             = module.secrets.secret_ids
 
-  secret_ids = module.secrets.secret_ids
-
-  depends_on = [module.storage, module.secrets, module.ghcr_mirror]
+  depends_on = [module.storage, module.jobs]
 }
 
 module "networking" {
