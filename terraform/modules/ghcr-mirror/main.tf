@@ -18,16 +18,16 @@ resource "google_artifact_registry_repository" "ghcr_io_mirror" {
     }
   }
   cleanup_policies {
-    id     = "delete-untagged-older-than-7d"
+    id     = "cleanup-policy-1"
     action = "DELETE"
     condition {
-      older_than = "604800s" # 7 days
+      older_than = "86400s" # 1 day
       tag_state  = "UNTAGGED"
     }
   }
 
   lifecycle {
-    prevent_destroy = true
+    ignore_changes = [remote_repository_config[0].upstream_credentials]
   }
 }
 
