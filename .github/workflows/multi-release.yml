@@ -2,8 +2,8 @@ name: Multi-Project Release
 
 on:
   push:
-    tags:
-      - '*'
+    # tags:
+    #   - '*'
     paths:
       - 'backend/**'
       - 'storefront/**'
@@ -50,7 +50,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.GAR_REGISTRY }}/${{ github.repository }}-${{ matrix.project }}
+          images: ${{ env.GAR_REGISTRY }}/hublots-marketplace/hublots-marketplace-${{ matrix.project }}
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
