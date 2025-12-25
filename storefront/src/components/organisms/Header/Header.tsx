@@ -49,7 +49,7 @@ export const Header = async () => {
         <div className="flex lg:justify-center lg:w-1/3 items-center pl-4 lg:pl-0">
           <LocalizedClientLink href="/" className="text-2xl font-bold">
             <Image
-              src="/logo.png"
+              src="/logo.svg"
               width={126}
               height={40}
               alt="Logo"
