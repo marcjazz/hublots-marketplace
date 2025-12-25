@@ -9,15 +9,19 @@ on:
       - 'storefront/**'
       - '.github/workflows/multi-release.yml'
 
-env:
-  REGISTRY: ghcr.io
-
+      
 jobs:
   build-and-push-image:
+    environment: production
+    env:
+      GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      GCP_REGION: ${{ vars.GCP_REGION }}
+      GAR_REGISTRY: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+      id-token: write
     strategy:
       matrix:
         project: [backend, storefront]
@@ -26,18 +30,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID'
+          service_account: 'ARTIFACT_REGISTRY_SA_EMAIL'
+
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.GAR_REGISTRY }}
+          username: 'oauth2accesstoken'
+          password: ${{ steps.auth.outputs.access_token }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}-${{ matrix.project }}
+          images: ${{ env.GAR_REGISTRY }}/${{ github.repository }}-${{ matrix.project }}
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
