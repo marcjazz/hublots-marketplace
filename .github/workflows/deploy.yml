@@ -4,25 +4,25 @@ on:
   workflow_dispatch:
     inputs:
       deploy_environment:
-        description: 'Deployment Environment'
+        description: "Deployment Environment"
         required: true
-        default: 'production'
+        default: "production"
         type: string
       tag:
-        description: 'Container Image Tag'
+        description: "Container Image Tag"
         required: true
-        default: 'latest'
+        default: "latest"
         type: string
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: "Terraform"
     environment: production
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
-      packages: 'read'
+      contents: "read"
+      id-token: "write"
+      packages: "read"
 
     env:
       TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
@@ -44,28 +44,30 @@ jobs:
       TF_VAR_site_name: ${{ vars.SITE_NAME }}
       TF_VAR_site_description: ${{ vars.SITE_DESCRIPTION }}
       TF_VAR_stripe_secret_api_key: ${{ secrets.STRIPE_SECRET_API_KEY }}
+      TF_VAR_admin_password: ${{ secrets.ADMIN_PASSWORD }}
+      TF_VAR_seller_password: ${{ secrets.SELLER_PASSWORD }}
       TF_IN_AUTOMATION: true
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        token_format: 'access_token'
-        project_id: '${{ vars.GCP_PROJECT_ID }}'
-        workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/providers/${{ secrets.WIP_PROVIDER }}'
-        service_account: '${{ secrets.GHA_SERVICE_ACCOUNT }}'
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v2"
+        with:
+          token_format: "access_token"
+          project_id: "${{ vars.GCP_PROJECT_ID }}"
+          workload_identity_provider: "projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WIP_POOL }}/providers/${{ secrets.WIP_PROVIDER }}"
+          service_account: "${{ secrets.GHA_SERVICE_ACCOUNT }}"
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
 
-    - name: Terraform Init
-      run: terraform init -input=false
-      working-directory: ./terraform
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: ./terraform
 
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false
-      working-directory: ./terraform
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false
+        working-directory: ./terraform
