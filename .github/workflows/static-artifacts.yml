@@ -44,9 +44,10 @@ jobs:
         shell: bash
         env:
           VITE_MEDUSA_BASE: "/"
-          VITE_MEDUSA_STOREFRONT_URL: front.${{ vars.SITE_DOMAIN }}
-          VITE_MEDUSA_BACKEND_URL: api.${{ vars.SITE_DOMAIN }}
+          VITE_MEDUSA_STOREFRONT_URL: https://front.${{ vars.SITE_DOMAIN }}
+          VITE_MEDUSA_BACKEND_URL: https://api.${{ vars.SITE_DOMAIN }}
           VITE_MEDUSA_B2B_PANEL: true
+          VITE_DISABLE_SELLERS_REGISTRATION: false
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
