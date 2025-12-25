@@ -42,18 +42,18 @@ function groupItemsBySeller(cart: HttpTypes.StoreCart) {
       }
       groupedBySeller[seller.id].items.push(item)
     } else {
-      if (!groupedBySeller["fleek"]) {
-        groupedBySeller["fleek"] = {
+      if (!groupedBySeller["hublots"]) {
+        groupedBySeller["hublots"] = {
           seller: {
-            name: "Fleek",
-            id: "fleek",
-            photo: "/Logo.svg",
+            name: "HUBLOTS",
+            id: "hublots",
+            photo: "https://avatars.githubusercontent.com/u/157491783?s=400&u=fa9190c57626f1a13368c3561cf4ce8ddaaa778a&v=4",
             created_at: new Date(),
           },
           items: [],
         }
       }
-      groupedBySeller["fleek"].items.push(item)
+      groupedBySeller["hublots"].items.push(item)
     }
   })
 

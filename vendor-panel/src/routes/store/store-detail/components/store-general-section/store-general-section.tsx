@@ -33,7 +33,7 @@ export const StoreGeneralSection = ({ seller }: { seller: StoreVendor }) => {
         <Text size="small" leading="compact" weight="plus">
           Image
         </Text>
-        <ImageAvatar src={seller.photo || "/logo.svg"} size={8} rounded />
+        <ImageAvatar src={seller.photo || "https://avatars.githubusercontent.com/u/157491783?s=400&u=fa9190c57626f1a13368c3561cf4ce8ddaaa778a&v=4"} size={8} rounded />
       </div>
       <div className="text-ui-fg-subtle grid grid-cols-2 px-6 py-4">
         <Text size="small" leading="compact" weight="plus">
