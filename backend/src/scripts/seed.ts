@@ -2,6 +2,7 @@ import { ExecArgs } from '@medusajs/framework/types'
 import { ContainerRegistrationKeys } from '@medusajs/framework/utils'
 
 import {
+  ADMIN_USER,
   createAdminUser,
   createConfigurationRules,
   createDefaultCommissionLevel,
@@ -16,7 +17,8 @@ import {
   createSellerShippingOption,
   createSellerStockLocation,
   createServiceZoneForFulfillmentSet,
-  createStore
+  createStore,
+  SELLER_USER
 } from './seed/seed-functions'
 
 export default async function seedMarketplaceData({ container }: ExecArgs) {
@@ -73,9 +75,9 @@ export default async function seedMarketplaceData({ container }: ExecArgs) {
   logger.info('=== Finished ===')
   logger.info(`Publishable api key: ${apiKey.token}`)
   logger.info(`Admin panel access:`)
-  logger.info(`email: admin@mercurjs.com`)
-  logger.info(`pass: supersecret`)
+  logger.info(`email: ${ADMIN_USER.email}`)
+  logger.info(`pass: ${ADMIN_USER.password}`)
   logger.info(`Vendor panel access:`)
-  logger.info(`email: seller@mercurjs.com`)
-  logger.info(`pass: secret`)
+  logger.info(`email: ${SELLER_USER.email}`)
+  logger.info(`pass: ${SELLER_USER.password}`)
 }
