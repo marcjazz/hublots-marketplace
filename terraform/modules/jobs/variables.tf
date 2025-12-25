@@ -1,6 +1,6 @@
 variable "project_id" { type = string }
 variable "region" { type = string }
-variable "github_repository" { type = string }
+variable "gar_repository" { type = string }
 variable "container_image_tag" { type = string }
 variable "service_accounts" { type = map(any) }
 variable "secret_ids" {

@@ -1,3 +1,7 @@
+locals {
+  gar_base_url = "${var.region}-docker.pkg.dev/${var.project_id}/hublots-gar/${var.gar_repository}-"
+}
+
 # Backend Service
 resource "google_cloud_run_v2_service" "backend" {
   project      = var.project_id
@@ -11,7 +15,7 @@ resource "google_cloud_run_v2_service" "backend" {
 
     containers {
       name  = "backend"
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-backend:${var.container_image_tag}"
+      image = "${local.gar_base_url}-backend:${var.container_image_tag}"
       ports { container_port = 9000 }
       env {
         name = "DATABASE_URL"
@@ -97,7 +101,7 @@ resource "google_cloud_run_v2_service" "storefront" {
   template {
     service_account = var.service_accounts["storefront"].email
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-storefront:${var.container_image_tag}"
+      image = "${local.gar_base_url}-storefront:${var.container_image_tag}"
       ports { container_port = 3000 }
       env {
         name  = "MEDUSA_BACKEND_URL"

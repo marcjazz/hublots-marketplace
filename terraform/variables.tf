@@ -25,16 +25,12 @@ variable "container_image_tag" {
   default     = "latest"
 }
 
-variable "github_repository" {
-  description = "GitHub repository for GHCR images"
+variable "gar_repository" {
+  description = "GAR image repository"
   type        = string
-  default     = "marcjazz/hublots-marketplace"
+  default     = "hublots-marketplace"
 }
 
-variable "github_owner" {
-  description = "GitHub owner or organization for GHCR images"
-  type        = string
-}
 
 variable "environment" {
   description = "Deployment environment (e.g., dev, prod)"

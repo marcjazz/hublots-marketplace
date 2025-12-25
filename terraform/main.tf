@@ -36,8 +36,6 @@ module "storage" {
 module "secrets" {
   source                = "./modules/secrets"
   project_id            = var.project_id
-  ghcr_pat              = var.ghcr_pat
-  github_owner          = var.github_owner
   domain                = var.domain
   service_accounts      = module.iam.service_accounts
   jwt_secret            = var.jwt_secret
@@ -52,35 +50,22 @@ module "secrets" {
   depends_on = [module.iam]
 }
 
-module "ghcr_mirror" {
-  source                       = "./modules/ghcr-mirror"
-  project_id                   = var.project_id
-  region                       = var.region
-  github_owner                 = var.github_owner
-  ghcr_pat_secret_version_name = module.secrets.ghcr_pat_secret_version_name
-  service_accounts             = module.iam.service_accounts
-  project_number               = data.google_project.project.number
-
-  depends_on = [module.secrets]
-}
-
 module "jobs" {
   source              = "./modules/jobs"
   project_id          = var.project_id
   region              = var.region
-  github_repository   = var.github_repository
+  gar_repository      = var.gar_repository
   container_image_tag = var.container_image_tag
   service_accounts    = module.iam.service_accounts
   secret_ids          = module.secrets.secret_ids
 
-  depends_on = [module.ghcr_mirror]
+  depends_on = [module.secrets]
 }
 
 module "compute" {
   source                 = "./modules/compute"
   project_id             = var.project_id
   region                 = var.region
-  github_repository      = var.github_repository
   container_image_tag    = var.container_image_tag
   service_accounts       = module.iam.service_accounts
   admin_bucket_name      = module.storage.admin_bucket_name
@@ -93,6 +78,7 @@ module "compute" {
   site_description       = var.site_description
   resend_from_email      = var.resend_from_email
   secret_ids             = module.secrets.secret_ids
+  gar_repository         = var.gar_repository
 
   depends_on = [module.storage, module.jobs]
 }

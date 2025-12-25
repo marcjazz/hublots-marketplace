@@ -1,17 +1,17 @@
 locals {
-  job_image = "${var.region}-docker.pkg.dev/${var.project_id}/ghcr-io-mirror/${var.github_repository}-backend:${var.container_image_tag}"
+  gcf_blueprint = "${var.region}-docker.pkg.dev/${var.project_id}/hublots-gar/${var.gar_repository}-backend:${var.container_image_tag}"
 }
 
 resource "random_id" "run_id" {
   byte_length = 4
   # This triggers a new ID (and thus a new run) only when the image changes
   keepers = {
-    image = local.job_image
+    image = local.gcf_blueprint
   }
 }
 
 resource "google_storage_bucket" "sample_images" {
-  name                        = "${var.project_id}-sample-images"
+  name                        = "${var.gar_repository}-sample-images"
   location                    = var.region
   uniform_bucket_level_access = true
   force_destroy               = true
@@ -47,7 +47,7 @@ resource "google_cloud_run_v2_job" "medusa_init" {
 
       containers {
         name  = "medusa-init"
-        image = local.job_image
+        image = local.gcf_blueprint
 
         command = ["/bin/sh", "-c"]
         args = [
