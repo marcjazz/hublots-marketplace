@@ -2,8 +2,8 @@ name: Static Artifacts Release
 
 on:
   push:
-    # tags:
-    #   - "*"
+    tags:
+      - "*"
     paths:
       - "admin-panel/**"
       - "vendor-panel/**"
