@@ -42,7 +42,7 @@ export const ProfileGeneralSection = ({ user }: ProfileGeneralSectionProps) => {
         <Text size="small" leading="compact" weight="plus">
           Photo
         </Text>
-        <ImageAvatar src={photo || "https://avatars.githubusercontent.com/u/157491783?s=400&u=fa9190c57626f1a13368c3561cf4ce8ddaaa778a&v=4"} size={8} rounded />
+        <ImageAvatar src={photo || "/logo.png"} size={8} rounded />
       </div>
       <div className="text-ui-fg-subtle grid grid-cols-2 items-center px-6 py-4">
         <Text size="small" leading="compact" weight="plus">

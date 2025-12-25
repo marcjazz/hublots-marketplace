@@ -23,7 +23,7 @@ export default async function RootLayout({
           <div className="flex items-center justify-center pl-4 lg:pl-0 w-full">
             <LocalizedClientLink href="/" className="text-2xl font-bold">
               <Image
-                src="https://avatars.githubusercontent.com/u/157491783?s=400&u=fa9190c57626f1a13368c3561cf4ce8ddaaa778a&v=4"
+                src="/logo.png"
                 width={126}
                 height={40}
                 alt="Logo"

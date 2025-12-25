@@ -47,7 +47,7 @@ function groupItemsBySeller(cart: HttpTypes.StoreCart) {
           seller: {
             name: "HUBLOTS",
             id: "hublots",
-            photo: "https://avatars.githubusercontent.com/u/157491783?s=400&u=fa9190c57626f1a13368c3561cf4ce8ddaaa778a&v=4",
+            photo: "/logo.png",
             created_at: new Date(),
           },
           items: [],
