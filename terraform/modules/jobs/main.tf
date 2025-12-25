@@ -67,6 +67,24 @@ resource "google_cloud_run_v2_job" "medusa_init" {
           name  = "SAMPLE_IMAGES_BUCKET"
           value = google_storage_bucket.sample_images.name
         }
+        env {
+          name = "ADMIN_PASSWORD"
+          value_source {
+            secret_key_ref {
+              secret  = var.secret_ids["admin-password"]
+              version = "latest"
+            }
+          }
+        }
+        env {
+          name = "SELLER_PASSWORD"
+          value_source {
+            secret_key_ref {
+              secret  = var.secret_ids["seller-password"]
+              version = "latest"
+            }
+          }
+        }
       }
     }
   }

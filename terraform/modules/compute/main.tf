@@ -1,5 +1,5 @@
 locals {
-  gar_base_url = "${var.region}-docker.pkg.dev/${var.project_id}/hublots-gar/${var.gar_repository}-"
+  gar_base_url = "${var.region}-docker.pkg.dev/${var.project_id}/hublots-gar/${var.gar_repository}"
 }
 
 # Backend Service
@@ -64,24 +64,6 @@ resource "google_cloud_run_v2_service" "backend" {
       env {
         name  = "RESEND_FROM_EMAIL"
         value = var.resend_from_email
-      }
-      env {
-        name = "ADMIN_PASSWORD"
-        value_source {
-          secret_key_ref {
-            secret  = var.secret_ids["admin-password"]
-            version = "latest"
-          }
-        }
-      }
-      env {
-        name = "SELLER_PASSWORD"
-        value_source {
-          secret_key_ref {
-            secret  = var.secret_ids["seller-password"]
-            version = "latest"
-          }
-        }
       }
     }
     containers {
