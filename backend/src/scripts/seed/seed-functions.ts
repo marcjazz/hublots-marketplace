@@ -32,7 +32,7 @@ import {
 
 import { productsToInsert } from './seed-products'
 
-const countries = ['be', 'de', 'dk', 'se', 'fr', 'es', 'it', 'pl', 'cz', 'nl']
+const countries = ['CM', 'CF', 'TD', 'CG', 'CD', 'GQ', 'GA', 'ST']
 
 export async function createAdminUser(container: MedusaContainer) {
   const authService = container.resolve(Modules.AUTH)
@@ -50,8 +50,8 @@ export async function createAdminUser(container: MedusaContainer) {
   // Create auth identity with password
   const { authIdentity } = await authService.register('emailpass', {
     body: {
-      email: 'admin@mercurjs.com',
-      password: 'supersecret'
+      email: 'admin@hublots.co',
+      password: process.env.ADMIN_PASSWORD || 'supersecret'
     }
   })
   
@@ -63,7 +63,7 @@ export async function createAdminUser(container: MedusaContainer) {
   const { result: user } = await createUserAccountWorkflow(container).run({
     input: {
       userData: {
-        email: 'admin@mercurjs.com',
+        email: 'admin@hublots.co',
         first_name: 'Admin',
         last_name: 'User'
       },
@@ -259,7 +259,7 @@ export async function createSeller(container: MedusaContainer) {
   const { authIdentity } = await authService.register('emailpass', {
     body: {
       email: 'seller@mercurjs.com',
-      password: 'secret'
+      password: process.env.SELLER_PASSWORD || 'secret'
     }
   })
 

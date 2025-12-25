@@ -1,600 +1,324 @@
 import { ProductStatus } from '@medusajs/framework/utils'
 
+const bucketName = process.env.SAMPLE_IMAGES_BUCKET || 'hublots-sample-images'
+const baseUrl = `https://storage.googleapis.com/${bucketName}`
+
 export const productsToInsert = [
   {
-    title: 'AIR FORCE 1 LUXE UNISEX Sneakers',
-    handle: 'air-force-1-luxe-unisex-sneakers',
-    subtitle: ' foam midsole with Air-Sole unit',
+    title: 'Consultation Design Intérieur',
+    handle: 'consultation-design-interieur',
+    subtitle: 'Expertise et conseils personnalisés',
     description:
-      'The iconic Air Force 1 with premium materials and enhanced comfort. Features a full-grain leather upper',
+      'Transformez votre espace de vie avec l\'aide de nos experts. Cette consultation comprend une analyse de votre intérieur, des recommandations de couleurs et d\'aménagement.',
     is_giftcard: false,
     status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/AIR-FORCE-1-LUXE-UNISEX-1 -01JRYW1QY88H8T98HNPZF7NJTF.png',
+    thumbnail: `${baseUrl}/consultation-design-interieur.jpeg`,
     options: [
       {
-        title: 'Color',
-        values: ['White']
+        title: 'Durée',
+        values: ['1 heure', '2 heures']
       }
     ],
     variants: [
       {
-        title: 'White',
+        title: '1 heure',
         allow_backorder: false,
-        manage_inventory: true,
+        manage_inventory: false,
         prices: [
           {
-            amount: 99,
+            amount: 80,
             currency_code: 'eur'
           }
         ],
         options: {
-          Color: 'White'
+          Durée: '1 heure'
+        }
+      },
+      {
+        title: '2 heures',
+        allow_backorder: false,
+        manage_inventory: false,
+        prices: [
+          {
+            amount: 150,
+            currency_code: 'eur'
+          }
+        ],
+        options: {
+          Durée: '2 heures'
         }
       }
     ],
     discountable: true,
     images: [
       {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/AIR-FORCE-1-LUXE-UNISEX-1 -01JRYW1QY88H8T98HNPZF7NJTF.png'
+        url: `${baseUrl}/consultation-design-interieur.jpeg`
       },
       {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/AIR-FORCE-1-LUXE-UNISEX-2 -01JRYW1QY96TV72HCK602R8ASK.png'
+        url: `${baseUrl}/consultation-design-interieur-1.jpeg`
       }
     ]
   },
   {
-    title: 'New Runner Flag Sneakers',
-    handle: 'new-runner-flag',
-    subtitle: '',
+    title: 'Cours de Cuisine Italienne',
+    handle: 'cours-cuisine-italienne',
+    subtitle: 'Apprenez les secrets des pâtes fraîches',
     description:
-      'Heritage-inspired running silhouette featuring distinctive flag details and national color accents. Combines lightweight cushioning, breathable materials, and nostalgic design elements for a unique statement piece with exceptional comfort.',
+      'Un atelier immersif pour maîtriser l\'art culinaire italien. Ingrédients inclus, dégustation sur place.',
     is_giftcard: false,
     status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/New-Runner-Flag-1-01JRYW0TG1KQ5T688H810M9BE3.png',
-    discountable: true,
-    variants: [
-      {
-        title: 'Brown / 41 / New',
-        allow_backorder: false,
-        manage_inventory: true,
-        options: { Color: 'Brown', Size: '41', Condition: 'New' },
-        variant_rank: 0,
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 59
-          }
-        ]
-      },
-      {
-        title: 'Brown / 40 / New',
-        allow_backorder: false,
-        manage_inventory: true,
-        options: { Color: 'Brown', Size: '40', Condition: 'New' },
-        variant_rank: 1,
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 59
-          }
-        ]
-      },
-      {
-        title: 'Brown / 39 / New',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 2,
-        options: { Color: 'Brown', Size: '39', Condition: 'New' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 59
-          }
-        ]
-      },
-      {
-        title: 'Brown / 38 / New',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 3,
-        options: { Color: 'Brown', Size: '38', Condition: 'New' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 59
-          }
-        ]
-      },
-      {
-        title: 'Brown / 41 / Used',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 4,
-        options: { Color: 'Brown', Size: '41', Condition: 'Used' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 39
-          }
-        ]
-      },
-      {
-        title: 'Brown / 40 / Used',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 5,
-        options: { Color: 'Brown', Size: '40', Condition: 'Used' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 39
-          }
-        ]
-      },
-      {
-        title: 'Brown / 39 / Used',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 5,
-        options: { Color: 'Brown', Size: '39', Condition: 'Used' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 39
-          }
-        ]
-      },
-      {
-        title: 'Brown / 38 / Used',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 5,
-        options: { Color: 'Brown', Size: '38', Condition: 'Used' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 39
-          }
-        ]
-      }
-    ],
+    thumbnail: `${baseUrl}/cours-cuisine-italienne.jpeg`,
     options: [
       {
-        title: 'Size',
-        values: ['38', '39', '40', '41']
-      },
-      {
-        title: 'Color',
-        values: ['Brown']
-      },
-      {
-        title: 'Condition',
-        values: ['New', 'Used']
+        title: 'Niveau',
+        values: ['Débutant', 'Avancé']
       }
     ],
+    variants: [
+      {
+        title: 'Débutant',
+        allow_backorder: false,
+        manage_inventory: true,
+        options: { Niveau: 'Débutant' },
+        prices: [
+          {
+            currency_code: 'eur',
+            amount: 65
+          }
+        ]
+      },
+      {
+        title: 'Avancé',
+        allow_backorder: false,
+        manage_inventory: true,
+        options: { Niveau: 'Avancé' },
+        prices: [
+          {
+            currency_code: 'eur',
+            amount: 85
+          }
+        ]
+      }
+    ],
+    discountable: true,
     images: [
       {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/New-Runner-Flag-1-01JRYW0TG1KQ5T688H810M9BE3.png'
+        url: `${baseUrl}/cours-cuisine-italienne.jpeg`
+      },
+      {
+        url: `${baseUrl}/cours-cuisine-italienne-1.jpeg`
       }
     ]
   },
   {
-    title: 'CLASSIC CUPSOLE Sneakers',
-    handle: 'classic-cupsole-sneakers',
-    subtitle: '',
-    description: 'Retro court style reimagined for today',
+    title: 'Service de Nettoyage Professionnel',
+    handle: 'nettoyage-professionnel',
+    subtitle: 'Un foyer éclatant de propreté',
+    description: 'Service de ménage à domicile par des professionnels qualifiés. Produits d\'entretien respectueux de l\'environnement inclus.',
     is_giftcard: false,
     status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/CLASSIC-CUPSOLE-1 -01JRYVZQBJ85B2MPZ3Q0KTBYGA.png',
-    discountable: true,
+    thumbnail: `${baseUrl}/nettoyage-professionnel.jpeg`,
+    options: [
+      {
+        title: 'Type de Nettoyage',
+        values: ['Standard', 'Approfondi']
+      }
+    ],
     variants: [
       {
-        title: 'White / Used / 41',
+        title: 'Standard',
         allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 0,
+        manage_inventory: false,
         options: {
-          Color: 'White',
-          Size: '41',
-          Condition: 'Used'
+          'Type de Nettoyage': 'Standard'
         },
         prices: [
           {
             currency_code: 'eur',
-            amount: 59
+            amount: 40
           }
         ]
       },
       {
-        title: 'Black / Used / 41',
+        title: 'Approfondi',
         allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 1,
+        manage_inventory: false,
         options: {
-          Color: 'Black',
-          Size: '41',
-          Condition: 'Used'
+          'Type de Nettoyage': 'Approfondi'
         },
         prices: [
           {
             currency_code: 'eur',
-            amount: 69
+            amount: 75
           }
         ]
       }
     ],
-    options: [
-      {
-        title: 'Size',
-        values: ['40', '41']
-      },
-      {
-        title: 'Color',
-        values: ['White', 'Black']
-      },
-      {
-        title: 'Condition',
-        values: ['New', 'Used']
-      }
-    ],
+    discountable: true,
     images: [
       {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/CLASSIC-CUPSOLE-1 -01JRYVZQBJ85B2MPZ3Q0KTBYGA.png'
+        url: `${baseUrl}/nettoyage-professionnel.jpeg`
+      },
+      {
+        url: `${baseUrl}/nettoyage-professionnel-1.jpeg`
+      },
+      {
+        url: `${baseUrl}/nettoyage-professionnel-2.jpeg`
       }
     ]
   },
   {
-    title: 'STORM 96 2K LITE Sneakers',
-    handle: 'storm-96-2k-lite',
-    subtitle: '',
+    title: 'Coaching Fitness Personnalisé',
+    handle: 'coaching-fitness-perso',
+    subtitle: 'Atteignez vos objectifs avec un pro',
     description:
-      "Retro-futuristic design combining '90s athletic aesthetics with contemporary technology. Features sculpted, lightweight midsole, mixed material upper, and unique lacing system for stand-out street style with all-day wearability.",
+      'Séance individuelle de sport adaptée à votre condition physique. Suivi nutritionnel de base inclus.',
     is_giftcard: false,
     status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/STORM-96-2K-LITE-1-01JRYVZ58MYDM626NAX1E9ZDDQ.png',
-    discountable: true,
+    thumbnail: `${baseUrl}/coaching-fitness-perso.jpeg`,
+    options: [
+      { title: 'Lieu', values: ['À domicile', 'En ligne'] }
+    ],
     variants: [
       {
-        title: 'Black / 42',
+        title: 'À domicile',
         allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 0,
+        manage_inventory: false,
         options: {
-          Color: 'Black',
-          Size: '42'
+          Lieu: 'À domicile'
         },
         prices: [
           {
             currency_code: 'eur',
-            amount: 79
+            amount: 60
           }
         ]
       },
       {
-        title: 'Black / 41',
+        title: 'En ligne',
         allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 1,
+        manage_inventory: false,
         options: {
-          Color: 'Black',
-          Size: '41'
+          Lieu: 'En ligne'
         },
         prices: [
           {
             currency_code: 'eur',
-            amount: 79
+            amount: 45
           }
         ]
       }
     ],
-    options: [
-      { title: 'Size', values: ['41', '42'] },
-      { title: 'Color', values: ['Black'] }
-    ],
+    discountable: true,
     images: [
       {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/STORM-96-2K-LITE-1-01JRYVZ58MYDM626NAX1E9ZDDQ.png'
+        url: `${baseUrl}/coaching-fitness-perso.jpeg`
+      },
+      {
+        url: `${baseUrl}/coaching-fitness-perso-1.jpeg`
       }
     ]
   },
   {
-    title: 'U574 UNISEX Sneakers',
-    handle: 'u574-unisex-sneakers',
-    subtitle: '',
+    title: 'Réparation Smartphone',
+    handle: 'reparation-smartphone',
+    subtitle: 'Écran brisé ou batterie fatiguée ?',
     description:
-      'Featuring the classic 574 silhouette with updated materials and cushioning. Includes ENCAP midsole technology for support and maximum durability, plus a suede/mesh upper for breathability and style.',
+      'Diagnostic et réparation rapide de votre smartphone. Pièces de rechange garanties 6 mois.',
     is_giftcard: false,
     status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/U574-UNISEX-1-01JRYVYJVR8ZWQF87V8NS2HHX9.png',
-    discountable: true,
+    thumbnail: `${baseUrl}/reparation-smartphone.jpeg`,
+    options: [
+      { title: 'Type de Réparation', values: ['Écran', 'Batterie'] }
+    ],
     variants: [
       {
-        title: '37 / Orange / New',
+        title: 'Écran',
         allow_backorder: false,
         manage_inventory: true,
-        variant_rank: 0,
         options: {
-          Color: 'Orange',
-          Size: '37',
-          Condition: 'New'
+          'Type de Réparation': 'Écran'
         },
         prices: [
           {
             currency_code: 'eur',
-            amount: 87
+            amount: 120
           }
         ]
-      }
-    ],
-    options: [
-      { title: 'Color', values: ['Orange'] },
-      { title: 'Size', values: ['37'] },
-      { title: 'Condition', values: ['Used', 'New'] }
-    ],
-    images: [
-      {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/U574-UNISEX-1-01JRYVYJVR8ZWQF87V8NS2HHX9.png'
       },
       {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/U574-UNISEX-2-01JRYVYJVTX6NRM2CCEPR6T994.png'
-      }
-    ]
-  },
-  {
-    title: 'Air VaporMax 2023 Flyknit Triple Black Sneakers',
-    handle: 'air-vapormax-2023-flyknit-triple-black-sneakers',
-    subtitle: '',
-    description:
-      'Revolutionary cushioning with VaporMax Air technology and lightweight Flyknit construction. The unique sole eliminates excess weight, while the sleek triple black colorway offers versatile styling options.',
-    is_giftcard: false,
-    status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/Air-VaporMax-2023-Flyknit-Triple-Black-1 -01JRYVXVMV7D60YFGHGCY7FD1K.png',
-    discountable: true,
-    variants: [
-      {
-        title: 'Black / 41 / New',
+        title: 'Batterie',
         allow_backorder: false,
         manage_inventory: true,
-        variant_rank: 0,
-        options: { Color: 'Black', Size: '41', Condition: 'New' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 99
-          }
-        ]
-      }
-    ],
-    options: [
-      { title: 'Color', values: ['Black'] },
-      { title: 'Size', values: ['41'] },
-      { title: 'Condition', values: ['Used', 'New'] }
-    ],
-    images: [
-      {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/Air-VaporMax-2023-Flyknit-Triple-Black-1 -01JRYVXVMV7D60YFGHGCY7FD1K.png'
-      },
-      {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/Air-VaporMax-2023-Flyknit-Triple-Black-2 -01JRYVXVMZS1REFQNM6WKJWDPG.png'
-      }
-    ]
-  },
-  {
-    title: 'Reelwind Sneakers',
-    handle: 'reelwind-sneakers',
-    subtitle: '',
-    description:
-      'Performance-meets-lifestyle design with responsive cushioning and flexible support. Made with recycled materials, featuring a breathable upper and durable rubber outsole for all-day comfort.',
-    is_giftcard: false,
-    status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/Reelwind-1-01JRYVWVF8XVHG23RXMNAY2EFJ.png',
-    discountable: true,
-    variants: [
-      {
-        title: 'Red / 38',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 0,
-        options: { Color: 'Red', Size: '38' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 59
-          }
-        ]
-      }
-    ],
-    options: [
-      {
-        title: 'Size',
-        values: ['38']
-      },
-      {
-        title: 'Color',
-        values: ['Red']
-      }
-    ],
-    images: [
-      {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/Reelwind-1-01JRYVWVF8XVHG23RXMNAY2EFJ.png'
-      }
-    ]
-  },
-  {
-    title: 'Cool Balance U9060EEE Sneakers',
-    handle: 'u9060eee',
-    subtitle: '',
-    description:
-      'Modern interpretation of the classic running silhouette with exaggerated proportions and enhanced cushioning. Features a combination of premium suede and mesh with an angular, sculptural midsole design for contemporary street style.',
-    is_giftcard: false,
-    status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/U9060EEE-1-01JRYVW83SET4B4ZYZVSK39FDF.png',
-    discountable: true,
-    variants: [
-      {
-        title: 'Gray / Used',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 1,
         options: {
-          Color: 'Gray',
-          Condition: 'Used'
+          'Type de Réparation': 'Batterie'
         },
         prices: [
           {
             currency_code: 'eur',
-            amount: 39
+            amount: 50
+          }
+        ]
+      }
+    ],
+    discountable: true,
+    images: [
+      {
+        url: `${baseUrl}/reparation-smartphone.jpeg`
+      },
+      {
+        url: `${baseUrl}/reparation-smartphone-1.jpeg`
+      }
+    ]
+  },
+  {
+    title: 'Photographe Événementiel',
+    handle: 'photographe-evenementiel',
+    subtitle: 'Capturez vos moments précieux',
+    description:
+      'Reportage photo pour mariages, anniversaires ou événements d\'entreprise. Remise des photos retouchées sur support numérique.',
+    is_giftcard: false,
+    status: ProductStatus.PUBLISHED,
+    thumbnail: `${baseUrl}/photographe-evenementiel.jpeg`,
+    options: [
+      { title: 'Forfait', values: ['Demi-journée', 'Journée complète'] }
+    ],
+    variants: [
+      {
+        title: 'Demi-journée',
+        allow_backorder: false,
+        manage_inventory: false,
+        options: { Forfait: 'Demi-journée' },
+        prices: [
+          {
+            currency_code: 'eur',
+            amount: 450
           }
         ]
       },
       {
-        title: 'Gray / New',
+        title: 'Journée complète',
         allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 0,
-        options: { Color: 'Gray', Condition: 'New' },
+        manage_inventory: false,
+        options: { Forfait: 'Journée complète' },
         prices: [
           {
             currency_code: 'eur',
-            amount: 79
+            amount: 800
           }
         ]
       }
     ],
-    options: [
+    discountable: true,
+    images: [
       {
-        title: 'Condition',
-        values: ['New', 'Used']
+        url: `${baseUrl}/photographe-evenementiel.jpeg`
       },
       {
-        title: 'Color',
-        values: ['Gray']
-      }
-    ],
-    images: [
+        url: `${baseUrl}/photographe-evenementiel-1.jpeg`
+      },
       {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/U9060EEE-1-01JRYVW83SET4B4ZYZVSK39FDF.png'
-      }
-    ]
-  },
-  {
-    title: 'Brown Sneakers',
-    handle: 'brown-sneakers',
-    subtitle: 'Cosy',
-    description:
-      'Classic brown sneakers with leather and suede upper, and a durable rubber sole. Timeless and versatile.',
-    is_giftcard: false,
-    status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/u2735941527_Product_photography_of_brown_Adidas_samba_Sneaker_80c8f007-dcfa-4e5b-b8ac-bf88851a7376_0-01JRWZZ5V9M2ZC0K0WSC96E4AZ.png',
-    discountable: true,
-    variants: [
-      {
-        title: 'Brown / New',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 0,
-        options: {
-          Color: 'Brown',
-          Condition: 'New'
-        },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 89
-          }
-        ]
-      }
-    ],
-    options: [
-      { title: 'Color', values: ['Brown'] },
-      { title: 'Condition', values: ['New'] }
-    ],
-    images: [
-      {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/u2735941527_Product_photography_of_brown_Adidas_samba_Sneaker_80c8f007-dcfa-4e5b-b8ac-bf88851a7376_0-01JRWZZ5V9M2ZC0K0WSC96E4AZ.png'
-      }
-    ]
-  },
-  {
-    title: 'Green high-tops',
-    handle: 'green-high-tops',
-    subtitle: '',
-    description:
-      'Bold green high-tops with classic canvas upper and rubber sole. A timeless streetwear staple.',
-    is_giftcard: false,
-    status: ProductStatus.PUBLISHED,
-    thumbnail:
-      'https://mercur-connect.s3.eu-central-1.amazonaws.com/u2735941527_Product_photography_of_green_converse_Sneakers_no_1ef027ea-f31f-4996-b419-63f85716a277_1-01JRWZYCWYAD4QVMRRTFVWHHDK.png',
-    discountable: true,
-    variants: [
-      {
-        title: 'Green / 40 / New',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 0,
-        options: { Color: 'Green', Size: '40', Condition: 'New' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 99
-          }
-        ]
-      }
-    ],
-    options: [
-      { title: 'Color', values: ['Green'] },
-      { title: 'Size', values: ['40'] },
-      { title: 'Condition', values: ['Used', 'New'] }
-    ],
-    images: [
-      {
-        url: 'https://mercur-connect.s3.eu-central-1.amazonaws.com/u2735941527_Product_photography_of_green_converse_Sneakers_no_1ef027ea-f31f-4996-b419-63f85716a277_1-01JRWZYCWYAD4QVMRRTFVWHHDK.png'
-      }
-    ]
-  },
-  {
-    title: 'High Sneakers',
-    handle: 'high-sneakers',
-    subtitle: 'Purple, beige, and orange',
-    description:
-      'High Sneakers in a bold mix of purple, beige, and orange. Premium materials, iconic silhouette, and standout color blocking.',
-    is_giftcard: false,
-    status: ProductStatus.PUBLISHED,
-    thumbnail: 'https://i.imgur.com/zIcEOTS.png',
-    discountable: true,
-    variants: [
-      {
-        title: 'High Sneakers',
-        allow_backorder: false,
-        manage_inventory: true,
-        variant_rank: 0,
-        options: { Color: 'Purple' },
-        prices: [
-          {
-            currency_code: 'eur',
-            amount: 119
-          }
-        ]
-      }
-    ],
-    options: [
-      {
-        title: 'Color',
-        values: ['Purple']
-      }
-    ],
-    images: [
-      {
-        url: 'https://i.imgur.com/zIcEOTS.png'
+        url: `${baseUrl}/photographe-evenementiel-2.jpeg`
       }
     ]
   }
