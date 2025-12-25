@@ -46,6 +46,8 @@ module "secrets" {
   revalidate_secret     = var.revalidate_secret
   stripe_secret_api_key = var.stripe_secret_api_key
   neon_db_url           = var.neon_db_url
+  admin_password        = var.admin_password
+  seller_password       = var.seller_password
 
   depends_on = [module.iam]
 }

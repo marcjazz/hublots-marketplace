@@ -102,3 +102,15 @@ variable "stripe_secret_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "admin_password" {
+  description = "Admin password"
+  type        = string
+  sensitive   = true
+}
+
+variable "seller_password" {
+  description = "Seller password"
+  type        = string
+  sensitive   = true
+}

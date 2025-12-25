@@ -26,6 +26,8 @@ locals {
     "revalidate-secret"     = var.revalidate_secret
     "stripe-secret-api-key" = var.stripe_secret_api_key
     "neon-db-url"           = var.neon_db_url
+    "admin-password"        = var.admin_password
+    "seller-password"       = var.seller_password
   }
 }
 
