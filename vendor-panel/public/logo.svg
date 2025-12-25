@@ -1,38 +1,18 @@
-      <svg
-        width='44'
-        height='44'
-        viewBox='0 0 44 44'
-        fill='none'
-        xmlns='http://www.w3.org/2000/svg'
-      >
-        <rect
-          width='44'
-          height='44'
-          rx='10'
-          fill='#FAFAFA'
-        />
-        <g clipPath='url(#clip0_11_175)'>
-          <path
-            d='M8 7V20.7349L19.821 13.8675L8 7Z'
-            fill='#4C24DD'
-          />
-          <path
-            d='M36.0002 37.0001V23.2651L24.1792 30.1326L36.0002 37.0001Z'
-            fill='#4C24DD'
-          />
-          <path
-            d='M8 23.2651V37L36 20.7349V7L8 23.2651Z'
-            fill='#4C24DD'
-          />
-        </g>
-        <defs>
-          <clipPath id='clip0_11_175'>
-            <rect
-              width='28'
-              height='30'
-              fill='white'
-              transform='translate(8 7)'
-            />
-          </clipPath>
-        </defs>
-      </svg>
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="400.000000pt" height="400.000000pt" viewBox="0 0 400.000000 400.000000"
+ preserveAspectRatio="xMidYMid meet">
+
+<g transform="translate(0.000000,400.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M0 2000 l0 -2000 475 0 475 0 0 930 0 930 1050 0 1050 0 0 -390 0
+-390 475 0 475 0 0 1460 0 1460 -475 0 -475 0 0 -528 0 -527 56 -160 c31 -88
+59 -171 64 -185 4 -14 33 -96 64 -184 31 -87 55 -160 53 -162 -2 -3 -44 37
+-93 87 -120 123 -303 267 -414 327 -227 123 -381 177 -592 207 -378 54 -809
+-50 -1168 -282 -68 -44 -216 -157 -240 -183 -3 -3 -33 -32 -68 -64 l-62 -59
+41 89 c23 49 57 123 76 164 20 41 50 107 68 145 18 39 51 109 74 158 l41 87 0
+535 0 535 -475 0 -475 0 0 -2000z"/>
+</g>
+</svg>
