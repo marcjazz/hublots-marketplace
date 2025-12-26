@@ -17,7 +17,8 @@ The primary entities in the system are:
 -   **Payment & Payout:** Entities tracking the flow of funds from the customer to the platform and from the platform to the provider.
 -   **Review:** A rating and comment left by a User for a completed Booking.
 -   **Chat:** A communication channel linked to a Booking.
--   **Subscription:** The subscription plan a Provider is enrolled in.
+-   **SubscriptionPlan:** Defines the available subscription tiers for providers.
+-   **ProviderSubscription:** Tracks a provider's specific subscription history (e.g., their active plan).
 
 **Visual Relationship Diagram (Conceptual):**
 
@@ -30,9 +31,9 @@ The primary entities in the system are:
   |                                 |                   |
 (has many)                          |                   |
   |                                 |                   ^
-[Provider] --< (has many) -- [Booking]                   | (has one)
+[Provider] --< (has many) -- [Booking]                   | (has many)
                                     |                   |
-                                    |------------ (has one) --- [Subscription]
+                                    |------------ (has one) --- [ProviderSubscription] -- (belongs to) --> [SubscriptionPlan]
                                     |
                                     |------------ (belongs to) -- [Service]
                                     |
@@ -81,12 +82,11 @@ Represents the service provider business. This will be a custom entity linked to
 | `location_type`| `Enum` | `fixed`, `real-time` | Determines geo-query logic |
 | `current_location`| `PostGIS Point` | Stores `(latitude, longitude)` | Indexed for geo-queries |
 | `availability_schedule`| `JSONB` | Stores weekly availability | e.g., `{"mon": "08:00-17:00"}` |
-| `subscription_id`| `UUID` | Foreign Key to `Subscription` | |
 | `user_id` | `UUID` | Foreign Key to a Medusa `User` for login | |
 
 **Relationships:**
 - Belongs to a Medusa `User` (for panel access)
-- Has one `Subscription`
+- Has many `ProviderSubscriptions`
 - Has many `Technicians`
 - Has many `Services`
 - Has many `Bookings`
@@ -193,10 +193,12 @@ User feedback for a completed service.
 | `id` | `UUID` | Primary Key | |
 | `booking_id` | `UUID` | Foreign Key to `Booking` | Ensures only paying users can review |
 | `user_id` | `UUID` | Foreign Key to `User` | |
-| `provider_id` | `UUID` | Foreign Key to `Provider` | |
 | `rating` | `Integer`| 1 to 5 stars | |
 | `comment` | `Text` | Public review text | |
 | `created_at` | `DateTime`| Timestamp of creation | |
+
+**Relationships:**
+- Belongs to one `Booking` (and through it, to the `Provider` and `User`)
 
 ---
 
@@ -220,14 +222,32 @@ Real-time communication for a booking.
 
 ---
 
-#### 9. Subscription
-Provider subscription plans.
+#### 9. SubscriptionPlan
+Defines the available subscription tiers for providers.
 
 | Field | Type | Description | Notes |
 | :--- | :--- | :--- | :--- |
 | `id` | `UUID` | Primary Key | |
 | `name` | `String` | "Free", "Pro", "Premium" | |
-| `commission_rate`| `Float` | e.g., 0.15 for 15% | |
+| `commission_rate`| `Decimal` | e.g., 0.15 for 15%. Use Decimal for precision. |
 | `visibility_boost`| `Integer`| A weighting factor for search | e.g., 0, 1, 2 |
 | `max_requests` | `Integer`| Max requests per month | `null` for unlimited |
 | `price_monthly` | `Decimal` | Monthly subscription fee | |
+
+---
+
+#### 10. ProviderSubscription
+Join table to track the history of subscriptions for each provider.
+
+| Field | Type | Description | Notes |
+| :--- | :--- | :--- | :--- |
+| `id` | `UUID` | Primary Key | |
+| `provider_id` | `UUID` | Foreign Key to `Provider` | |
+| `subscription_plan_id` | `UUID` | Foreign Key to `SubscriptionPlan` | |
+| `status` | `Enum` | `active`, `expired`, `cancelled` | |
+| `starts_at` | `DateTime`| Timestamp when the subscription becomes active | |
+| `ends_at` | `DateTime`| Timestamp when the subscription expires | |
+
+**Relationships:**
+- Belongs to one `Provider`
+- Belongs to one `SubscriptionPlan`

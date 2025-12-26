@@ -23,7 +23,7 @@ Entitlements are the specific features or benefits a provider receives based on 
 
 | Feature / Entitlement | Tier 1: Basique | Tier 2: Pro | Tier 3: Premium |
 | :--- | :--- | :--- | :--- |
-| **Platform Commission Rate** | **20%** | **12%** | **7%** |
+| **Platform Commission Rate** | **20%** (`Decimal`) | **12%** (`Decimal`) | **7%** (`Decimal`) |
 | **Search Visibility Boost** | Normal | **Higher** (1.5x boost) | **Highest** (2.5x boost) |
 | **Priority Request Access** | Standard Queue | **Priority Queue** | **Instant Access** |
 | **Number of Service Categories** | Up to 2 | Up to 10 | Unlimited |
@@ -51,19 +51,22 @@ As defined in the MVP Scope, the initial launch will feature a simplified versio
 The subscription logic will be managed by a custom `SubscriptionService` within the Medusa backend.
 
 #### **a. Data Model**
-The `Subscription` and `Provider` entities defined in the Domain Model will be used.
+The system uses two core entities for managing subscriptions, as defined in the `domain-model.md`:
 
--   `SubscriptionPlan` entity: Stores the details of each tier (name, price, entitlements as a JSONB field).
--   `Provider` entity: Has a foreign key `subscription_plan_id` to link a provider to their current plan.
+-   **`SubscriptionPlan`**: Stores the definitions of each tier (e.g., "Pro"), including its name, price, and a JSONB field for all associated entitlements (`commission_rate`, `visibility_boost`, etc.).
+-   **`ProviderSubscription`**: A join table that links a `Provider` to a `SubscriptionPlan`. This entity tracks the lifecycle of each individual subscription, with a `status` (`active`, `expired`), a `starts_at`, and an `ends_at` timestamp. This robust model allows for a full history of upgrades, downgrades, and renewals.
 
 #### **b. Subscription Management Flow**
--   **Treating Subscriptions as Products:** A Medusa `Product` will be created for the "Pro" and "Premium" plans. These products will have a special flag (e.g., `is_subscription: true` in metadata).
+-   **Treating Subscriptions as Products:** A Medusa `Product` will be created for the "Pro" and "Premium" plans, flagged with `is_subscription: true` in their metadata.
 -   **Purchase Flow:**
     1.  A provider in their panel clicks "Upgrade".
     2.  This adds the corresponding subscription "product" to a cart.
     3.  The provider completes a standard Medusa checkout process to pay for the first month.
--   **Activation:** A Medusa `Order` completion webhook will listen for orders containing a subscription product. When detected, it will call the `SubscriptionService`.
--   **`SubscriptionService.activateSubscription(providerId, planId)`**: This method updates the `provider.subscription_plan_id` and sets an `expires_at` timestamp (e.g., 30 days from now).
+-   **Activation:** A Medusa `Order` completion webhook listens for orders containing a subscription product. When detected, it calls the `SubscriptionService`.
+-   **`SubscriptionService.activateSubscription(providerId, planId)`**: This method:
+    1.  Finds and deactivates any existing `active` subscription for the provider.
+    2.  Creates a **new record** in the `ProviderSubscription` table, linking the `provider_id` and the `plan_id`.
+    3.  Sets the new subscription's `status` to `active`, `starts_at` to the current time, and `ends_at` to 30 days in the future.
 
 #### **c. Enforcement Points**
 
@@ -74,7 +77,7 @@ This is where the system actively applies the subscription rules.
 -   **Process:**
     1.  The system retrieves the `booking.agreed_price`.
     2.  It calls `SubscriptionService.getEntitlements(booking.provider_id)`.
-    3.  This method returns the provider's current `commission_rate`.
+    3.  This method now queries the `ProviderSubscription` table to find the currently `active` plan for the provider and returns its `commission_rate`.
     4.  The system calculates `commission = agreed_price * commission_rate`.
     5.  The `payout_amount` is calculated as `agreed_price - commission`.
     6.  The payout is processed for the final `payout_amount`.
@@ -83,14 +86,12 @@ This is where the system actively applies the subscription rules.
 -   **Location:** In the `GeolocationService.findProvidersInRadius` method.
 -   **Process:**
     1.  The initial PostGIS query fetches all providers within the radius.
-    2.  The service then iterates through the results, retrieving the `visibility_boost` factor for each provider from the `SubscriptionService`.
-    3.  The final list of providers returned to the frontend is re-sorted, applying the boost factor to providers on higher tiers. For example, they can be simply moved to the top of the list.
+    2.  The service then iterates through the results, retrieving the `visibility_boost` factor for each provider from their active subscription plan via the `SubscriptionService`.
+    3.  The final list of providers returned to the frontend is re-sorted, applying the boost factor to providers on higher tiers.
 
 **3. Priority Request Access (Phase 2)**
 -   **Location:** In the future "Request Broadcasting" service.
 -   **Process:**
     1.  When a custom job is posted, the system finds all nearby providers.
-    2.  It groups them by subscription tier (`Premium`, `Pro`, `Basique`).
+    2.  It groups them based on the tier of their currently active `ProviderSubscription`.
     3.  Notifications are sent out in waves: `Premium` providers are notified instantly, `Pro` providers after 30 seconds, and `Basique` providers after 90 seconds.
-
-This design provides a clear and robust framework for managing provider subscriptions, starting with a simple MVP and scaling to a full-featured system that drives platform revenue and provider engagement.
