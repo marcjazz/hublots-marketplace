@@ -31,13 +31,23 @@ export default class GeolocationService extends MedusaService({
       // We assume the table name is geolocation_store_location 
       // based on Medusa's default naming convention for modules
       const results = await pgConnection.query(`
-        SELECT store_id 
-        FROM geolocation_store_location
-        WHERE ST_DWithin(
-          ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)::geography,
-          ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
-          $3
-        )
+        SELECT
+          sl.store_id,
+          sp.visibility_boost
+        FROM
+          geolocation_store_location sl
+        LEFT JOIN
+          store_subscription ss ON sl.store_id = ss.store_id AND ss.status = 'active'
+        LEFT JOIN
+          subscription_plan sp ON ss.subscription_plan_id = sp.id
+        WHERE
+          ST_DWithin(
+            ST_SetSRID(ST_MakePoint(sl.longitude, sl.latitude), 4326)::geography,
+            ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
+            $3
+          )
+        ORDER BY
+          sp.visibility_boost DESC NULLS LAST;
       `, [lon, lat, radiusInMeters])
 
       return results.rows.map((row: { store_id: string }) => row.store_id)
