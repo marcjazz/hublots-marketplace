@@ -30,7 +30,8 @@
     "@mercurjs/commission": "^1.4.5",
     "@mercurjs/framework": "^1.4.5",
     "@mercurjs/requests": "^1.4.5",
-    "@mercurjs/resend": "^1.4.5"
+    "@mercurjs/resend": "^1.4.5",
+    "cross-env": "^10.1.0"
   },
   "devDependencies": {
     "@medusajs/test-utils": "2.11.3",
