@@ -54,7 +54,9 @@ export class NotchPayService {
 
     // 1. Resolve store ID from booking (assuming order metadata or link)
     // For MVP, we'll assume we can get it.
-    const storeId = "store_sample"; 
+    const orderModule = this.container.resolve('order');
+    const order = await orderModule.retrieve(bookingId, { relations: ['store'] });
+    const storeId = order.store_id; 
 
     // 2. Compute commission
     const subscriptionModule = this.container.resolve("subscriptionModule");
