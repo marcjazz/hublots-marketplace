@@ -1,4 +1,8 @@
+'use client';
+
 import Image from "next/image"
+import React from "react";
+import { useRouter } from "next/navigation";
 
 import tailwindConfig from "../../../../tailwind.config"
 import { ArrowRightIcon } from "@/icons"
@@ -12,6 +16,15 @@ type HeroProps = {
 }
 
 export const Hero = ({ image, heading, paragraph, buttons }: HeroProps) => {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = React.useState("");
+
+  const handleSearch = () => {
+    if (searchQuery) {
+      router.push(`/categories?q=${searchQuery}`);
+    }
+  };
+
   return (
     <section className="w-full flex container mt-5 flex-col lg:flex-row text-primary">
       <Image
@@ -32,6 +45,10 @@ export const Hero = ({ image, heading, paragraph, buttons }: HeroProps) => {
               {heading}
             </h2>
             <p className="text-lg mb-8">{paragraph}</p>
+            <div className="flex gap-4 mt-8">
+              <input type="text" placeholder="Search for services" className="border rounded-sm p-2 w-full" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+              <button className="bg-primary text-white p-2 rounded-sm" onClick={handleSearch}>Search</button>
+            </div>
           </div>
         </div>
         {buttons.length && (
