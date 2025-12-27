@@ -170,7 +170,7 @@ export const listProductsWithSort = async ({
     pageParam: 0,
     queryParams: {
       ...queryParams,
-      q,
+      search: q,
       limit: 100
     },
     category_id,
