@@ -1,9 +1,12 @@
 import { Heading } from "@medusajs/ui";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
-import { retrieveCart } from "@/lib/data/cart";
+import { retrieveCart, listCartShippingMethods, listCartPaymentMethods } from "@/lib/data/cart";
 import { retrieveCustomer } from "@/lib/data/customer";
+import Checkout from "@/modules/checkout/templates";
+import CheckoutSkeleton from "@/modules/checkout/templates/skeleton";
 
 export default async function CheckoutPage() {
 
@@ -19,7 +22,6 @@ export default async function CheckoutPage() {
     return notFound();
   }
 
-  // TODO: Uncomment when shipping methods are implemented
   const shippingMethods = await listCartShippingMethods(cart.id, false);
   const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? '');
 
@@ -33,7 +35,7 @@ export default async function CheckoutPage() {
             <Checkout
               cart={cart}
               customer={customer}
-              availableShippingMethods={shippingMethods}
+              availableShippingMethods={shippingMethods as any}
               availablePaymentMethods={paymentMethods}
             />
           </Suspense>
