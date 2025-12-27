@@ -7,6 +7,12 @@ import { redirect } from 'next/navigation';
 
 import medusaError from '@/lib/helpers/medusa-error';
 import { parseVariantIdsFromError } from '@/lib/helpers/parse-variant-error';
+/**
+ * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
+ * @param cartId - optional - The ID of the cart to retrieve.
+ * @returns The cart object if found, or null if not found.
+ */
+import { Cart } from '@/types/cart';
 
 import { fetchQuery, sdk } from '../config';
 import {
@@ -18,13 +24,6 @@ import {
   setCartId
 } from './cookies';
 import { getRegion } from './regions';
-
-/**
- * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
- * @param cartId - optional - The ID of the cart to retrieve.
- * @returns The cart object if found, or null if not found.
- */
-import { Cart } from "@/types/cart";
 
 export async function retrieveCart(cartId?: string): Promise<Cart | null> {
   const id = cartId || (await getCartId());
@@ -129,7 +128,9 @@ export async function addToCart({
     ...(await getAuthHeaders(cookies()))
   };
 
-  const currentItem = cart.items?.find((item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId);
+  const currentItem = cart.items?.find(
+    (item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId
+  );
 
   if (currentItem) {
     await sdk.store.cart
@@ -267,7 +268,7 @@ export async function applyPromotions(codes: string[]) {
   const cartId = await getCartId();
 
   if (!cartId) {
-    return { success: false, error: "No existing cart found" }
+    return { success: false, error: 'No existing cart found' };
   }
 
   const headers = {
@@ -275,24 +276,17 @@ export async function applyPromotions(codes: string[]) {
   };
 
   try {
-    const { cart } = await sdk.store.cart.update(
-      cartId,
-      { promo_codes: codes },
-      {},
-      headers
-    )
-    const cartCacheTag = await getCacheTag("carts")
-    revalidateTag(cartCacheTag)
-    const applied = cart.promotions?.some((promotion: HttpTypes.StorePromotion) =>
+    const { cart } = await sdk.store.cart.update(cartId, { promo_codes: codes }, {}, headers);
+    const cartCacheTag = await getCacheTag('carts');
+    revalidateTag(cartCacheTag);
+    const applied = (cart as any).promotions?.some((promotion: HttpTypes.StorePromotion) =>
       codes.includes(promotion.code!)
-    )
-    return { success: true, applied }
+    );
+    return { success: true, applied };
   } catch (error: any) {
     const errorMessage =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to apply promotion code"
-    return { success: false, error: errorMessage }
+      error?.response?.data?.message || error?.message || 'Failed to apply promotion code';
+    return { success: false, error: errorMessage };
   }
 }
 
@@ -371,8 +365,8 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
       },
       email: formData.get('email')
     } as {
-      shipping_address: HttpTypes.AddressPayload;
-      billing_address: HttpTypes.AddressPayload;
+      shipping_address: HttpTypes.BaseAddress;
+      billing_address: HttpTypes.BaseAddress;
       email: string;
     };
 
@@ -508,21 +502,20 @@ export async function updateRegionWithValidation(
 
       // Fetch cart with minimal fields to get items
       try {
-        const { cart } = await sdk.client.fetch<{ cart: Cart }>(
-          `/store/carts/${cartId}`,
-          {
-            method: 'GET',
-            query: {
-              fields: '*items'
-            },
-            headers,
-            cache: 'no-cache'
-          }
-        );
+        const { cart } = await sdk.client.fetch<{ cart: Cart }>(`/store/carts/${cartId}`, {
+          method: 'GET',
+          query: {
+            fields: '*items'
+          },
+          headers,
+          cache: 'no-cache'
+        });
 
         // Iterate over problematic variants and remove corresponding items
         for (const variantId of problematicVariantIds) {
-          const item = cart?.items?.find((item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId);
+          const item = cart?.items?.find(
+            (item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId
+          );
           if (item) {
             try {
               await sdk.store.cart.deleteLineItem(cart.id, item.id);
@@ -583,22 +576,25 @@ export async function listCartShippingMethods(cartId: string, cached = true) {
     ...(await getAuthHeaders(cookies()))
   };
 
-  const next = cached ? await getCacheOptions("shippingMethods") : {
-    cache: "no-cache"
-  };
+  const next = cached
+    ? await getCacheOptions('shippingMethods')
+    : {
+        cache: 'no-cache'
+      };
 
-  return await sdk.client.fetch<{
-    shipping_options: HttpTypes.StoreCartShippingOption[]
-  }>("/store/shipping-options", {
-    query: {
-      cart_id: cartId
-    },
-    next,
-    headers,
-    cache: "force-cache"
-  }).then(({
-    shipping_options
-  }) => shipping_options).catch(() => []);
+  return await sdk.client
+    .fetch<{
+      shipping_options: HttpTypes.StoreCartShippingOption[];
+    }>('/store/shipping-options', {
+      query: {
+        cart_id: cartId
+      },
+      next,
+      headers,
+      cache: 'force-cache'
+    })
+    .then(({ shipping_options }) => shipping_options)
+    .catch(() => []);
 }
 
 export async function listCartPaymentMethods(regionId: string, cached = true) {
@@ -606,22 +602,25 @@ export async function listCartPaymentMethods(regionId: string, cached = true) {
     ...(await getAuthHeaders(cookies()))
   };
 
-  const next = cached ? await getCacheOptions("paymentMethods") : {
-    cache: "no-cache"
-  };
+  const next = cached
+    ? await getCacheOptions('paymentMethods')
+    : {
+        cache: 'no-cache'
+      };
 
-  return await sdk.client.fetch<{
-    payment_providers: {
-      id: string
-    } []
-  }>("/store/payment-providers", {
-    query: {
-      region_id: regionId
-    },
-    next,
-    headers,
-    cache: "force-cache"
-  }).then(({
-    payment_providers
-  }) => payment_providers).catch(() => []);
+  return await sdk.client
+    .fetch<{
+      payment_providers: {
+        id: string;
+      }[];
+    }>('/store/payment-providers', {
+      query: {
+        region_id: regionId
+      },
+      next,
+      headers,
+      cache: 'force-cache'
+    })
+    .then(({ payment_providers }) => payment_providers)
+    .catch(() => []);
 }
