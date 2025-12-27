@@ -23,6 +23,7 @@ export const listProducts = async ({
   queryParams?: HttpTypes.FindParams &
     HttpTypes.StoreProductParams & {
       handle?: string[];
+      search?: string;
     };
   category_id?: string;
   collection_id?: string;
@@ -61,7 +62,7 @@ export const listProducts = async ({
   }
 
   const headers = {
-    ...(await getAuthHeaders())
+    ...(await getAuthHeaders(countryCode!))
   };
 
   const useCached = forceCache || (limit <= 8 && !category_id && !collection_id);
@@ -82,6 +83,7 @@ export const listProducts = async ({
         fields:
           '*variants.calculated_price,+variants.inventory_quantity,*seller,*variants,*seller.products,' +
           '*seller.reviews,*seller.reviews.customer,*seller.reviews.seller,*seller.products.variants,*attribute_values,*attribute_values.attribute',
+        search: queryParams?.search,
         ...queryParams
       },
       headers,
@@ -141,7 +143,8 @@ export const listProductsWithSort = async ({
   countryCode,
   category_id,
   seller_id,
-  collection_id
+  collection_id,
+  q,
 }: {
   page?: number;
   queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams;
@@ -150,6 +153,7 @@ export const listProductsWithSort = async ({
   category_id?: string;
   seller_id?: string;
   collection_id?: string;
+  q?: string;
 }): Promise<{
   response: {
     products: HttpTypes.StoreProduct[];
@@ -166,6 +170,7 @@ export const listProductsWithSort = async ({
     pageParam: 0,
     queryParams: {
       ...queryParams,
+      q,
       limit: 100
     },
     category_id,
@@ -178,7 +183,7 @@ export const listProductsWithSort = async ({
     : products;
 
   const pricedProducts = filteredProducts.filter(prod =>
-    prod.variants?.some(variant => variant.calculated_price !== null)
+    prod.variants?.some((variant: HttpTypes.StoreProductVariant) => variant.calculated_price !== null)
   );
 
   const sortedProducts = sortProducts(pricedProducts, sortBy);
