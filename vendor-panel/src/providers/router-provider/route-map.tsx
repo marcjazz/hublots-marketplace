@@ -9,10 +9,9 @@ import { SettingsLayout } from "../../components/layout/settings-layout"
 import { ErrorBoundary } from "../../components/utilities/error-boundary"
 import { TaxRegionDetailBreadcrumb } from "../../routes/tax-regions/tax-region-detail/breadcrumb"
 import { taxRegionLoader } from "../../routes/tax-regions/tax-region-detail/loader"
-import { RouteExtensions } from "./route-extensions"
-import { SettingsExtensions } from "./settings-extensions"
 import { ExtendedAdminOrderResponse } from "../../types/order"
 import { ExtendedAdminProductResponse } from "../../types/products"
+import { SettingsExtensions } from "./settings-extensions"
 
 export const RouteMap: RouteObject[] = [
   {
@@ -1000,7 +999,20 @@ export const RouteMap: RouteObject[] = [
               },
             ],
           },
-          ...RouteExtensions,
+          {
+            path: "/services",
+            lazy: () => import("../../routes/services"),
+            children: [
+              {
+                path: "",
+                lazy: () => import("../../routes/services/service-list"),
+              },
+              {
+                path: "create",
+                lazy: () => import("../../routes/services/service-create"),
+              },
+            ],
+          },
         ],
       },
     ],
@@ -1819,6 +1831,10 @@ export const RouteMap: RouteObject[] = [
   {
     element: <PublicLayout />,
     children: [
+      {
+        path: "/login",
+        lazy: () => import("../../routes/login"),
+      },
       {
         errorElement: <ErrorBoundary />,
         children: [
