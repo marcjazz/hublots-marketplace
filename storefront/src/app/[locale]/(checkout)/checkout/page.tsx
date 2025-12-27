@@ -1,68 +1,47 @@
-import { Suspense } from 'react';
+import { Heading } from "@medusajs/ui";
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { retrieveCart } from "@/lib/data/cart";
+import { retrieveCustomer } from "@/lib/data/customer";
 
-import PaymentWrapper from '@/components/organisms/PaymentContainer/PaymentWrapper';
-import { CartAddressSection } from '@/components/sections/CartAddressSection/CartAddressSection';
-import CartPaymentSection from '@/components/sections/CartPaymentSection/CartPaymentSection';
-import CartReview from '@/components/sections/CartReview/CartReview';
-import CartShippingMethodsSection from '@/components/sections/CartShippingMethodsSection/CartShippingMethodsSection';
-import { retrieveCart } from '@/lib/data/cart';
-import { retrieveCustomer } from '@/lib/data/customer';
-import { listCartShippingMethods } from '@/lib/data/fulfillment';
-import { listCartPaymentMethods } from '@/lib/data/payment';
+export default async function CheckoutPage() {
 
-export const metadata: Metadata = {
-  title: 'Checkout',
-  description: 'My cart page - Checkout'
-};
+  const cartId = (await cookies()).get("_medusa_cart_id")?.value;
 
-export default async function CheckoutPage({}) {
-  return (
-    <Suspense
-      fallback={<div className="container flex items-center justify-center">Loading...</div>}
-    >
-      <CheckoutPageContent />
-    </Suspense>
-  );
-}
+  if (!cartId) {
+    return notFound();
+  }
 
-async function CheckoutPageContent({}) {
-  const cart = await retrieveCart();
+  const cart = await retrieveCart(cartId);
 
   if (!cart) {
     return notFound();
   }
 
-  const shippingMethods = await listCartShippingMethods(cart.id, false);
-  const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? '');
+  // TODO: Uncomment when shipping methods are implemented
+  // const shippingMethods = await listCartShippingMethods(cart.id, false);
+  // const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? '');
+
   const customer = await retrieveCustomer();
 
   return (
-    <PaymentWrapper cart={cart}>
-      <main className="container">
-        <div className="grid gap-8 lg:grid-cols-11">
-          <div className="flex flex-col gap-4 lg:col-span-6">
-            <CartAddressSection
-              cart={cart}
+    <div className="bg-primary text-primary">
+      <div className="container flex flex-col md:flex-row gap-5 py-10">
+        <div className="md:w-1/2">
+          {/* <Suspense fallback={<CheckoutSkeleton />}>
+            <Checkout 
+              cart={cart} 
               customer={customer}
+              // availableShippingMethods={shippingMethods as any}
+              // availablePaymentMethods={paymentMethods}
             />
-            <CartShippingMethodsSection
-              cart={cart}
-              availableShippingMethods={shippingMethods as any}
-            />
-            <CartPaymentSection
-              cart={cart}
-              availablePaymentMethods={paymentMethods}
-            />
-          </div>
-
-          <div className="lg:col-span-5">
-            <CartReview cart={cart} />
-          </div>
+          </Suspense> */}
         </div>
-      </main>
-    </PaymentWrapper>
+        <div className="md:w-1/2">
+          <Heading>Order Summary</Heading>
+        </div>
+      </div>
+    </div>
   );
 }

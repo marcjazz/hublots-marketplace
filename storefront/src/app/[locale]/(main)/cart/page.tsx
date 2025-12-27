@@ -1,17 +1,27 @@
-import { Cart } from '@/components/sections';
-import { Metadata } from 'next';
-import { Suspense } from 'react';
+import { Suspense } from "react"
 
-export const metadata: Metadata = {
-  title: 'Cart',
-  description: 'My cart page',
-};
+import { Cart } from "@/components/sections"
+import { retrieveCart } from "@/lib/data/cart"
+import { cookies } from "next/headers"
+import { CartEmpty } from "@/components/organisms"
 
-export default function CartPage({}) {
+export default async function CartPage() {
+  const cartId = (await cookies()).get("_medusa_cart_id")?.value;
+
+  if (!cartId) {
+    return <CartEmpty />;
+  }
+
+  const cart = await retrieveCart(cartId);
+
+  if (!cart) {
+    return <CartEmpty />;
+  }
+
   return (
     <main className='container grid grid-cols-12'>
       <Suspense fallback={<>Loading...</>}>
-        <Cart />
+        <Cart cart={cart} />
       </Suspense>
     </main>
   );
