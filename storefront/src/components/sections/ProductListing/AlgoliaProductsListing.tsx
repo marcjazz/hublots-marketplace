@@ -126,7 +126,7 @@ const ProductsListing = ({
       setApiProducts([])
       setIsLoadingProducts(false)
     }
-  }, [itemsKey])
+  }, [itemsKey, handleSetProducts, items.length])
 
   if (!results?.processingTimeMS) return <ProductListingSkeleton />
 
