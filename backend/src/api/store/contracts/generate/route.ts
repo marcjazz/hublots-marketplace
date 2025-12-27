@@ -12,7 +12,7 @@ export const POST = async (
 
   // In a real scenario, we would update the order metadata here
   const orderModule = req.scope.resolve('order')
-  await orderModule.update(orderId, {
+  await orderModule.updateOrders(orderId, {
     metadata: { contract: contractContent },
   })
 

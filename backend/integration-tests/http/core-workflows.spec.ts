@@ -4,6 +4,7 @@ import { IApiKeyModuleService } from '@medusajs/framework/types'
 import { SELLER_MODULE } from '@mercurjs/b2c-core/modules/seller'
 import SubscriptionService from '../../src/modules/subscription/service'
 import GeolocationService from '../../src/modules/geolocation/service'
+import { StoreStatus } from '@mercurjs/framework'
 
 jest.setTimeout(60 * 1000)
 
@@ -13,7 +14,7 @@ medusaIntegrationTestRunner({
       describe('Geolocation-based Provider Search', () => {
         it('should find nearby stores and sort them by subscription tier', async () => {
           const container = getContainer()
-          const sellerModule = container.resolve<any>(SELLER_MODULE)
+          const sellerModule = container.resolve(SELLER_MODULE)
           const subscriptionModule = container.resolve<SubscriptionService>('subscription')
           const geolocationModule = container.resolve<GeolocationService>('geolocation')
           const apiKeyModule = container.resolve<IApiKeyModuleService>(Modules.API_KEY)
@@ -35,12 +36,13 @@ medusaIntegrationTestRunner({
             {
               name: 'Store Pro',
               handle: 'store-pro',
-              store_status: 'ACTIVE',
+              store_status: StoreStatus.ACTIVE,
             },
             {
               name: 'Store Basique',
               handle: 'store-basique',
-              store_status: 'ACTIVE',
+              // store_status: 'ACTIVE',
+              store_status: StoreStatus.ACTIVE
             },
           ])
 
