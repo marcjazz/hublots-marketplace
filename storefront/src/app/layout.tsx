@@ -51,6 +51,7 @@ export default async function RootLayout({
       className=""
     >
       <Head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
