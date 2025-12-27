@@ -13,7 +13,7 @@ export const POST = async (
   const { storeId, action } = req.body
   const sellerModule = req.scope.resolve('seller')
 
-  const store = await sellerModule.updateSellers({
+  const stores = await sellerModule.updateSellers({
     id: storeId,
     store_status: action === 'approve' ? StoreStatus.ACTIVE : StoreStatus.INACTIVE,
   })
@@ -21,6 +21,6 @@ export const POST = async (
   // Optional: Trigger notification or link creation
 
   res.json({
-    store,
+    store: stores[0],
   })
 }
