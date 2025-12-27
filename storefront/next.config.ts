@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   trailingSlash: false,
   reactStrictMode: true,
+  outputFileTracingRoot: '../../',
   logging: {
     fetches: {
       fullUrl: true,
