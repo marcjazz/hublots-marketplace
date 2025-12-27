@@ -10,9 +10,8 @@ export const POST = async (
 
   const contractContent = await chatService.generateContract(orderId)
 
-  // In a real scenario, we would update the order metadata here
-  const orderModule = req.scope.resolve('order')
-  await orderModule.update(orderId, {
+  const orderService = req.scope.resolve('order')
+  await orderService.updateOrders(orderId, {
     metadata: { contract: contractContent },
   })
 

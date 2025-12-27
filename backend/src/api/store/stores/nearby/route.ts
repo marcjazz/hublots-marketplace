@@ -45,15 +45,19 @@ export const POST = async (
 
   // 3. For each store, get its subscription boost for sorting
   // (In a full implementation, this would be part of the graph query if links are defined)
-  const enrichedStores = await Promise.all(
+  const entitlements = await Promise.all(
     stores.map(async (store) => {
-      const entitlements = await subscriptionModule.getEntitlements(store.id)
-      return {
-        ...store,
-        entitlements,
-      }
+      const storeEntitlements = await subscriptionModule.getEntitlements(store.id);
+      return { [store.id]: storeEntitlements };
     })
-  )
+  ).then(results => results.reduce((acc, curr) => ({ ...acc, ...curr }), {}));
+  const enrichedStores = stores.map(store => {
+    const storeEntitlements = entitlements[store.id] || { commission_rate: 0.2, visibility_boost: false };
+    return {
+      ...store,
+      entitlements: storeEntitlements,
+    }
+  });
 
   // 4. Sort by visibility boost
   enrichedStores.sort((a, b) => {

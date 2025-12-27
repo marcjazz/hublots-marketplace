@@ -25,58 +25,67 @@ export type NotchPaySession = {
 export class NotchPayService {
   private sessions: Map<string, NotchPaySession> = new Map();
   private container: any;
-
   constructor(container: any) {
     this.container = container;
   }
-
-  async authorize(bookingId: string, amount: number, currency: string, idempotencyKey?: string): Promise<NotchPaySession> {
+  async authorize(
+    bookingId: string,
+    amount: number,
+    currency: string,
+    idempotencyKey?: string
+  ): Promise<NotchPaySession> {
     // idempotent: if session exists with idempotencyKey return existing
     const key = idempotencyKey ?? bookingId;
     if (this.sessions.has(key)) return this.sessions.get(key)!;
-    const session: NotchPaySession = { id: generateEntityId(), bookingId, status: 'authorized', amount, currency };
+    const session: NotchPaySession = {
+      id: generateEntityId(),
+      bookingId,
+      status: "authorized",
+      amount,
+      currency,
+    };
     this.sessions.set(key, session);
     return session;
   }
-
-  async capture(bookingId: string, idempotencyKey?: string): Promise<NotchPaySession> {
-    const key = idempotencyKey ?? `cap_${bookingId}`;
+  async capture(
+    bookingId: string,
+    idempotencyKey?: string
+  ): Promise<NotchPaySession> {
+    const key = idempotencyKey ?? bookingId;
     if (this.sessions.has(key)) {
-        const existingSession = this.sessions.get(key)!;
-        if (existingSession.status === 'captured') {
-            return existingSession;
-        }
+      const existingSession = this.sessions.get(key)!;
+      if (existingSession.status === "captured") {
+        return existingSession;
+      }
     }
-
     let session: NotchPaySession | undefined;
     for (const s of this.sessions.values()) {
-        if (s.bookingId === bookingId && s.status === 'authorized') {
-            session = s;
-            break;
-        }
+      if (s.bookingId === bookingId && s.status === "authorized") {
+        session = s;
+        break;
+      }
     }
-
     if (!session) {
-      throw new Error('Authorized Notch Pay session not found for booking');
+      throw new Error("Authorized Notch Pay session not found for booking");
     }
-
     // 1. Resolve store ID from booking (assuming order metadata or link)
     // For MVP, we'll assume we can get it.
-    const orderModule = this.container.resolve('order');
-    const order = await orderModule.retrieve(bookingId, { relations: ['store'] });
+    const orderModule = this.container.resolve("order");
+    const order = await orderModule.retrieve(bookingId, {
+      relations: ["store"],
+    });
     const storeId = order.store_id;
-
     // 2. Compute commission
     const subscriptionModule = this.container.resolve("subscription");
     const entitlements = await subscriptionModule.getEntitlements(storeId);
     const commissionRate = entitlements.commission_rate || 0.2;
     const commissionAmount = session.amount * commissionRate;
     const payoutAmount = session.amount - commissionAmount;
-
     // 3. Trigger Notch Pay Payout (Scaffold)
-    console.log(`Triggering payout of ${payoutAmount} to store ${storeId} (Commission: ${commissionAmount})`);
-
-    session.status = 'captured';
+    console.log(
+      `Triggering payout of ${payoutAmount} to store ${storeId} (Commission: ${commissionAmount})`
+    );
+    session.status = "captured";
     this.sessions.set(key, session); // Use the same key for idempotency
     return session;
   }
