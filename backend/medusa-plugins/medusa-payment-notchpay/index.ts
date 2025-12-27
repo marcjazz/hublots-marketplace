@@ -1,3 +1,4 @@
+import { generateEntityId } from "@medusajs/utils";
 // Notch Pay escrow plugin scaffold for Phase 1 MVP
 // Provides skeleton for authorize and capture flows
 // This scaffold is designed to be extended with actual API calls to Notch Pay
@@ -33,33 +34,40 @@ export class NotchPayService {
     // idempotent: if session exists with idempotencyKey return existing
     const key = idempotencyKey ?? bookingId;
     if (this.sessions.has(key)) return this.sessions.get(key)!;
-    const session: NotchPaySession = { id: `np_${Date.now()}`, bookingId, status: 'authorized', amount, currency };
+    const session: NotchPaySession = { id: generateEntityId(), bookingId, status: 'authorized', amount, currency };
     this.sessions.set(key, session);
     return session;
   }
 
   async capture(bookingId: string, idempotencyKey?: string): Promise<NotchPaySession> {
-    // find by booking
+    const key = idempotencyKey ?? `cap_${bookingId}`;
+    if (this.sessions.has(key)) {
+        const existingSession = this.sessions.get(key)!;
+        if (existingSession.status === 'captured') {
+            return existingSession;
+        }
+    }
+
     let session: NotchPaySession | undefined;
     for (const s of this.sessions.values()) {
-      if (s.bookingId === bookingId && s.status !== 'captured') {
-        session = s;
-        break;
-      }
+        if (s.bookingId === bookingId && s.status === 'authorized') {
+            session = s;
+            break;
+        }
     }
 
     if (!session) {
-      throw new Error('Notch Pay session not found for booking');
+      throw new Error('Authorized Notch Pay session not found for booking');
     }
 
     // 1. Resolve store ID from booking (assuming order metadata or link)
     // For MVP, we'll assume we can get it.
     const orderModule = this.container.resolve('order');
     const order = await orderModule.retrieve(bookingId, { relations: ['store'] });
-    const storeId = order.store_id; 
+    const storeId = order.store_id;
 
     // 2. Compute commission
-    const subscriptionModule = this.container.resolve("subscriptionModule");
+    const subscriptionModule = this.container.resolve("subscription");
     const entitlements = await subscriptionModule.getEntitlements(storeId);
     const commissionRate = entitlements.commission_rate || 0.2;
     const commissionAmount = session.amount * commissionRate;
@@ -69,7 +77,7 @@ export class NotchPayService {
     console.log(`Triggering payout of ${payoutAmount} to store ${storeId} (Commission: ${commissionAmount})`);
 
     session.status = 'captured';
-    this.sessions.set(idempotencyKey ?? `cap_${bookingId}`, session);
+    this.sessions.set(key, session); // Use the same key for idempotency
     return session;
   }
 

@@ -13,7 +13,7 @@ medusaIntegrationTestRunner({
       describe('Geolocation-based Provider Search', () => {
         it('should find nearby stores and sort them by subscription tier', async () => {
           const container = getContainer()
-          const sellerModule = container.resolve(SELLER_MODULE) as any
+          const sellerModule = container.resolve<any>(SELLER_MODULE)
           const subscriptionModule = container.resolve<SubscriptionService>('subscription')
           const geolocationModule = container.resolve<GeolocationService>('geolocation')
           const apiKeyModule = container.resolve<IApiKeyModuleService>(Modules.API_KEY)
@@ -178,4 +178,3 @@ medusaIntegrationTestRunner({
     })
   },
 })
-

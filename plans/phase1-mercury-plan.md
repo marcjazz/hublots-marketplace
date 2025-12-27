@@ -105,4 +105,3 @@ References
 - Technical architecture: [`docs/technical-architecture.md`](`docs/technical-architecture.md`)
 - Subscription design: [`docs/subscription-system-design.md`](`docs/subscription-system-design.md`)
 - Risks: [`docs/technical-risks-and-mitigation.md`](`docs/technical-risks-and-mitigation.md`)
-

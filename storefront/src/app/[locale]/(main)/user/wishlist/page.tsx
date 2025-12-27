@@ -6,7 +6,6 @@ import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedL
 import { Button } from "@/components/atoms"
 import { WishlistItem } from "@/components/cells"
 import { getUserWishlists } from "@/lib/data/wishlist"
-// @ts-ignore
 import { HttpTypes } from "@medusajs/types"
 import { UserNavigation } from "@/components/molecules"
 

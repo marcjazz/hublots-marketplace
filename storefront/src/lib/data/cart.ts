@@ -129,7 +129,7 @@ export async function addToCart({
     ...(await getAuthHeaders(cookies()))
   };
 
-  const currentItem = cart.items?.find((item: any) => item.variant_id === variantId);
+  const currentItem = cart.items?.find((item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId);
 
   if (currentItem) {
     await sdk.store.cart
@@ -283,9 +283,8 @@ export async function applyPromotions(codes: string[]) {
     )
     const cartCacheTag = await getCacheTag("carts")
     revalidateTag(cartCacheTag)
-    // @ts-ignore
-    const applied = cart.promotions?.some((promotion: any) =>
-      codes.includes(promotion.code)
+    const applied = cart.promotions?.some((promotion: HttpTypes.StorePromotion) =>
+      codes.includes(promotion.code!)
     )
     return { success: true, applied }
   } catch (error: any) {
@@ -371,7 +370,11 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
         phone: formData.get('shipping_address.phone')
       },
       email: formData.get('email')
-    } as any;
+    } as {
+      shipping_address: HttpTypes.AddressPayload;
+      billing_address: HttpTypes.AddressPayload;
+      email: string;
+    };
 
     // const sameAsBilling = formData.get("same_as_billing")
     // if (sameAsBilling === "on") data.billing_address = data.shipping_address
@@ -519,7 +522,7 @@ export async function updateRegionWithValidation(
 
         // Iterate over problematic variants and remove corresponding items
         for (const variantId of problematicVariantIds) {
-          const item = cart?.items?.find((item: any) => item.variant_id === variantId);
+          const item = cart?.items?.find((item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId);
           if (item) {
             try {
               await sdk.store.cart.deleteLineItem(cart.id, item.id);
@@ -573,4 +576,52 @@ export async function listCartOptions() {
     headers,
     cache: 'force-cache'
   });
+}
+
+export async function listCartShippingMethods(cartId: string, cached = true) {
+  const headers = {
+    ...(await getAuthHeaders(cookies()))
+  };
+
+  const next = cached ? await getCacheOptions("shippingMethods") : {
+    cache: "no-cache"
+  };
+
+  return await sdk.client.fetch<{
+    shipping_options: HttpTypes.StoreCartShippingOption[]
+  }>("/store/shipping-options", {
+    query: {
+      cart_id: cartId
+    },
+    next,
+    headers,
+    cache: "force-cache"
+  }).then(({
+    shipping_options
+  }) => shipping_options).catch(() => []);
+}
+
+export async function listCartPaymentMethods(regionId: string, cached = true) {
+  const headers = {
+    ...(await getAuthHeaders(cookies()))
+  };
+
+  const next = cached ? await getCacheOptions("paymentMethods") : {
+    cache: "no-cache"
+  };
+
+  return await sdk.client.fetch<{
+    payment_providers: {
+      id: string
+    } []
+  }>("/store/payment-providers", {
+    query: {
+      region_id: regionId
+    },
+    next,
+    headers,
+    cache: "force-cache"
+  }).then(({
+    payment_providers
+  }) => payment_providers).catch(() => []);
 }

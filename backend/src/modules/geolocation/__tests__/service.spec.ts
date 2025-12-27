@@ -68,19 +68,12 @@ describe('GeolocationService', () => {
       expect(result).toEqual(['store_1', 'store_2'])
     })
 
-    it('should fallback to in-memory filtering if PostGIS fails', async () => {
-      mockQuery.mockRejectedValue(new Error('PostGIS error'))
-      ;(service.listStoreLocations as jest.Mock).mockResolvedValue([
-        { store_id: 'store_1', latitude: 10, longitude: 20 },
-        { store_id: 'store_2', latitude: 10.01, longitude: 20.01 },
-        { store_id: 'store_3', latitude: 80, longitude: 80 }, // This one is far away
-      ])
+    it('should throw an error if PostGIS fails', async () => {
+      mockQuery.mockRejectedValue(new Error('PostGIS error'));
 
-      const result = await service.findStoresInRadius(10, 20, 5)
-
-      expect(service.listStoreLocations).toHaveBeenCalled()
-      // The fallback in the original service returns all locations, let's test that
-      expect(result).toEqual(['store_1', 'store_2', 'store_3'])
-    })
+      await expect(service.findStoresInRadius(10, 20, 5)).rejects.toThrow(
+        'Could not retrieve stores due to a database error.'
+      );
+    });
   })
 })

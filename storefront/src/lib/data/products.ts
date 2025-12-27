@@ -61,8 +61,10 @@ export const listProducts = async ({
     };
   }
 
+  const { cookies } = await import('next/headers');
+
   const headers = {
-    ...(await getAuthHeaders(countryCode!))
+    ...(await getAuthHeaders(cookies()))
   };
 
   const useCached = forceCache || (limit <= 8 && !category_id && !collection_id);

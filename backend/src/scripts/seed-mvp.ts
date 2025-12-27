@@ -8,7 +8,7 @@ export default async function seed({ container }: ExecArgs) {
   const geolocationModule = container.resolve("geolocation") as GeolocationService
 
   console.log("Seeding subscription plans...")
-  
+
   const basique = await subscriptionModule.createSubscriptionPlans({
     name: "Basique",
     price_monthly: 0,

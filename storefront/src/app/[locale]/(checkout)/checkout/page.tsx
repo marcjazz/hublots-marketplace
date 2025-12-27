@@ -20,8 +20,8 @@ export default async function CheckoutPage() {
   }
 
   // TODO: Uncomment when shipping methods are implemented
-  // const shippingMethods = await listCartShippingMethods(cart.id, false);
-  // const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? '');
+  const shippingMethods = await listCartShippingMethods(cart.id, false);
+  const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? '');
 
   const customer = await retrieveCustomer();
 
@@ -29,14 +29,14 @@ export default async function CheckoutPage() {
     <div className="bg-primary text-primary">
       <div className="container flex flex-col md:flex-row gap-5 py-10">
         <div className="md:w-1/2">
-          {/* <Suspense fallback={<CheckoutSkeleton />}>
-            <Checkout 
-              cart={cart} 
+          <Suspense fallback={<CheckoutSkeleton />}>
+            <Checkout
+              cart={cart}
               customer={customer}
-              // availableShippingMethods={shippingMethods as any}
-              // availablePaymentMethods={paymentMethods}
+              availableShippingMethods={shippingMethods}
+              availablePaymentMethods={paymentMethods}
             />
-          </Suspense> */}
+          </Suspense>
         </div>
         <div className="md:w-1/2">
           <Heading>Order Summary</Heading>

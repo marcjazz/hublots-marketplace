@@ -98,4 +98,3 @@ type StoreSubscriptionDTO = {
   ends_at: Date | null
   subscription_plan: SubscriptionPlanDTO
 }
-

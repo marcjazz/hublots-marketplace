@@ -16,7 +16,7 @@ export default class ChatService extends MedusaService(ModelMap) {
 
   async getMessages(orderId: string, sharedContext = {}): Promise<ChatMessageDTO[]> {
     const messages = await this.listChatMessages({ order_id: orderId }, {}, sharedContext)
-    return messages as unknown as ChatMessageDTO[];
+    return messages.map(m => this.transformToDto(m));
   }
 
   async addMessage(orderId: string, senderId: string, content: string, sharedContext = {}): Promise<ChatMessageDTO> {
@@ -25,12 +25,22 @@ export default class ChatService extends MedusaService(ModelMap) {
       sender_id: senderId,
       content,
     }, sharedContext)
-    return message as unknown as ChatMessageDTO;
+    return this.transformToDto(message);
+  }
+
+  private transformToDto(message: ChatMessage): ChatMessageDTO {
+    return {
+      id: message.id,
+      order_id: message.order_id,
+      sender_id: message.sender_id,
+      content: message.content,
+      metadata: message.metadata,
+    };
   }
 
   async generateContract(orderId: string, sharedContext = {}): Promise<string> {
     const messages = await this.getMessages(orderId, sharedContext)
-    
+
     // Simple logic to extract contract terms from chat history
     // In a real MVP, this could use LLM or specific regex on messages
     const terms = messages
@@ -41,7 +51,7 @@ export default class ChatService extends MedusaService(ModelMap) {
     const contractContent = `
 CONTRACT FOR ORDER ${orderId}
 ----------------------------
-Date: ${new Date().toLocaleDateString()}
+Date: ${new Date().toISOString().split('T')[0]}
 
 TERMS EXTRACTED FROM CHAT:
 ${terms || "No specific terms extracted from chat history."}
@@ -63,4 +73,3 @@ type ChatMessageDTO = {
   content: string
   metadata: Record<string, any> | null
 }
-
