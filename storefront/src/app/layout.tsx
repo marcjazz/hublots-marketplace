@@ -57,6 +57,10 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
         <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
           rel="dns-prefetch"
           href="https://fonts.gstatic.com"
         />
