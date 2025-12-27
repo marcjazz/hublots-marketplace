@@ -7,12 +7,6 @@ import { redirect } from 'next/navigation';
 
 import medusaError from '@/lib/helpers/medusa-error';
 import { parseVariantIdsFromError } from '@/lib/helpers/parse-variant-error';
-/**
- * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
- * @param cartId - optional - The ID of the cart to retrieve.
- * @returns The cart object if found, or null if not found.
- */
-import { Cart } from '@/types/cart';
 
 import { fetchQuery, sdk } from '../config';
 import {
@@ -24,6 +18,13 @@ import {
   setCartId
 } from './cookies';
 import { getRegion } from './regions';
+
+/**
+ * Retrieves a cart by its ID. If no ID is provided, it will use the cart ID from the cookies.
+ * @param cartId - optional - The ID of the cart to retrieve.
+ * @returns The cart object if found, or null if not found.
+ */
+import { Cart } from "@/types/cart";
 
 export async function retrieveCart(cartId?: string): Promise<Cart | null> {
   const id = cartId || (await getCartId());
@@ -128,9 +129,7 @@ export async function addToCart({
     ...(await getAuthHeaders(cookies()))
   };
 
-  const currentItem = cart.items?.find(
-    (item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId
-  );
+  const currentItem = cart.items?.find((item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId);
 
   if (currentItem) {
     await sdk.store.cart
@@ -244,7 +243,7 @@ export async function setShippingMethod({
 }
 
 export async function initiatePaymentSession(
-  cart: Cart,
+  cart: HttpTypes.StoreCart,
   data: {
     provider_id: string;
     context?: Record<string, unknown>;
@@ -268,7 +267,7 @@ export async function applyPromotions(codes: string[]) {
   const cartId = await getCartId();
 
   if (!cartId) {
-    return { success: false, error: 'No existing cart found' };
+    return { success: false, error: "No existing cart found" }
   }
 
   const headers = {
@@ -276,25 +275,24 @@ export async function applyPromotions(codes: string[]) {
   };
 
   try {
-    const { cart } = await sdk.store.cart.update(cartId, { promo_codes: codes }, {}, headers);
-    const cartCacheTag = await getCacheTag('carts');
-    revalidateTag(cartCacheTag);
-    if (!cart) {
-      return { success: false, error: 'Failed to apply promotion code' };
-    }
-
-    if (Object.hasOwn(cart, 'promotions')) {
-      return { success: true, applied: false };
-    }
-
-    const applied = (cart as Cart).promotions?.some((promotion: HttpTypes.StorePromotion) =>
+    const { cart } = await sdk.store.cart.update(
+      cartId,
+      { promo_codes: codes },
+      {},
+      headers
+    )
+    const cartCacheTag = await getCacheTag("carts")
+    revalidateTag(cartCacheTag)
+    const applied = cart.promotions?.some((promotion: HttpTypes.StorePromotion) =>
       codes.includes(promotion.code!)
-    );
-    return { success: true, applied };
+    )
+    return { success: true, applied }
   } catch (error: any) {
     const errorMessage =
-      error?.response?.data?.message || error?.message || 'Failed to apply promotion code';
-    return { success: false, error: errorMessage };
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to apply promotion code"
+    return { success: false, error: errorMessage }
   }
 }
 
@@ -359,7 +357,6 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
     }
 
     const data = {
-      email: formData.get('email'),
       shipping_address: {
         first_name: formData.get('shipping_address.first_name'),
         last_name: formData.get('shipping_address.last_name'),
@@ -371,11 +368,12 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
         country_code: formData.get('shipping_address.country_code'),
         province: formData.get('shipping_address.province'),
         phone: formData.get('shipping_address.phone')
-      }
+      },
+      email: formData.get('email')
     } as {
+      shipping_address: HttpTypes.AddressPayload;
+      billing_address: HttpTypes.AddressPayload;
       email: string;
-      shipping_address: HttpTypes.BaseAddress;
-      billing_address: HttpTypes.BaseAddress;
     };
 
     // const sameAsBilling = formData.get("same_as_billing")
@@ -510,20 +508,21 @@ export async function updateRegionWithValidation(
 
       // Fetch cart with minimal fields to get items
       try {
-        const { cart } = await sdk.client.fetch<{ cart: Cart }>(`/store/carts/${cartId}`, {
-          method: 'GET',
-          query: {
-            fields: '*items'
-          },
-          headers,
-          cache: 'no-cache'
-        });
+        const { cart } = await sdk.client.fetch<{ cart: Cart }>(
+          `/store/carts/${cartId}`,
+          {
+            method: 'GET',
+            query: {
+              fields: '*items'
+            },
+            headers,
+            cache: 'no-cache'
+          }
+        );
 
         // Iterate over problematic variants and remove corresponding items
         for (const variantId of problematicVariantIds) {
-          const item = cart?.items?.find(
-            (item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId
-          );
+          const item = cart?.items?.find((item: HttpTypes.StoreCartLineItem) => item.variant_id === variantId);
           if (item) {
             try {
               await sdk.store.cart.deleteLineItem(cart.id, item.id);
@@ -584,25 +583,22 @@ export async function listCartShippingMethods(cartId: string, cached = true) {
     ...(await getAuthHeaders(cookies()))
   };
 
-  const next = cached
-    ? await getCacheOptions('shippingMethods')
-    : {
-        cache: 'no-cache'
-      };
+  const next = cached ? await getCacheOptions("shippingMethods") : {
+    cache: "no-cache"
+  };
 
-  return await sdk.client
-    .fetch<{
-      shipping_options: HttpTypes.StoreCartShippingOption[];
-    }>('/store/shipping-options', {
-      query: {
-        cart_id: cartId
-      },
-      next,
-      headers,
-      cache: 'force-cache'
-    })
-    .then(({ shipping_options }) => shipping_options)
-    .catch(() => []);
+  return await sdk.client.fetch<{
+    shipping_options: HttpTypes.StoreCartShippingOption[]
+  }>("/store/shipping-options", {
+    query: {
+      cart_id: cartId
+    },
+    next,
+    headers,
+    cache: "force-cache"
+  }).then(({
+    shipping_options
+  }) => shipping_options).catch(() => []);
 }
 
 export async function listCartPaymentMethods(regionId: string, cached = true) {
@@ -610,25 +606,22 @@ export async function listCartPaymentMethods(regionId: string, cached = true) {
     ...(await getAuthHeaders(cookies()))
   };
 
-  const next = cached
-    ? await getCacheOptions('paymentMethods')
-    : {
-        cache: 'no-cache'
-      };
+  const next = cached ? await getCacheOptions("paymentMethods") : {
+    cache: "no-cache"
+  };
 
-  return await sdk.client
-    .fetch<{
-      payment_providers: {
-        id: string;
-      }[];
-    }>('/store/payment-providers', {
-      query: {
-        region_id: regionId
-      },
-      next,
-      headers,
-      cache: 'force-cache'
-    })
-    .then(({ payment_providers }) => payment_providers)
-    .catch(() => []);
+  return await sdk.client.fetch<{
+    payment_providers: {
+      id: string
+    } []
+  }>("/store/payment-providers", {
+    query: {
+      region_id: regionId
+    },
+    next,
+    headers,
+    cache: "force-cache"
+  }).then(({
+    payment_providers
+  }) => payment_providers).catch(() => []);
 }

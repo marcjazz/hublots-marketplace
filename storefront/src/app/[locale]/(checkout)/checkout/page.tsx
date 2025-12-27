@@ -2,11 +2,8 @@ import { Heading } from "@medusajs/ui";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
-import { listCartPaymentMethods, listCartShippingMethods, retrieveCart } from "@/lib/data/cart";
+import { retrieveCart } from "@/lib/data/cart";
 import { retrieveCustomer } from "@/lib/data/customer";
-import { Suspense } from "react";
-import Checkout from "@/components/sections/CartReview/CartReview";
-import CheckoutSkeleton from "@/components/skeletons/CheckoutSkeleton";
 
 export default async function CheckoutPage() {
 
@@ -22,6 +19,7 @@ export default async function CheckoutPage() {
     return notFound();
   }
 
+  // TODO: Uncomment when shipping methods are implemented
   const shippingMethods = await listCartShippingMethods(cart.id, false);
   const paymentMethods = await listCartPaymentMethods(cart.region?.id ?? '');
 
@@ -32,7 +30,12 @@ export default async function CheckoutPage() {
       <div className="container flex flex-col md:flex-row gap-5 py-10">
         <div className="md:w-1/2">
           <Suspense fallback={<CheckoutSkeleton />}>
-            <Checkout cart={cart} />
+            <Checkout
+              cart={cart}
+              customer={customer}
+              availableShippingMethods={shippingMethods}
+              availablePaymentMethods={paymentMethods}
+            />
           </Suspense>
         </div>
         <div className="md:w-1/2">

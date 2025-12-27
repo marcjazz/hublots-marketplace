@@ -51,7 +51,7 @@ export const PasswordValidator = ({
       "8chars": validation.errors.tooShort,
       symbolOrDigit: validation.errors.noDigitOrSymbol,
     })
-  }, [password, setError])
+  }, [password])
   return (
     <Card className="p-4">
       <p

@@ -6,6 +6,7 @@ export default class GeolocationService extends MedusaService({
 }) {
   async upsertStoreLocation(storeId: string, lat: number, lon: number): Promise<void> {
     const existing = await this.listStoreLocations({ store_id: storeId })
+
     if (existing.length > 0) {
       await this.updateStoreLocations({
         id: existing[0].id,
