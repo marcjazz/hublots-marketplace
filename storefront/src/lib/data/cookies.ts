@@ -1,10 +1,10 @@
 import 'server-only';
 import { cookies as nextCookies } from 'next/headers';
 
-export const getAuthHeaders = async (): Promise<
+export const getAuthHeaders = async (cookiesPromise?: any): Promise<
   { authorization: string } | {}
 > => {
-  const cookies = await nextCookies();
+  const cookies = cookiesPromise ? await cookiesPromise : await nextCookies();
   const token = cookies.get('_medusa_jwt')?.value;
 
   if (!token) {

@@ -9,12 +9,14 @@ import { PRODUCT_LIMIT } from "@/const"
 import { listProductsWithSort } from "@/lib/data/products"
 
 export const ProductListing = async ({
+  q,
   category_id,
   collection_id,
   seller_id,
   showSidebar = false,
   locale = process.env.NEXT_PUBLIC_DEFAULT_REGION || "pl",
 }: {
+  q?: string
   category_id?: string
   collection_id?: string
   seller_id?: string
@@ -22,6 +24,7 @@ export const ProductListing = async ({
   locale?: string
 }) => {
   const { response } = await listProductsWithSort({
+    q,
     seller_id,
     category_id,
     collection_id,
