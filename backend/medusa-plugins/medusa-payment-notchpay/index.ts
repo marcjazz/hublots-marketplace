@@ -22,10 +22,13 @@ export type NotchPaySession = {
   currency: string;
 }
 
+import { MedusaContainer, IOrderModuleService } from "@medusajs/framework/types";
+
 export class NotchPayService {
   private sessions: Map<string, NotchPaySession> = new Map();
-  private container: any;
-  constructor(container: any) {
+  private bookingIdIndex: Map<string, string> = new Map();
+  private container: MedusaContainer;
+  constructor(container: MedusaContainer) {
     this.container = container;
   }
   async authorize(
@@ -45,6 +48,7 @@ export class NotchPayService {
       currency,
     };
     this.sessions.set(key, session);
+    this.bookingIdIndex.set(bookingId, key);
     return session;
   }
   async capture(
@@ -58,25 +62,21 @@ export class NotchPayService {
         return existingSession;
       }
     }
-    let session: NotchPaySession | undefined;
-    for (const s of this.sessions.values()) {
-      if (s.bookingId === bookingId && s.status === "authorized") {
-        session = s;
-        break;
-      }
-    }
-    if (!session) {
+    const sessionKey = this.bookingIdIndex.get(bookingId);
+    if (!sessionKey || !this.sessions.has(sessionKey)) {
       throw new Error("Authorized Notch Pay session not found for booking");
     }
+
+    const session = this.sessions.get(sessionKey)!;
     // 1. Resolve store ID from booking (assuming order metadata or link)
     // For MVP, we'll assume we can get it.
-    const orderModule = this.container.resolve("order");
+    const orderModule = this.container.resolve<any>("order");
     const order = await orderModule.retrieve(bookingId, {
       relations: ["store"],
     });
     const storeId = order.store_id;
     // 2. Compute commission
-    const subscriptionModule = this.container.resolve("subscription");
+    const subscriptionModule = this.container.resolve<any>("subscription");
     const entitlements = await subscriptionModule.getEntitlements(storeId);
     const commissionRate = entitlements.commission_rate || 0.2;
     const commissionAmount = session.amount * commissionRate;
