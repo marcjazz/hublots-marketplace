@@ -1,4 +1,3 @@
-
 import { defineConfig, loadEnv } from '@medusajs/framework/utils'
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd());
@@ -19,7 +18,7 @@ module.exports = defineConfig({
     }
   },
   admin: {
-    disable: true,
+    disable: false,
   },
   plugins: [
     {
@@ -40,6 +39,15 @@ module.exports = defineConfig({
     }
   ],
   modules: [
+    {
+      resolve: "./src/modules/geolocation",
+    },
+    {
+      resolve: "./src/modules/subscription",
+    },
+    {
+      resolve: "./src/modules/chat",
+    },
     {
       resolve: '@medusajs/medusa/notification',
       options: {

@@ -1,3 +1,6 @@
-const { MetadataStorage } = require("@medusajs/framework/mikro-orm/core")
+const { medusaIntegrationTestRunner } = require("@medusajs/test-utils")
 
-MetadataStorage.clear()
+medusaIntegrationTestRunner({
+  force_modules_migration: true,
+  // other options...
+});

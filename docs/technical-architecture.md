@@ -1,4 +1,3 @@
-
 # Technical Architecture
 
 This document outlines the technical architecture for the service marketplace platform, built upon MedusaJS and the MercurJS marketplace engine. It details the responsibilities of each core component and the design of custom modules required to meet the platform's unique feature set.

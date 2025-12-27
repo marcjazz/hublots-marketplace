@@ -1,4 +1,3 @@
-
 # Technical Risks & Mitigation Plan
 
 This document identifies potential technical risks and challenges for the service marketplace platform. For each risk, a corresponding mitigation strategy is proposed to ensure the platform is scalable, secure, and reliable.

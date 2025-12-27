@@ -1,4 +1,3 @@
-
 # Marketplace Domain Model
 
 Here is the proposed domain model for the service marketplace platform. This model outlines the core entities, their attributes, and their relationships, serving as the blueprint for the database schema and technical architecture.

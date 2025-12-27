@@ -1004,6 +1004,11 @@
   dependencies:
     tslib "^2.0.0"
 
+"@epic-web/invariant@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@epic-web/invariant/-/invariant-1.0.0.tgz#1073e5dee6dd540410784990eb73e4acd25c9813"
+  integrity sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA==
+
 "@esbuild/aix-ppc64@0.21.5":
   version "0.21.5"
   resolved "https://registry.yarnpkg.com/@esbuild/aix-ppc64/-/aix-ppc64-0.21.5.tgz#c7184a326533fcdf1b8ee0733e21c713b975575f"
@@ -5756,7 +5761,7 @@
   dependencies:
     tslib "^2.8.0"
 
-"@swc/jest@^0.2.36":
+"@swc/jest@^0.2.39":
   version "0.2.39"
   resolved "https://registry.yarnpkg.com/@swc/jest/-/jest-0.2.39.tgz#482bee0adb0726fab1487a4f902a278ec563a6b7"
   integrity sha512-eyokjOwYd0Q8RnMHri+8/FS1HIrIUKK/sRrFp8c1dThUOfNeCWbLmBP1P5VsKdvmkd25JaH+OKYwEYiAYg9YAA==
@@ -7091,6 +7096,14 @@ cron-parser@^4.2.0, cron-parser@^4.6.0, cron-parser@^4.9.0:
   integrity sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==
   dependencies:
     luxon "^3.2.1"
+
+cross-env@^10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-10.1.0.tgz#cfd2a6200df9ed75bfb9cb3d7ce609c13ea21783"
+  integrity sha512-GsYosgnACZTADcmEyJctkJIoqAhHjttw7RsFrVoJNXbsWWqaq6Ym+7kZjq6mS45O0jij6vtiReppKQEtqWy6Dw==
+  dependencies:
+    "@epic-web/invariant" "^1.0.0"
+    cross-spawn "^7.0.6"
 
 cross-fetch@4.0.0:
   version "4.0.0"

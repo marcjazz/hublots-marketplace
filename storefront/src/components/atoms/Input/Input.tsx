@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 
 import { CloseIcon } from "@/icons"
 import { useEffect, useState } from "react"
-import { EyeMini, EyeSlashMini } from "@medusajs/icons"
+import { Eye, EyeOff } from "lucide-react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -97,7 +97,7 @@ export function Input({
             onClick={() => setShowPassword(!showPassword)}
             className="text-ui-fg-subtle px-4 focus:outline-none transition-all duration-150 outline-none focus:text-ui-fg-base absolute right-0 top-4"
           >
-            {showPassword ? <EyeMini /> : <EyeSlashMini />}
+            {showPassword ? <Eye /> : <EyeOff />}
           </button>
         )}
       </div>

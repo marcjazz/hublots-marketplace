@@ -48,7 +48,7 @@ const ProductsListing = ({ locale }: { locale: string }) => {
     }).then(({ response }) => {
       setProd(response.products)
     })
-  }, [])
+  }, [locale])
 
   return (
     <>

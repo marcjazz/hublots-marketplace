@@ -1,4 +1,3 @@
-
 # MVP Scope Definition
 
 This document defines the scope for the Minimum Viable Product (MVP) of the service marketplace. The features are divided into two phases to ensure a focused and rapid initial launch, followed by strategic enhancements.

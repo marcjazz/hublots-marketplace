@@ -1,11 +1,10 @@
-import { HttpTypes } from "@medusajs/types"
+import type { HttpTypes } from "@medusajs/types"
 
 export interface Cart extends HttpTypes.StoreCart {
-//  promotions?: any[]
- discount_subtotal?: number
+  promotions?: any[];
 }
 
 export interface StoreCartLineItemOptimisticUpdate
- extends Partial<HttpTypes.StoreCartLineItem> {
- tax_total: number
+  extends Partial<HttpTypes.StoreCartLineItem> {
+  tax_total: number
 }

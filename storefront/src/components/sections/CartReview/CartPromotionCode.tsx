@@ -58,14 +58,17 @@ export default function CartPromotionCode({ cart }: { cart: HttpTypes.StoreCart 
         Promotion code
       </Heading>
       <div>
-        {cart?.promotions?.map(promo => (
-          <div
-            key={promo.id}
-            className="mb-4 flex flex-row items-center gap-x-2"
-          >
-            <Label className="text-md">{promo.code}</Label>
-          </div>
-        ))}
+        {(() => {
+          const promos: any[] = Array.isArray((cart as any)?.promotions) ? (cart as any).promotions : [];
+          return promos.map(promo => (
+            <div
+              key={promo.id}
+              className="mb-4 flex flex-row items-center gap-x-2"
+            >
+              <Label className="text-md">{promo.code}</Label>
+            </div>
+          ));
+        })()}
       </div>
       <Input
         placeholder="Enter your promotion code"

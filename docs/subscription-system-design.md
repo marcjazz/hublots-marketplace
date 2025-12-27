@@ -1,4 +1,3 @@
-
 # Provider Subscription System Design
 
 This document provides a detailed design for the provider subscription model. It outlines the plan structure, the specific entitlements for each tier, and the technical implementation for enforcing these rules within the MedusaJS and MercurJS architecture.
