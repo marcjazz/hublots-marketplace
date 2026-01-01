@@ -1,10 +1,7 @@
 import {
-  BannerSection,
-  BlogSection,
   Hero,
   HomeCategories,
   HomeProductSection,
-  ShopByStyleSection,
 } from "@/components/sections"
 
 import type { Metadata } from "next"
@@ -12,6 +9,8 @@ import { headers } from "next/headers"
 import Script from "next/script"
 import { listRegions } from "@/lib/data/regions"
 import { toHreflang } from "@/lib/helpers/hreflang"
+import { listProducts } from "@/lib/data/products"
+import { listCategories } from "@/lib/data/categories"
 
 export async function generateMetadata({
   params,
@@ -122,13 +121,22 @@ export default async function Home({
     process.env.NEXT_PUBLIC_SITE_NAME ||
     "Mercur B2C Demo - Marketplace Storefront"
 
+  const {
+    response: { products },
+  } = await listProducts({
+    countryCode: locale,
+    queryParams: { limit: 12 },
+  })
+
+  const { categories } = await listCategories()
+
   return (
     <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start text-primary">
       <link
         rel="preload"
         as="image"
-        href="/images/hero/Image.jpg"
-        imageSrcSet="/images/hero/Image.jpg 700w"
+        href="/images/hero/image.png"
+        imageSrcSet="/images/hero/image.png 700w"
         imageSizes="(min-width: 1024px) 50vw, 100vw"
       />
       {/* Organization JSON-LD */}
@@ -161,28 +169,28 @@ export default async function Home({
       />
 
       <Hero
-        image="/images/hero/Image.jpg"
-        heading="Snag your style in a flash"
-        paragraph="Buy, sell, and discover pre-loved gems from the trendiest brands."
+        image="/images/hero/image.png"
+        heading="Services for Modern Living, On Demand"
+        paragraph="Book, manage, and pay for services from trusted professionals in your community."
         buttons={[
-          { label: "Buy now", path: "/categories" },
+          { label: "Explore services", path: "/categories" },
           {
-            label: "Sell now",
-            path:
-              process.env.NEXT_PUBLIC_VENDOR_URL ||
-              "https://vendor.mercurjs.com",
+            label: "Become a provider",
+            path: "/register",
           },
         ]}
       />
       <div className="px-4 lg:px-8 w-full">
-        <HomeProductSection heading="trending listings" locale={locale} home />
+        <HomeProductSection
+          heading="Explore popular services"
+          locale={locale}
+          products={products as any}
+          home
+        />
       </div>
       <div className="px-4 lg:px-8 w-full">
-        <HomeCategories heading="SHOP BY CATEGORY" />
+        <HomeCategories heading="CATEGORIES" categories={categories} />
       </div>
-      <BannerSection />
-      <ShopByStyleSection />
-      <BlogSection />
     </main>
   )
 }
