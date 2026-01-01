@@ -11,7 +11,7 @@ import { profileDetailsSchema, ProfileDetailsFormData } from "./schema"
 import { LabeledInput } from "@/components/cells"
 import { Button } from "@/components/atoms"
 import { updateCustomer } from "@/lib/data/customer"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { useState } from "react"
 
 interface Props {

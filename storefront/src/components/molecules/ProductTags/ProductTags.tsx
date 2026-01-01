@@ -1,5 +1,5 @@
 import { Label } from '@/components/atoms';
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 
 export const ProductTags = ({
   tags,

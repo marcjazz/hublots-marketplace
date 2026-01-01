@@ -6,7 +6,7 @@ import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedL
 import { Button } from "@/components/atoms"
 import { WishlistItem } from "@/components/cells"
 import { getUserWishlists } from "@/lib/data/wishlist"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { UserNavigation } from "@/components/molecules"
 
 export default async function Wishlist() {

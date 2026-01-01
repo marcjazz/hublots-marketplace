@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 import { Heading, Label } from '@medusajs/ui';
 
 import { Button, Input } from '@/components/atoms';

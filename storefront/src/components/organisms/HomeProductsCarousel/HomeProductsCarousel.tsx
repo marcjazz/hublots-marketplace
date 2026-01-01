@@ -2,7 +2,7 @@ import { Carousel } from "@/components/cells"
 import { ProductCard } from "../ProductCard/ProductCard"
 import { listProducts } from "@/lib/data/products"
 import { Product } from "@/types/product"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { getProductPrice } from "@/lib/helpers/get-product-price"
 
 export const HomeProductsCarousel = async ({

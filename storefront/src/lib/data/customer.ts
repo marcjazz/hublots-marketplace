@@ -1,7 +1,7 @@
 'use server';
 
 
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 

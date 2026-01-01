@@ -1,4 +1,4 @@
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 import { SortOptions } from '@/types/product';
 
 interface MinPricedProduct extends HttpTypes.StoreProduct {

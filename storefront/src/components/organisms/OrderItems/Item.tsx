@@ -1,5 +1,5 @@
 import { convertToLocale } from "@/lib/helpers/money"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import Image from "next/image"
 export const Item = ({
   item,

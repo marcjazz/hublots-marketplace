@@ -11,7 +11,7 @@ import { Fragment, useEffect, useMemo, useState } from "react"
 import ReactCountryFlag from "react-country-flag"
 
 import { useParams, usePathname, useRouter } from "next/navigation"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 
 import { updateRegionWithValidation } from "@/lib/data/cart"
 import { Label } from "@medusajs/ui"

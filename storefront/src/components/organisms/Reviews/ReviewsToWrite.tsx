@@ -7,7 +7,7 @@ import { useState } from "react"
 import { Order } from "@/lib/data/reviews"
 import { navigation } from "./navigation"
 import { OrderCard } from "./OrderCard"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 
 export const ReviewsToWrite = ({ orders }: { orders: Array<Order> }) => {
   const [showForm, setShowForm] = useState<

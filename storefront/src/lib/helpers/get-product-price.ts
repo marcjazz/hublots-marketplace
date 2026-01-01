@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { getPercentageDiff } from "./get-precentage-diff"
 import { convertToLocale } from "./money"
 

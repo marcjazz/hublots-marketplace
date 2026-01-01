@@ -1,6 +1,6 @@
 "use client"
 
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 
 import { Chip } from "@/components/atoms"
 import useUpdateSearchParams from "@/hooks/useUpdateSearchParams"

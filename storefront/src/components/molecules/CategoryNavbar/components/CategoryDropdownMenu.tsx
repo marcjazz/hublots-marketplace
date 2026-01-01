@@ -1,6 +1,6 @@
 "use client"
 
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { CategoryDropdownContainer } from "./CategoryDropdownContainer"
 import { CategoryDropdownContent } from "./CategoryDropdownContent"
 import { ChildCategories } from "./ChildCategories"

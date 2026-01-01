@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { convertToLocale } from "@/lib/helpers/money"
 import { filterValidCartItems } from "@/lib/helpers/filter-valid-cart-items"
 import { DeleteCartItemButton } from "@/components/molecules"

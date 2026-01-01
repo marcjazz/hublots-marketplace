@@ -1,6 +1,6 @@
 'use server';
 
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 
 import { StoreCardShippingMethod } from '@/components/sections/CartShippingMethodsSection/CartShippingMethodsSection';
 import { sdk } from '@/lib/config';

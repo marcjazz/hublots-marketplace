@@ -1,6 +1,6 @@
 'use server';
 
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 
 import { SellerProps } from '@/types/seller';
 

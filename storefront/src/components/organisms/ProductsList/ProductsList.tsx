@@ -1,5 +1,5 @@
 import { ProductCard } from "../ProductCard/ProductCard"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 
 export const ProductsList = ({
   products,

@@ -4,7 +4,7 @@ import { Button } from "@/components/atoms"
 import { ChatBox } from "@/components/cells/ChatBox/ChatBox"
 import { Modal } from "@/components/molecules"
 import { useState } from "react"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { SellerProps } from "@/types/seller"
 import { MessageIcon } from "@/icons"
 

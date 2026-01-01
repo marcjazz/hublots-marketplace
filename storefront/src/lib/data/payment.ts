@@ -1,6 +1,6 @@
 'use server';
 
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 
 import { sdk } from '../config';
 import { getAuthHeaders, getCacheOptions } from './cookies';

@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import { Text } from "@medusajs/ui"
 import { format } from "date-fns"
 

@@ -1,4 +1,4 @@
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 
 export interface Cart extends HttpTypes.StoreCart {
 //  promotions?: any[]

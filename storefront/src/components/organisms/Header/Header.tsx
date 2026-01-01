@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 
 import { CartDropdown, MobileNavbar, Navbar } from "@/components/cells"
 import { HeartIcon } from "@/icons"

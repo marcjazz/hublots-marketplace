@@ -11,7 +11,7 @@ import { addressSchema, AddressFormData } from "./schema"
 import { LabeledInput } from "@/components/cells"
 import { Button } from "@/components/atoms"
 import { addCustomerAddress, updateCustomerAddress } from "@/lib/data/customer"
-import { HttpTypes } from "@medusajs/types"
+import { HttpTypes } from '@/types/medusa'
 import CountrySelect from "@/components/cells/CountrySelect/CountrySelect"
 import { useState } from "react"
 

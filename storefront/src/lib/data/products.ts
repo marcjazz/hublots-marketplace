@@ -1,10 +1,10 @@
 'use server';
 
-import type { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 
 import { getProductPrice } from '@/lib/helpers/get-product-price';
 import { sortProducts } from '@/lib/helpers/sort-products';
-import { Product, SortOptions } from '@/types/product';
+import {  SortOptions } from '@/types/product';
 import { SellerProps } from '@/types/seller';
 
 import { sdk } from '../config';
@@ -32,7 +32,7 @@ export const listProducts = async ({
   forceCache?: boolean;
 }): Promise<{
   response: {
-    products: (Product & { seller?: SellerProps })[];
+    products: (HttpTypes.StoreProduct & { seller?: SellerProps })[];
     count: number;
   };
   nextPage: number | null;
@@ -49,9 +49,9 @@ export const listProducts = async ({
   let region: HttpTypes.StoreRegion | undefined | null;
 
   if (countryCode) {
-    region = await getRegion(countryCode);
+    region = await getRegion(countryCode) as unknown as HttpTypes.StoreRegion;
   } else {
-    region = await retrieveRegion(regionId!);
+    region = await retrieveRegion(regionId!) as unknown as HttpTypes.StoreRegion;
   }
 
   if (!region) {
@@ -88,7 +88,7 @@ export const listProducts = async ({
       next: useCached ? { revalidate: 60 } : undefined,
       cache: useCached ? 'force-cache' : 'no-cache'
     })
-    .then(({ products: productsRaw, count }) => {
+    .then(({ products: productsRaw, count }: { products: (HttpTypes.StoreProduct & { seller?: SellerProps })[]; count: number }) => {
       const products = productsRaw.filter(product => product.seller?.store_status !== 'SUSPENDED');
 
       const nextPage = count > offset + limit ? pageParam + 1 : null;
@@ -110,7 +110,7 @@ export const listProducts = async ({
         queryParams
       };
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.error('listProducts - Error fetching products:', error);
       return {
         response: {
@@ -169,7 +169,7 @@ export const listProductsWithSort = async ({
   });
 
   let filteredProducts = seller_id
-    ? products.filter((product) => product.seller?.id === seller_id)
+    ? (products as (HttpTypes.StoreProduct & { seller?: SellerProps })[]).filter((product) => product.seller?.id === seller_id)
     : products;
 
   // Apply filters from search params
@@ -223,7 +223,7 @@ export const listProductsWithSort = async ({
   }
 
   const pricedProducts = filteredProducts.filter((prod) =>
-    prod.variants?.some((variant: ) => {
+    (prod.variants as any)?.some((variant: any) => {
       console.log(
         `Product ${prod.id} variant calculated_price:`,
         variant.calculated_price
@@ -232,7 +232,7 @@ export const listProductsWithSort = async ({
     })
   );
 
-  const sortedProducts = sortProducts(pricedProducts, sortBy);
+  const sortedProducts = sortProducts(pricedProducts as HttpTypes.StoreProduct[], sortBy);
 
   const pageParam = (page - 1) * limit;
 
@@ -246,6 +246,6 @@ export const listProductsWithSort = async ({
       count
     },
     nextPage,
-    queryParams
+    queryParams,
   };
 };

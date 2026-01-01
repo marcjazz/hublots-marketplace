@@ -1,5 +1,5 @@
 import { ProductCarousel } from '@/components/cells';
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 
 export const GalleryCarousel = ({
   images,

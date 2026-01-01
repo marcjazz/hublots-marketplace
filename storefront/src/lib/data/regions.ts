@@ -1,6 +1,6 @@
 'use server';
 
-import { HttpTypes } from '@medusajs/types';
+import { HttpTypes } from '@/types/medusa';
 
 import medusaError from '@/lib/helpers/medusa-error';
 
