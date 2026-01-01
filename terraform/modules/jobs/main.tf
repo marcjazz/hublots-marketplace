@@ -68,6 +68,10 @@ resource "google_cloud_run_v2_job" "medusa_init" {
           value = google_storage_bucket.sample_images.name
         }
         env {
+          name  = "REDIS_URL"
+          value = "redis://localhost:6379"
+        }
+        env {
           name = "ADMIN_PASSWORD"
           value_source {
             secret_key_ref {
@@ -85,6 +89,11 @@ resource "google_cloud_run_v2_job" "medusa_init" {
             }
           }
         }
+      }
+
+      containers {
+        name  = "redis"
+        image = "redis:7-alpine"
       }
     }
   }

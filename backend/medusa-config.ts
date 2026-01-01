@@ -39,13 +39,17 @@ module.exports = defineConfig({
     },
   ],
   modules: [
-    {
-      resolve: '@medusajs/event-bus-redis',
-      options: {
-        redisUrl: process.env.REDIS_URL,
-      },
-      key: 'eventBusRedis',
-    },
+    ...(process.env.REDIS_URL
+      ? [
+          {
+            resolve: '@medusajs/event-bus-redis',
+            options: {
+              redisUrl: process.env.REDIS_URL,
+            },
+            key: 'eventBusRedis',
+          },
+        ]
+      : []),
     {
       resolve: '@medusajs/medusa/notification',
       options: {
