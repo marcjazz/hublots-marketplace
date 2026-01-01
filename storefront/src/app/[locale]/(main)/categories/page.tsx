@@ -2,9 +2,7 @@ import { ProductListingSkeleton } from "@/components/organisms/ProductListingSke
 import { Suspense } from "react"
 
 import { Breadcrumbs } from "@/components/atoms"
-import { AlgoliaProductsListing, ProductListing } from "@/components/sections"
-import { getRegion } from "@/lib/data/regions"
-import isBot from "@/lib/helpers/isBot"
+import { ProductListing } from "@/components/sections"
 import { headers } from "next/headers"
 import type { Metadata } from "next"
 import Script from "next/script"
@@ -65,18 +63,14 @@ export async function generateMetadata({
   }
 }
 
-const ALGOLIA_ID = process.env.NEXT_PUBLIC_ALGOLIA_ID
-const ALGOLIA_SEARCH_KEY = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
-
 async function AllCategories({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>
+  searchParams: Promise<any>
 }) {
   const { locale } = await params
-
-  const ua = (await headers()).get("user-agent") || ""
-  const bot = isBot(ua)
 
   const breadcrumbsItems = [
     {
@@ -84,8 +78,6 @@ async function AllCategories({
       label: "All Products",
     },
   ]
-
-  const currency_code = (await getRegion(locale))?.currency_code || "usd"
 
   // Fetch a small cached list for ItemList JSON-LD
   const headersList = await headers()
@@ -144,14 +136,7 @@ async function AllCategories({
       <h1 className="heading-xl uppercase">All Products</h1>
 
       <Suspense fallback={<ProductListingSkeleton />}>
-        {bot || !ALGOLIA_ID || !ALGOLIA_SEARCH_KEY ? (
-          <ProductListing showSidebar locale={locale} />
-        ) : (
-          <AlgoliaProductsListing
-            locale={locale}
-            currency_code={currency_code}
-          />
-        )}
+        <ProductListing showSidebar locale={locale} searchParams={searchParams} />
       </Suspense>
     </main>
   )

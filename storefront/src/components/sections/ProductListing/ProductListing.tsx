@@ -13,28 +13,32 @@ export const ProductListing = async ({
   collection_id,
   seller_id,
   showSidebar = false,
-  locale = process.env.NEXT_PUBLIC_DEFAULT_REGION || "pl",
+  locale = process.env.NEXT_PUBLIC_DEFAULT_REGION || "cm",
+  searchParams,
 }: {
   category_id?: string
   collection_id?: string
   seller_id?: string
   showSidebar?: boolean
   locale?: string
+  searchParams?: any
 }) => {
+  const { sortBy, page, ...filters } = (await searchParams) || {}
+
   const { response } = await listProductsWithSort({
     seller_id,
     category_id,
     collection_id,
     countryCode: locale,
-    sortBy: "created_at",
+    sortBy: sortBy || "created_at",
+    page: page ? parseInt(page) : 1,
+    filters,
     queryParams: {
       limit: PRODUCT_LIMIT,
     },
   })
 
-  const { products } = await response
-
-  const count = products.length
+  const { products, count } = await response
 
   const pages = Math.ceil(count / PRODUCT_LIMIT) || 1
 

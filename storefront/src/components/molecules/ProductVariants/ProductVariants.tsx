@@ -4,7 +4,6 @@ import { HttpTypes } from "@medusajs/types"
 
 import { Chip } from "@/components/atoms"
 import useUpdateSearchParams from "@/hooks/useUpdateSearchParams"
-import { BaseHit, Hit } from "instantsearch.js"
 
 export const ProductVariants = ({
   product,
@@ -30,22 +29,17 @@ export const ProductVariants = ({
               {selectedVariant[title.toLowerCase()]}
             </span>
             <div className="flex gap-2 mt-2">
-              {(values || []).map(
-                ({
-                  id,
-                  value,
-                }: Partial<Hit<HttpTypes.StoreProductOptionValue>>) => (
-                  <Chip
-                    key={id}
-                    selected={selectedVariant[title.toLowerCase()] === value}
-                    color={title === "Color"}
-                    value={value}
-                    onSelect={() =>
-                      setOptionValue(title.toLowerCase(), value || "")
-                    }
-                  />
-                )
-              )}
+              {(values || []).map(({ id, value }: any) => (
+                <Chip
+                  key={id}
+                  selected={selectedVariant[title.toLowerCase()] === value}
+                  color={title === "Color"}
+                  value={value}
+                  onSelect={() =>
+                    setOptionValue(title.toLowerCase(), value || "")
+                  }
+                />
+              ))}
             </div>
           </div>
         )

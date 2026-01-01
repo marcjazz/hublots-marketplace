@@ -2,7 +2,7 @@ import { ProductStatus } from '@medusajs/framework/utils'
 
 console.log('Starting seed-products.ts script...');
 
-const bucketName = process.env.SAMPLE_IMAGES_BUCKET || 'hublots-sample-images'
+const bucketName = process.env.SAMPLE_IMAGES_BUCKET || 'hublots-marketplace-sample-images'
 const baseUrl = `https://storage.googleapis.com/${bucketName}`
 
 export const productsToInsert = [

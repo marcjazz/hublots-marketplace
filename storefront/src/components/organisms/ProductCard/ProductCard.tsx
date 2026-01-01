@@ -3,7 +3,6 @@
 import Image from "next/image"
 import { Button } from "@/components/atoms"
 import { HttpTypes } from "@medusajs/types"
-import { BaseHit, Hit } from "instantsearch.js"
 import { cn } from "@/lib/utils"
 import LocalizedClientLink from "@/components/molecules/LocalizedLink/LocalizedLink"
 import { getProductPrice } from "@/lib/helpers/get-product-price"
@@ -13,19 +12,21 @@ export const ProductCard = ({
   api_product,
   className,
 }: {
-  product: Hit<HttpTypes.StoreProduct> | Partial<Hit<BaseHit>>
+  product: HttpTypes.StoreProduct
   api_product?: HttpTypes.StoreProduct | null
   className?: string
 }) => {
-  if (!api_product) {
+  const displayProduct = api_product || product
+
+  if (!displayProduct) {
     return null
   }
 
   const { cheapestPrice } = getProductPrice({
-    product: api_product! as HttpTypes.StoreProduct,
+    product: displayProduct,
   })
 
-  const productName = String(product.title || "Product")
+  const productName = String(displayProduct.title || "Product")
 
   return (
     <div
@@ -36,16 +37,16 @@ export const ProductCard = ({
     >
       <div className="relative w-full h-full bg-primary aspect-square">
         <LocalizedClientLink
-          href={`/products/${product.handle}`}
+          href={`/products/${displayProduct.handle}`}
           aria-label={`View ${productName}`}
           title={`View ${productName}`}
         >
           <div className="overflow-hidden rounded-sm w-full h-full flex justify-center align-center ">
-            {product.thumbnail ? (
+            {displayProduct.thumbnail ? (
               <Image
                 priority
                 fetchPriority="high"
-                src={decodeURIComponent(product.thumbnail)}
+                src={decodeURIComponent(displayProduct.thumbnail)}
                 alt={`${productName} image`}
                 width={100}
                 height={100}
@@ -66,7 +67,7 @@ export const ProductCard = ({
           </div>
         </LocalizedClientLink>
         <LocalizedClientLink
-          href={`/products/${product.handle}`}
+          href={`/products/${displayProduct.handle}`}
           aria-label={`See more about ${productName}`}
           title={`See more about ${productName}`}
         >
@@ -76,13 +77,13 @@ export const ProductCard = ({
         </LocalizedClientLink>
       </div>
       <LocalizedClientLink
-        href={`/products/${product.handle}`}
+        href={`/products/${displayProduct.handle}`}
         aria-label={`Go to ${productName} page`}
         title={`Go to ${productName} page`}
       >
         <div className="flex justify-between p-4">
           <div className="w-full">
-            <h3 className="heading-sm truncate">{product.title}</h3>
+            <h3 className="heading-sm truncate">{displayProduct.title}</h3>
             <div className="flex items-center gap-2 mt-2">
               <p className="font-medium">{cheapestPrice?.calculated_price}</p>
               {cheapestPrice?.calculated_price !==

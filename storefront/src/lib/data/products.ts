@@ -1,9 +1,10 @@
 'use server';
 
-import { HttpTypes } from '@medusajs/types';
+import type { HttpTypes } from '@medusajs/types';
 
+import { getProductPrice } from '@/lib/helpers/get-product-price';
 import { sortProducts } from '@/lib/helpers/sort-products';
-import { SortOptions } from '@/types/product';
+import { Product, SortOptions } from '@/types/product';
 import { SellerProps } from '@/types/seller';
 
 import { sdk } from '../config';
@@ -31,7 +32,7 @@ export const listProducts = async ({
   forceCache?: boolean;
 }): Promise<{
   response: {
-    products: (HttpTypes.StoreProduct & { seller?: SellerProps })[];
+    products: (Product & { seller?: SellerProps })[];
     count: number;
   };
   nextPage: number | null;
@@ -80,8 +81,7 @@ export const listProducts = async ({
         offset,
         region_id: region?.id,
         fields:
-          '*variants.calculated_price,+variants.inventory_quantity,*seller,*variants,*seller.products,' +
-          '*seller.reviews,*seller.reviews.customer,*seller.reviews.seller,*seller.products.variants,*attribute_values,*attribute_values.attribute',
+          '*variants.calculated_price,+variants.inventory_quantity,*seller,*variants,*attribute_values,*attribute_values.attribute',
         ...queryParams
       },
       headers,
@@ -93,20 +93,12 @@ export const listProducts = async ({
 
       const nextPage = count > offset + limit ? pageParam + 1 : null;
 
-      const response = products.filter(prod => {
-        // @ts-ignore Property 'seller' exists but TypeScript doesn't recognize it
-        const reviews = prod.seller?.reviews.filter(item => !!item) ?? [];
-        return (
-          // @ts-ignore Property 'seller' exists but TypeScript doesn't recognize it
-          prod?.seller && {
-            ...prod,
-            seller: {
-              // @ts-ignore Property 'seller' exists but TypeScript doesn't recognize it
-              ...prod.seller,
-              reviews
-            }
-          }
-        );
+      const response = products.map(prod => {
+        const reviews = prod.seller?.reviews?.filter((item: unknown) => !!item) ?? [];
+        return {
+          ...prod,
+          seller: prod.seller ? { ...prod.seller, reviews } : undefined
+        };
       });
 
       return {
@@ -118,7 +110,8 @@ export const listProducts = async ({
         queryParams
       };
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error('listProducts - Error fetching products:', error);
       return {
         response: {
           products: [],
@@ -141,7 +134,8 @@ export const listProductsWithSort = async ({
   countryCode,
   category_id,
   seller_id,
-  collection_id
+  collection_id,
+  filters
 }: {
   page?: number;
   queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams;
@@ -150,6 +144,7 @@ export const listProductsWithSort = async ({
   category_id?: string;
   seller_id?: string;
   collection_id?: string;
+  filters?: Record<string, string>;
 }): Promise<{
   response: {
     products: HttpTypes.StoreProduct[];
@@ -173,12 +168,68 @@ export const listProductsWithSort = async ({
     countryCode
   });
 
-  const filteredProducts = seller_id
-    ? products.filter(product => product.seller?.id === seller_id)
+  let filteredProducts = seller_id
+    ? products.filter((product) => product.seller?.id === seller_id)
     : products;
 
-  const pricedProducts = filteredProducts.filter(prod =>
-    prod.variants?.some(variant => variant.calculated_price !== null)
+  // Apply filters from search params
+  if (filters) {
+    if (filters.size) {
+      const sizes = filters.size.split(',').filter(Boolean);
+      filteredProducts = filteredProducts.filter((product: any) =>
+        product.attribute_values?.some(
+          (av: any) =>
+            av.attribute?.handle === 'size' && sizes.includes(av.value)
+        )
+      );
+    }
+    if (filters.color) {
+      const colors = filters.color.split(',').filter(Boolean);
+      filteredProducts = filteredProducts.filter((product: any) =>
+        product.attribute_values?.some(
+          (av: any) =>
+            av.attribute?.handle === 'color' && colors.includes(av.value)
+        )
+      );
+    }
+    if (filters.condition) {
+      const conditions = filters.condition.split(',').filter(Boolean);
+      filteredProducts = filteredProducts.filter((product: any) =>
+        product.attribute_values?.some(
+          (av: any) =>
+            av.attribute?.handle === 'condition' &&
+            conditions.includes(av.value)
+        )
+      );
+    }
+    if (filters.min_price) {
+      const minPrice = parseFloat(filters.min_price);
+      filteredProducts = filteredProducts.filter((product) => {
+        const { cheapestPrice } = getProductPrice({
+          product: product as any
+        });
+        return (cheapestPrice?.calculated_price_number || 0) >= minPrice;
+      });
+    }
+    if (filters.max_price) {
+      const maxPrice = parseFloat(filters.max_price);
+      filteredProducts = filteredProducts.filter((product) => {
+        const { cheapestPrice } = getProductPrice({
+          product: product as any
+        });
+        return (cheapestPrice?.calculated_price_number || 0) <= maxPrice;
+      });
+    }
+  }
+
+  const pricedProducts = filteredProducts.filter((prod) =>
+    prod.variants?.some((variant: ) => {
+      console.log(
+        `Product ${prod.id} variant calculated_price:`,
+        variant.calculated_price
+      );
+      return variant.calculated_price !== null;
+    })
   );
 
   const sortedProducts = sortProducts(pricedProducts, sortBy);
