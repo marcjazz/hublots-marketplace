@@ -1,10 +1,9 @@
 'use server';
 
-import { HttpTypes } from '@/types/medusa';
-
 import { getProductPrice } from '@/lib/helpers/get-product-price';
 import { sortProducts } from '@/lib/helpers/sort-products';
-import {  SortOptions } from '@/types/product';
+import { HttpTypes } from '@/types/medusa';
+import { SortOptions } from '@/types/product';
 import { SellerProps } from '@/types/seller';
 
 import { sdk } from '../config';
@@ -49,9 +48,9 @@ export const listProducts = async ({
   let region: HttpTypes.StoreRegion | undefined | null;
 
   if (countryCode) {
-    region = await getRegion(countryCode) as unknown as HttpTypes.StoreRegion;
+    region = (await getRegion(countryCode)) as unknown as HttpTypes.StoreRegion;
   } else {
-    region = await retrieveRegion(regionId!) as unknown as HttpTypes.StoreRegion;
+    region = (await retrieveRegion(regionId!)) as unknown as HttpTypes.StoreRegion;
   }
 
   if (!region) {
@@ -88,28 +87,38 @@ export const listProducts = async ({
       next: useCached ? { revalidate: 60 } : undefined,
       cache: useCached ? 'force-cache' : 'no-cache'
     })
-    .then(({ products: productsRaw, count }: { products: (HttpTypes.StoreProduct & { seller?: SellerProps })[]; count: number }) => {
-      const products = productsRaw.filter(product => product.seller?.store_status !== 'SUSPENDED');
+    .then(
+      ({
+        products: productsRaw,
+        count
+      }: {
+        products: (HttpTypes.StoreProduct & { seller?: SellerProps })[];
+        count: number;
+      }) => {
+        const products = productsRaw.filter(
+          product => product.seller?.store_status !== 'SUSPENDED'
+        );
 
-      const nextPage = count > offset + limit ? pageParam + 1 : null;
+        const nextPage = count > offset + limit ? pageParam + 1 : null;
 
-      const response = products.map(prod => {
-        const reviews = prod.seller?.reviews?.filter((item: unknown) => !!item) ?? [];
+        const response = products.map(prod => {
+          const reviews = prod.seller?.reviews?.filter((item: unknown) => !!item) ?? [];
+          return {
+            ...prod,
+            seller: prod.seller ? { ...prod.seller, reviews } : undefined
+          };
+        });
+
         return {
-          ...prod,
-          seller: prod.seller ? { ...prod.seller, reviews } : undefined
+          response: {
+            products: response,
+            count
+          },
+          nextPage: nextPage,
+          queryParams
         };
-      });
-
-      return {
-        response: {
-          products: response,
-          count
-        },
-        nextPage: nextPage,
-        queryParams
-      };
-    })
+      }
+    )
     .catch((error: any) => {
       console.error('listProducts - Error fetching products:', error);
       return {
@@ -169,7 +178,9 @@ export const listProductsWithSort = async ({
   });
 
   let filteredProducts = seller_id
-    ? (products as (HttpTypes.StoreProduct & { seller?: SellerProps })[]).filter((product) => product.seller?.id === seller_id)
+    ? (products as (HttpTypes.StoreProduct & { seller?: SellerProps })[]).filter(
+        product => product.seller?.id === seller_id
+      )
     : products;
 
   // Apply filters from search params
@@ -178,8 +189,7 @@ export const listProductsWithSort = async ({
       const sizes = filters.size.split(',').filter(Boolean);
       filteredProducts = filteredProducts.filter((product: any) =>
         product.attribute_values?.some(
-          (av: any) =>
-            av.attribute?.handle === 'size' && sizes.includes(av.value)
+          (av: any) => av.attribute?.handle === 'size' && sizes.includes(av.value)
         )
       );
     }
@@ -187,8 +197,7 @@ export const listProductsWithSort = async ({
       const colors = filters.color.split(',').filter(Boolean);
       filteredProducts = filteredProducts.filter((product: any) =>
         product.attribute_values?.some(
-          (av: any) =>
-            av.attribute?.handle === 'color' && colors.includes(av.value)
+          (av: any) => av.attribute?.handle === 'color' && colors.includes(av.value)
         )
       );
     }
@@ -196,38 +205,29 @@ export const listProductsWithSort = async ({
       const conditions = filters.condition.split(',').filter(Boolean);
       filteredProducts = filteredProducts.filter((product: any) =>
         product.attribute_values?.some(
-          (av: any) =>
-            av.attribute?.handle === 'condition' &&
-            conditions.includes(av.value)
+          (av: any) => av.attribute?.handle === 'condition' && conditions.includes(av.value)
         )
       );
     }
     if (filters.min_price) {
       const minPrice = parseFloat(filters.min_price);
-      filteredProducts = filteredProducts.filter((product) => {
-        const { cheapestPrice } = getProductPrice({
-          product: product as any
-        });
+      filteredProducts = filteredProducts.filter(product => {
+        const { cheapestPrice } = getProductPrice({ product });
         return (cheapestPrice?.calculated_price_number || 0) >= minPrice;
       });
     }
     if (filters.max_price) {
       const maxPrice = parseFloat(filters.max_price);
-      filteredProducts = filteredProducts.filter((product) => {
-        const { cheapestPrice } = getProductPrice({
-          product: product as any
-        });
+      filteredProducts = filteredProducts.filter(product => {
+        const { cheapestPrice } = getProductPrice({ product });
         return (cheapestPrice?.calculated_price_number || 0) <= maxPrice;
       });
     }
   }
 
-  const pricedProducts = filteredProducts.filter((prod) =>
-    (prod.variants as any)?.some((variant: any) => {
-      console.log(
-        `Product ${prod.id} variant calculated_price:`,
-        variant.calculated_price
-      );
+  const pricedProducts = filteredProducts.filter(prod =>
+    prod.variants?.some((variant: any) => {
+      console.log(`Product ${prod.id} variant calculated_price:`, variant.calculated_price);
       return variant.calculated_price !== null;
     })
   );
@@ -246,6 +246,6 @@ export const listProductsWithSort = async ({
       count
     },
     nextPage,
-    queryParams,
+    queryParams
   };
 };
