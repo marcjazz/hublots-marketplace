@@ -1,4 +1,4 @@
-import { HttpTypes } from '@/types/medusa'; // Test change
+import { HttpTypes } from '@/types/medusa';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { PROTECTED_ROUTES } from './lib/constants';

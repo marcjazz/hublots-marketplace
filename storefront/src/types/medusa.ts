@@ -12,7 +12,19 @@ import {
   StoreOrdersRes,
   StoreCustomersRes,
   StoreGetProductCategoriesRes,
-  StoreCollectionsListRes
+  StoreCollectionsListRes,
+  Address,
+  LineItem,
+  ShippingMethod,
+  PricedShippingOption,
+  PaymentSession,
+  ProductOption,
+  ProductOptionValue,
+  ProductTag,
+  ReturnReason,
+  StorePostCartsCartReq,
+  StorePostCustomersCustomerReq,
+  StorePostCustomersCustomerAddressesAddressReq,
 } from '@medusajs/client-types'
 
 export namespace HttpTypes {
@@ -31,6 +43,21 @@ export namespace HttpTypes {
   export type StoreCustomerResponse = StoreCustomersRes
   export type StoreProductCategoryListResponse = StoreGetProductCategoriesRes
   export type StoreCollectionListResponse = StoreCollectionsListRes
+  export type StoreCartAddress = Address
+  export type StoreCartLineItem = LineItem
+  export type StoreOrderLineItem = LineItem
+  export type StoreCartShippingMethod = ShippingMethod
+  export type StoreCartShippingOption = PricedShippingOption
+  export type StoreCustomerAddress = Address
+  export type StorePaymentSession = PaymentSession
+  export type StoreProductOption = ProductOption
+  export type StoreProductOptionValue = ProductOptionValue
+  export type StoreProductTag = ProductTag
+  export type StoreReturnReason = ReturnReason
+  export type StoreUpdateCart = StorePostCartsCartReq
+  export type StoreUpdateCustomer = StorePostCustomersCustomerReq
+  export type StoreUpdateCustomerAddress = StorePostCustomersCustomerAddressesAddressReq
+  export type StorePaymentProviderListResponse = any
 }
 
 export type {

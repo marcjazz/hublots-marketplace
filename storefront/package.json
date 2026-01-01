@@ -14,7 +14,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@medusajs/icons": "^1.2.0",
     "@medusajs/js-sdk": "^2.2.0",
-    "@medusajs/client-types": "^2.4.0",
+    "@medusajs/client-types": "^0.2.12",
     "@medusajs/ui": "^4.0.7",
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.1.0",
@@ -71,5 +71,6 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.0.0"
 }
