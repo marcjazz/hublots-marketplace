@@ -1,8 +1,8 @@
 import { HttpTypes } from '@/types/medusa'
 
 export interface Cart extends HttpTypes.StoreCart {
-//  promotions?: any[]
- discount_subtotal?: number
+  promotions?: any[]
+  discount_subtotal?: number
 }
 
 export interface StoreCartLineItemOptimisticUpdate

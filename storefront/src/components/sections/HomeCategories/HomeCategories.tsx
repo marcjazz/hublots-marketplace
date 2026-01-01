@@ -1,14 +1,17 @@
 import { Carousel } from "@/components/cells"
 import { CategoryCard } from "@/components/organisms"
 import { HttpTypes } from "@/types/medusa"
+import { listCategories } from "@/lib/data/categories"
 
 export const HomeCategories = async ({
   heading,
-  categories,
+  categories: categoriesProp,
 }: {
   heading: string
-  categories: HttpTypes.StoreProductCategory[]
+  categories?: HttpTypes.StoreProductCategory[]
 }) => {
+  const categories = categoriesProp || (await listCategories()).categories
+
   return (
     <section className="bg-primary py-8 w-full">
       <div className="mb-6">

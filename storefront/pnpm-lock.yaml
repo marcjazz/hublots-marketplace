@@ -17,15 +17,15 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.68.0(react@19.2.3))
-      '@medusajs/client-types':
-        specifier: ^0.2.12
-        version: 0.2.12
       '@medusajs/icons':
         specifier: ^1.2.0
         version: 1.2.2(react@19.2.3)
       '@medusajs/js-sdk':
         specifier: ^2.2.0
         version: 2.12.3
+      '@medusajs/types':
+        specifier: ^2.4.0
+        version: 2.4.0(awilix@8.0.1)
       '@medusajs/ui':
         specifier: ^4.0.7
         version: 4.0.31(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
@@ -1347,9 +1347,6 @@ packages:
       '@types/react': '>=16'
       react: '>=16'
 
-  '@medusajs/client-types@0.2.12':
-    resolution: {integrity: sha512-Qj7/uRaonxswzv28bWusdMQGGgVRVH6AvhppD5MhTeWDLLxHMyp8DkFjaRB7Z1yIqV+apBIGqapLUVR1IqoF8w==}
-
   '@medusajs/icons@1.2.2':
     resolution: {integrity: sha512-yCaEvCJg1GqbJ8eySqe+y3zS8tiE0cK/XNOsgmCHZ3dsu8i6lKvrsGzPVdjAtKlUJ9F2CnBO8dm4oXrg5w+6CA==}
     peerDependencies:
@@ -1363,6 +1360,19 @@ packages:
   '@medusajs/js-sdk@2.12.3':
     resolution: {integrity: sha512-8Tmmywg/VToTTwyhInSZMO0t0MuYgoak+e1o8xIXsH/Hp+7kkoXKRalib3/t9pnNC/L9s9vI9Slj+P1v9z0RxA==}
     engines: {node: '>=20'}
+
+  '@medusajs/types@2.4.0':
+    resolution: {integrity: sha512-G3KriSPhzg1NmD0p+CwBPwlsY68hQD7IModsL52iJHDo1DTuXT4fXA8cZzvk3a6pkbhfznaksD5sklNrwNknvw==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      awilix: ^8.0.1
+      ioredis: ^5.4.1
+      vite: ^5.2.11
+    peerDependenciesMeta:
+      ioredis:
+        optional: true
+      vite:
+        optional: true
 
   '@medusajs/ui@4.0.31':
     resolution: {integrity: sha512-ZR7ezb4FHiRF2x80SA/j+ZC1SFXA4xp5aTkikSvwjttKjaJyNoid7Kk6EkXV/qgrACzSpfyQKbf1eLW7Dfwkzw==}
@@ -3416,6 +3426,10 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
+  awilix@8.0.1:
+    resolution: {integrity: sha512-zDSp4R204scvQIDb2GMoWigzXemn0+3AKKIAt543T9v2h7lmoypvkmcx1W/Jet/nm27R1N1AsqrsYVviAR9KrA==}
+    engines: {node: '>=12.0.0'}
+
   axe-core@4.11.0:
     resolution: {integrity: sha512-ilYanEU8vxxBexpJd8cWM4ElSQq4QctCLKih0TSfjIfCQTeyH/6zVrmIJfLPrKTKJRbiG+cfnZbQIjAlJmF1jQ==}
     engines: {node: '>=4'}
@@ -3462,6 +3476,9 @@ packages:
 
   big.js@5.2.2:
     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
+
+  bignumber.js@9.3.1:
+    resolution: {integrity: sha512-Ko0uX15oIUS7wJ3Rb30Fs6SkVbLmPBAKdlm7q9+ak9bbIeFf0MwuBsQV6z7+X768/cHsfg+WlysDWJcmthjsjQ==}
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -7348,8 +7365,6 @@ snapshots:
       '@types/react': 19.2.7
       react: 19.2.3
 
-  '@medusajs/client-types@0.2.12': {}
-
   '@medusajs/icons@1.2.2(react@19.2.3)':
     dependencies:
       react: 19.2.3
@@ -7362,6 +7377,11 @@ snapshots:
     dependencies:
       fetch-event-stream: 0.1.6
       qs: 6.14.0
+
+  '@medusajs/types@2.4.0(awilix@8.0.1)':
+    dependencies:
+      awilix: 8.0.1
+      bignumber.js: 9.3.1
 
   '@medusajs/ui@4.0.31(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)':
     dependencies:
@@ -10109,6 +10129,11 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
+  awilix@8.0.1:
+    dependencies:
+      camel-case: 4.1.2
+      fast-glob: 3.3.3
+
   axe-core@4.11.0: {}
 
   axobject-query@4.1.0: {}
@@ -10155,6 +10180,8 @@ snapshots:
       open: 8.4.2
 
   big.js@5.2.2: {}
+
+  bignumber.js@9.3.1: {}
 
   binary-extensions@2.3.0: {}
 

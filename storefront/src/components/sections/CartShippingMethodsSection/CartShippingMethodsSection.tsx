@@ -26,7 +26,7 @@ type ExtendedStoreProduct = HttpTypes.StoreProduct & {
 };
 
 // Cart item type definition
-type CartItem = {
+type CartItem = HttpTypes.StoreCartLineItem & {
   product?: ExtendedStoreProduct;
   // Include other cart item properties as needed
 };

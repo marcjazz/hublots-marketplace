@@ -38,7 +38,7 @@ export const HomeProductsCarousel = async ({
           (product) => (
             <ProductCard
               key={product.id}
-              product={product}
+              product={product as any}
               api_product={
                 home
                   ? (product as HttpTypes.StoreProduct)
