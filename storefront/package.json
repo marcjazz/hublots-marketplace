@@ -12,6 +12,7 @@
     "@fontsource/inter": "^5.2.8",
     "@headlessui/react": "^2.2.1",
     "@hookform/resolvers": "^3.10.0",
+    "@medusajs/client-types": "0.2.12",
     "@medusajs/icons": "^1.2.0",
     "@medusajs/js-sdk": "^2.2.0",
     "@medusajs/types": "^2.4.0",
