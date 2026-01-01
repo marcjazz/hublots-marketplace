@@ -22,6 +22,7 @@ import {
 } from './seed/seed-functions'
 
 export default async function seedMarketplaceData({ container }: ExecArgs) {
+  console.log('Starting seed.ts script...');
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
 
   logger.info('=== Configurations ===')

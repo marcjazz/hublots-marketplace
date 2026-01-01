@@ -511,8 +511,7 @@ export async function createSellerProducts(
     ],
   }))
 
-  const { result } = await createProductsWorkflow.run({
-    container,
+  const { result } = await createProductsWorkflow(container).run({
     input: {
       products: toInsert,
       additional_data: {

@@ -1,7 +1,6 @@
-
 import { defineConfig, loadEnv } from '@medusajs/framework/utils'
 
-loadEnv(process.env.NODE_ENV || "development", process.cwd());
+loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
 module.exports = defineConfig({
   projectConfig: {
@@ -15,8 +14,8 @@ module.exports = defineConfig({
       authCors: process.env.CORS_ORIGINS!,
       jwtSecret: process.env.JWT_SECRET || 'supersecret',
       cookieSecret: process.env.COOKIE_SECRET || 'supersecret',
-      host: '0.0.0.0'
-    }
+      host: '0.0.0.0',
+    },
   },
   admin: {
     disable: true,
@@ -24,22 +23,29 @@ module.exports = defineConfig({
   plugins: [
     {
       resolve: '@mercurjs/b2c-core',
-      options: {}
+      options: {},
     },
     {
       resolve: '@mercurjs/commission',
-      options: {}
+      options: {},
     },
     {
       resolve: '@mercurjs/requests',
-      options: {}
+      options: {},
     },
     {
       resolve: '@mercurjs/resend',
-      options: {}
-    }
+      options: {},
+    },
   ],
   modules: [
+    {
+      resolve: '@medusajs/event-bus-redis',
+      options: {
+        redisUrl: process.env.REDIS_URL,
+      },
+      key: 'eventBusRedis',
+    },
     {
       resolve: '@medusajs/medusa/notification',
       options: {
@@ -50,18 +56,18 @@ module.exports = defineConfig({
             options: {
               channels: ['email'],
               api_key: process.env.RESEND_API_KEY,
-              from: process.env.RESEND_FROM_EMAIL
-            }
+              from: process.env.RESEND_FROM_EMAIL,
+            },
           },
           {
             resolve: '@medusajs/medusa/notification-local',
             id: 'local',
             options: {
-              channels: ['feed', 'seller_feed']
-            }
-          }
-        ]
-      }
-    }
-  ]
+              channels: ['feed', 'seller_feed'],
+            },
+          },
+        ],
+      },
+    },
+  ],
 })

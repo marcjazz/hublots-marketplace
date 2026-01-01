@@ -1,5 +1,7 @@
 import { ProductStatus } from '@medusajs/framework/utils'
 
+console.log('Starting seed-products.ts script...');
+
 const bucketName = process.env.SAMPLE_IMAGES_BUCKET || 'hublots-sample-images'
 const baseUrl = `https://storage.googleapis.com/${bucketName}`
 
@@ -28,6 +30,10 @@ export const productsToInsert = [
           {
             amount: 80,
             currency_code: 'eur'
+          },
+          {
+            amount: 52500,
+            currency_code: 'xaf'
           }
         ],
         options: {
@@ -42,6 +48,10 @@ export const productsToInsert = [
           {
             amount: 150,
             currency_code: 'eur'
+          },
+          {
+            amount: 98500,
+            currency_code: 'xaf'
           }
         ],
         options: {
@@ -84,6 +94,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 65
+          },
+          {
+            currency_code: 'xaf',
+            amount: 42500
           }
         ]
       },
@@ -96,6 +110,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 85
+          },
+          {
+            currency_code: 'xaf',
+            amount: 55700
           }
         ]
       }
@@ -136,6 +154,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 40
+          },
+          {
+            currency_code: 'xaf',
+            amount: 26200
           }
         ]
       },
@@ -150,6 +172,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 75
+          },
+          {
+            currency_code: 'xaf',
+            amount: 49100
           }
         ]
       }
@@ -191,6 +217,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 60
+          },
+          {
+            currency_code: 'xaf',
+            amount: 39300
           }
         ]
       },
@@ -205,6 +235,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 45
+          },
+          {
+            currency_code: 'xaf',
+            amount: 29500
           }
         ]
       }
@@ -243,6 +277,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 120
+          },
+          {
+            currency_code: 'xaf',
+            amount: 78600
           }
         ]
       },
@@ -257,6 +295,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 50
+          },
+          {
+            currency_code: 'xaf',
+            amount: 32700
           }
         ]
       }
@@ -293,6 +335,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 450
+          },
+          {
+            currency_code: 'xaf',
+            amount: 294900
           }
         ]
       },
@@ -305,6 +351,10 @@ export const productsToInsert = [
           {
             currency_code: 'eur',
             amount: 800
+          },
+          {
+            currency_code: 'xaf',
+            amount: 524200
           }
         ]
       }
