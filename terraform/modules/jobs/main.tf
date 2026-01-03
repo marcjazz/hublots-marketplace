@@ -92,6 +92,6 @@ resource "google_cloud_run_v2_job" "medusa_init" {
   depends_on = [google_storage_bucket_object.sample_images]
 
   lifecycle {
-    ignore_changes = [start_execution_token]
+    replace_triggered_by = [google_storage_bucket_object.sample_images]
   }
 }
